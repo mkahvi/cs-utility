@@ -66,6 +66,7 @@
     <None Include=".git\packed-refs" />
     <None Include=".git\refs\heads\master" />
     <None Include=".git\refs\remotes\origin\HEAD" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Atomic\Lock.cs" />
@@ -77,7 +78,7 @@
     <Compile Include="Human\Readable\Time.cs" />
     <Compile Include="Logic\BitOperations.cs" />
     <Compile Include="Native\Basic.cs" />
-    <Compile Include="Program\Core.cs" />
+    <Compile Include="Program\NativeImage.cs" />
     <Compile Include="Wrapper\Windows\PerformanceCounter.cs" />
   </ItemGroup>
   <ItemGroup>
