@@ -73,7 +73,9 @@
     <Compile Include="Execution\User.cs" />
     <Compile Include="Execution\UserActivity.cs" />
     <Compile Include="Extensions\CoreExtensions.cs" />
+    <Compile Include="File\Allocation.cs" />
     <Compile Include="File\Ini\Ini.cs" />
+    <Compile Include="File\NativeMethods.cs" />
     <Compile Include="Handling\DiscardException.cs" />
     <Compile Include="Human\Readable\Time.cs" />
     <Compile Include="Logic\BitOperations.cs" />
