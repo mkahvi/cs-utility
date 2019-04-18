@@ -797,7 +797,7 @@ namespace MKAh
 			public string Comment
 			{
 				get => _comment;
-				set => _comment = value.Replace("\n", " ");
+				set => _comment = value.Replace("\n", " "); // HACK
 			}
 
 			public bool CommentOnly => string.IsNullOrEmpty(Name);
@@ -1081,6 +1081,27 @@ namespace MKAh
 			}
 
 			return rv;
+		}
+
+		/// <summary>
+		/// Sets comment only if it's empty.
+		/// </summary>
+		public static Ini.Setting InitComment(this Ini.Setting setting, string comment, out bool added)
+		{
+			if (added = string.IsNullOrEmpty(setting.Comment))
+				setting.Comment = comment;
+
+			return setting;
+		}
+
+		/// <summary>
+		/// Shitty LINQ style comment setting.
+		/// </summary>
+		public static Ini.Setting Comment(this Ini.Setting setting, string comment)
+		{
+			setting.Comment = comment;
+
+			return setting;
 		}
 	}
 }
