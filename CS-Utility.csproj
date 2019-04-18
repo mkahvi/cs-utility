@@ -74,7 +74,16 @@
     <Compile Include="Execution\UserActivity.cs" />
     <Compile Include="Extensions\CoreExtensions.cs" />
     <Compile Include="File\Allocation.cs" />
+    <Compile Include="File\Ini\SettingType.cs" />
+    <Compile Include="File\Ini\Constant.cs" />
+    <Compile Include="File\Ini\Converter.cs" />
     <Compile Include="File\Ini\Ini.cs" />
+    <Compile Include="File\Ini\Interface\IContainer.cs" />
+    <Compile Include="File\Ini\Interface\Value.cs" />
+    <Compile Include="File\Ini\Section.cs" />
+    <Compile Include="File\Ini\Section.Extensions.cs" />
+    <Compile Include="File\Ini\Setting.cs" />
+    <Compile Include="File\Ini\Setting.Extensions.cs" />
     <Compile Include="File\NativeMethods.cs" />
     <Compile Include="Handling\DiscardException.cs" />
     <Compile Include="Human\Readable\Time.cs" />
