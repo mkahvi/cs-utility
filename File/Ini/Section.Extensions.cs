@@ -38,9 +38,10 @@ namespace MKAh.Ini
 				defaulted = false;
 			else
 			{
-				if (rv == null) section.Add(rv = new Ini.Setting() { Name = setting });
+				if (rv == null) rv = new Ini.Setting() { Name = setting };
 
 				rv.SetArray(Ini.Converter<T>.Convert(fallback));
+				section.Add(rv);
 				defaulted = true;
 			}
 
@@ -58,9 +59,11 @@ namespace MKAh.Ini
 				defaulted = false;
 			else
 			{
-				if (rv == null) section.Add(rv = new Ini.Setting() { Name = setting });
+				if (rv == null) rv = new Ini.Setting() { Name = setting };
 
 				rv.Set(Ini.Converter<T>.Convert(fallback));
+
+				section.Add(rv);
 
 				// TODO: signal owning config that this has been changed
 

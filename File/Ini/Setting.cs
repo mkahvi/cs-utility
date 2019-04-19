@@ -169,6 +169,7 @@ namespace MKAh.Ini
 				_array = (string[])value.Clone(); // is this enough?
 
 				//Debug.WriteLine("BaseArray = " + string.Join(", ", value));
+				Altered();
 			}
 		}
 

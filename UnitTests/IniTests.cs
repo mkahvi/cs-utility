@@ -237,7 +237,9 @@ namespace IniFile
 		[Test]
 		public void GetSetDefaultDoesSet()
 		{
+			var config = new Ini.Config();
 			var section = new Ini.Section("Test");
+			config.Add(section);
 
 			int newVal = 5;
 
@@ -254,6 +256,8 @@ namespace IniFile
 			Assert.AreEqual(2, array[1]);
 			Assert.AreEqual(3, array[2]);
 			Assert.AreEqual("{ 1, 2, 3 }", setVal2.EscapedValue);
+
+			Assert.AreEqual(3, config.Changes);
 		}
 
 		[Test]
