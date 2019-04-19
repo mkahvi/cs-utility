@@ -43,6 +43,8 @@ namespace MKAh.Ini
 		public Config Parent { get; set; } = null;
 		internal void ChildAltered(Setting value) => Parent?.ChildAltered(this);
 
+		protected override void Altered() => ChildAltered(null);
+
 		public List<Setting> Items { get; private set; } = new List<Setting>();
 		public int ItemCount => Items.Count;
 

@@ -28,9 +28,11 @@ using System;
 
 namespace MKAh.Ini.Interface
 {
-	public class Value
+	abstract public class Value
 	{
 		public int Line { get; internal set; } = -1;
+
+		protected abstract void Altered();
 
 		string _name = string.Empty;
 		public string Name
@@ -41,6 +43,7 @@ namespace MKAh.Ini.Interface
 				if (value != null && value.IndexOfAny(Config.ReservedCharacters) >= 0)
 					throw new ArgumentException("Name contains invalid characters.");
 				_name = value;
+				Altered();
 			}
 		}
 	}

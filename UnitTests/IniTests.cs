@@ -296,6 +296,24 @@ namespace IniFile
 		}
 
 		[Test]
+		public void NameChange()
+		{
+			var config = new Ini.Config();
+			var section = new Ini.Section("Test");
+			config.Add(section);
+
+			var setting = new Ini.Setting() { Name = "Name" };
+			section.Add(setting);
+
+			int mods = config.Changes;
+			section.Name = "tseT";
+			Assert.AreEqual(mods + 1, config.Changes);
+
+			setting.Name = "emaN";
+			Assert.AreEqual(mods + 2, config.Changes);
+		}
+
+		[Test]
 		public void EmptyArray()
 		{
 			var section = new Ini.Section("Test");

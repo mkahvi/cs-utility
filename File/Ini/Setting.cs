@@ -43,7 +43,7 @@ namespace MKAh.Ini
 
 		public Section Parent { get; set; } = null;
 
-		internal void Altered() => Parent?.ChildAltered(this);
+		protected override void Altered() => Parent?.ChildAltered(this);
 
 		public override string ToString()
 		{
