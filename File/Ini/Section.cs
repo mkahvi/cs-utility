@@ -33,11 +33,15 @@ namespace MKAh.Ini
 {
 	public class Section : Interface.Value, Interface.IContainer<Setting>, IEnumerable<Setting>
 	{
-		public Section(string name, int index = 0)
+		public Section(string name, int index = 0, Config parent=null)
 		{
 			Name = name;
 			Index = index;
+			Parent = parent;
 		}
+
+		public Config Parent { get; set; } = null;
+		internal void ChildAltered(Setting value) => Parent?.ChildAltered(this);
 
 		public List<Setting> Items { get; private set; } = new List<Setting>();
 		public int ItemCount => Items.Count;
@@ -47,6 +51,7 @@ namespace MKAh.Ini
 		public int Index { get; internal set; } = 0;
 
 		bool _uniqueKeys = false;
+
 		public bool UniqueKeys
 		{
 			get => _uniqueKeys;
@@ -57,7 +62,11 @@ namespace MKAh.Ini
 		public Setting this[int index]
 		{
 			get => Items[index];
-			set => Insert(index, value);
+			set
+			{
+				Insert(index, value);
+				Own(value);
+			}
 		}
 
 		public Setting this[string key]
@@ -66,7 +75,7 @@ namespace MKAh.Ini
 			{
 				Setting value = null;
 				if (!TryGet(key, out value))
-					Items.Add(value = new Setting() { Name = key });
+					Add(value = new Setting() { Name = key });
 
 				return value;
 			}
@@ -80,6 +89,8 @@ namespace MKAh.Ini
 				}
 				else
 					Add(value);
+
+				Own(value);
 			}
 		}
 		#endregion
@@ -95,20 +106,40 @@ namespace MKAh.Ini
 
 		public bool Contains(string key) => TryGet(key, out _);
 
-		public void Add(Setting value) => Items.Add(value);
-		public void Insert(int index, Setting value) => Items.Insert(value.Index = index, value);
-		public bool Remove(Setting value) => Items.Remove(value);
-		public void RemoveAt(int index) => Items.RemoveAt(index);
-
-		public bool TryRemove(string key)
+		void Own(Setting setting)
 		{
-			if (TryGet(key, out var value))
-			{
-				Remove(value);
-				return true;
-			}
+			setting.Parent = this;
+			ChildAltered(setting);
+		}
 
-			return false;
+		void Deown(Setting setting)
+		{
+			setting.Parent = null;
+			ChildAltered(setting);
+		}
+
+		public void Add(Setting value)
+		{
+			Items.Add(value);
+			Own(value);
+		}
+
+		public void Insert(int index, Setting value)
+		{
+			Items.Insert(value.Index = index, value);
+			Own(value);
+		}
+
+		public bool Remove(Setting value)
+		{
+			Deown(value);
+			return Items.Remove(value);
+		}
+
+		public void RemoveAt(int index)
+		{
+			var setting = Items.ElementAt(index);
+			Remove(setting);
 		}
 
 		public IEnumerator<Setting> GetEnumerator() => Items.GetEnumerator();

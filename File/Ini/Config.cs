@@ -96,6 +96,20 @@ namespace MKAh.Ini
 
 		//HashSet<string> UniqueSectionNames = new HashSet<string>();
 
+		int _changes=0;
+		/// <summary>
+		/// Number of changes to the config tree since creation or since last reset.
+		/// </summary>
+		public int Changes { get => _changes; }
+
+		/// <summary>
+		/// Resets the change counter.
+		/// </summary>
+		/// <returns>Number of changes that had been made.</returns>
+		public int ResetChangeCount() => System.Threading.Interlocked.Exchange(ref _changes, 0);
+
+		internal void ChildAltered(Section section) => System.Threading.Interlocked.Increment(ref _changes);
+
 		public Config()
 		{
 
@@ -214,6 +228,18 @@ namespace MKAh.Ini
 			}
 		}
 
+		void Own(Section section)
+		{
+			section.Parent = this;
+			ChildAltered(section);
+		}
+
+		void Deown(Section section)
+		{
+			section.Parent = null;
+			ChildAltered(section);
+		}
+
 		#region Indexer
 		public Section this[int index]
 		{
@@ -227,10 +253,7 @@ namespace MKAh.Ini
 			{
 				Section section = null;
 				if (!TryGet(name, out section))
-				{
-					section = new Section(name);
-					Items.Add(section);
-				}
+					Add(section = new Section(name));
 
 				return section;
 			}
@@ -239,6 +262,8 @@ namespace MKAh.Ini
 				value.UniqueKeys = UniqueKeys;
 
 				// TODO: different behaviour with unique keys
+
+				Own(value);
 
 				if (TryGet(value.Name, out var section))
 				{
@@ -251,19 +276,37 @@ namespace MKAh.Ini
 		}
 		#endregion
 
-		public bool TryRemove(string name) => TryGet(name, out var section) ? Remove(section) : false;
+		public bool Remove(Section section)
+		{
+			Deown(section);
+			return Items.Remove(section);
+		}
 
-		public bool Remove(Section section) => Items.Remove(section);
-		public void RemoveAt(int index) => Items.RemoveAt(index);
+		public void RemoveAt(int index)
+		{
+			var section = Items.ElementAt(index);
+			Remove(section);
+		}
 
 		public void Add(Section section)
 		{
+			section.Parent = this;
+			ChildAltered(section);
 			section.UniqueKeys = UniqueKeys;
 			Items.Add(section);
 		}
 
-		public void Insert(int index, Section section) => Items.Insert(index, section);
+		public void Insert(int index, Section section)
+		{
+			Own(section);
+			Items.Insert(index, section);
+		}
 
+		/// <summary>
+		/// Get section with the specified name or null.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		public Section Get(string name) => TryGet(name, out var section) ? section : null;
 
 		public bool Contains(string name) => TryGet(name, out _);

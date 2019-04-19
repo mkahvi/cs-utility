@@ -42,6 +42,5 @@ namespace MKAh.Ini.Interface
 		void Insert(int index, T value);
 		bool Remove(T value);
 		void RemoveAt(int index);
-		bool TryRemove(string key);
 	}
 }

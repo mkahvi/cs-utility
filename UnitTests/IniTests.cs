@@ -34,6 +34,8 @@ namespace IniFile
 
 			Assert.AreEqual(3, lines.Length);
 			Assert.AreEqual("[Test]\n", lines[0]);
+
+			Assert.AreEqual(2, config.Changes);
 		}
 
 		[Test]
@@ -44,6 +46,8 @@ namespace IniFile
 			var config = new Ini.Config();
 
 			config.Load(data.Split('\n'));
+
+			Assert.AreEqual(0, config.Changes);
 		}
 
 		[Test]
@@ -108,6 +112,8 @@ namespace IniFile
 			var value = section["Key"];
 
 			Assert.AreEqual("HaHaHa", value.Value);
+
+			Assert.AreEqual(3, config.Changes);
 		}
 
 		public void EmptyValues()
@@ -231,10 +237,7 @@ namespace IniFile
 		[Test]
 		public void GetSetDefaultDoesSet()
 		{
-			var config = new Ini.Config();
-
 			var section = new Ini.Section("Test");
-			config.Add(section);
 
 			int newVal = 5;
 
@@ -256,10 +259,7 @@ namespace IniFile
 		[Test]
 		public void GetSetDefaultGetOnly()
 		{
-			var config = new Ini.Config();
-
 			var section = new Ini.Section("Test");
-			config.Add(section);
 
 			string SettingName = "Preset";
 			string SettingName2 = "ArrayPreset";
@@ -289,7 +289,6 @@ namespace IniFile
 		[Test]
 		public void EmptyArray()
 		{
-			var config = new Ini.Config();
 			var section = new Ini.Section("Test");
 
 			string intSettingName = "IntArray";

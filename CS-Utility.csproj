@@ -77,7 +77,7 @@
     <Compile Include="File\Ini\SettingType.cs" />
     <Compile Include="File\Ini\Constant.cs" />
     <Compile Include="File\Ini\Converter.cs" />
-    <Compile Include="File\Ini\Ini.cs" />
+    <Compile Include="File\Ini\Config.cs" />
     <Compile Include="File\Ini\Interface\IContainer.cs" />
     <Compile Include="File\Ini\Interface\Value.cs" />
     <Compile Include="File\Ini\Section.cs" />
