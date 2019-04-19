@@ -276,6 +276,17 @@ namespace MKAh.Ini
 		}
 		#endregion
 
+		public bool TryRemove(string key)
+		{
+			if (TryGet(key, out var value))
+			{
+				Remove(value);
+				return true;
+			}
+
+			return false;
+		}
+
 		public bool Remove(Section section)
 		{
 			Deown(section);

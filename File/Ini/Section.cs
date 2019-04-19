@@ -130,6 +130,17 @@ namespace MKAh.Ini
 			Own(value);
 		}
 
+		public bool TryRemove(string key)
+		{
+			if (TryGet(key, out var value))
+			{
+				Remove(value);
+				return true;
+			}
+
+			return false;
+		}
+
 		public bool Remove(Setting value)
 		{
 			Deown(value);
