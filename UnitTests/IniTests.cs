@@ -324,10 +324,13 @@ namespace IniFile
 
 			section[intSettingName].IntArray = new int[] { };
 			section[stringSettingName].Array = new string[] { };
+			section[nullSettingName].Array = null;
 
 			var intArray = section[intSettingName].IntArray;
 			var stringArray = section[stringSettingName].Value;
+			var nullArray = section[nullSettingName].Array;
 
+			Assert.AreEqual(null, nullArray?.Length ?? null);
 			Assert.AreEqual(null, intArray?.Length ?? null);
 			Assert.AreEqual(null, stringArray?.Length ?? null);
 		}

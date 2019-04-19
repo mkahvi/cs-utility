@@ -170,7 +170,8 @@ namespace MKAh.Ini
 				_value = null;
 
 				ResetEscapedCache();
-				_array = (string[])value.Clone(); // is this enough?
+
+				_array = (string[])value?.Clone(); // is this enough?
 
 				//Debug.WriteLine("BaseArray = " + string.Join(", ", value));
 				Altered();
