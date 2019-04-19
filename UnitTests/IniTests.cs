@@ -243,14 +243,15 @@ namespace IniFile
 
 			int newVal = 5;
 
-			var setVal = section.GetOrSet("NotSet", newVal, out bool defaulted);
+			int mods = config.Changes;
+			var setVal = section.GetOrSet("NotSet", newVal);
 
-			Assert.AreEqual(true, defaulted);
+			Assert.AreEqual(mods + 1, config.Changes);
 			Assert.AreEqual(newVal, setVal.IntValue);
 
-			var setVal2 = section.GetOrSet("NotSetArray", new int[] { 1, 2, 3 }, out defaulted);
+			var setVal2 = section.GetOrSet("NotSetArray", new int[] { 1, 2, 3 });
+			Assert.AreEqual(mods + 2, config.Changes);
 
-			Assert.AreEqual(true, defaulted);
 			var array = setVal2.IntArray;
 			Assert.AreEqual(1, array[0]);
 			Assert.AreEqual(2, array[1]);
@@ -263,7 +264,9 @@ namespace IniFile
 		[Test]
 		public void GetSetDefaultGetOnly()
 		{
+			var config = new Ini.Config();
 			var section = new Ini.Section("Test");
+			config.Add(section);
 
 			string SettingName = "Preset";
 			string SettingName2 = "ArrayPreset";
@@ -273,16 +276,18 @@ namespace IniFile
 
 			section[SettingName].IntValue = oldVal;
 
-			var setting = section.GetOrSet(SettingName, newVal, out bool defaulted);
+			int mods = config.Changes;
+			var setting = section.GetOrSet(SettingName, newVal);
 
-			Assert.AreEqual(false, defaulted);
+			Assert.AreEqual(mods, config.Changes);
 			Assert.AreEqual(oldVal, setting.IntValue);
 
 			section[SettingName2].IntArray = new int[] { 1, 2, 3 };
 
-			var setting2 = section.GetOrSet(SettingName2, new int[] { 7, 8, 9 }, out defaulted);
+			mods = config.Changes;
+			var setting2 = section.GetOrSet(SettingName2, new int[] { 7, 8, 9 });
 
-			Assert.AreEqual(false, defaulted);
+			Assert.AreEqual(mods, config.Changes); // no changes
 			var array = setting2.IntArray;
 			Assert.AreEqual(1, array[0]);
 			Assert.AreEqual(2, array[1]);

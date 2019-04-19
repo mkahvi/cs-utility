@@ -149,7 +149,11 @@ namespace MKAh.Ini
 		public string Comment
 		{
 			get => _comment;
-			set => _comment = value.Replace("\n", " "); // HACK
+			set
+			{
+				_comment = value.Replace("\n", " "); // HACK
+				Altered();
+			}
 		}
 
 		public bool CommentOnly => string.IsNullOrEmpty(Name);

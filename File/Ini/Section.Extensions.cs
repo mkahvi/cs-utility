@@ -30,34 +30,28 @@ namespace MKAh.Ini
 {
 	public static partial class HelperExtensions
 	{
-		public static Ini.Setting GetOrSet<T>(this Ini.Section section, string setting, T[] fallback, out bool defaulted)
+		public static Ini.Setting GetOrSet<T>(this Ini.Section section, string setting, T[] fallback)
 		{
 			Ini.Setting rv = null;
 
-			if (section.TryGet(setting, out rv) && rv.Array != null)
-				defaulted = false;
-			else
+			if (!(section.TryGet(setting, out rv) && rv.Array != null))
 			{
 				if (rv == null) rv = new Ini.Setting() { Name = setting };
 
 				rv.SetArray(Ini.Converter<T>.Convert(fallback));
 				section.Add(rv);
-				defaulted = true;
 			}
 
 			return rv;
 		}
 
-		public static Ini.Setting GetOrSet<T>(this Ini.Section section, string setting, T fallback, out bool defaulted)
+		public static Ini.Setting GetOrSet<T>(this Ini.Section section, string setting, T fallback)
 		{
 			Debug.Assert(section != null);
 			Debug.Assert(!string.IsNullOrEmpty(setting));
 
 			Ini.Setting rv = null;
-
-			if (section.TryGet(setting, out rv) && rv.Value != null)
-				defaulted = false;
-			else
+			if (!(section.TryGet(setting, out rv) && rv.Value != null))
 			{
 				if (rv == null) rv = new Ini.Setting() { Name = setting };
 
@@ -66,8 +60,6 @@ namespace MKAh.Ini
 				section.Add(rv);
 
 				// TODO: signal owning config that this has been changed
-
-				defaulted = true;
 			}
 
 			return rv;

@@ -31,9 +31,9 @@ namespace MKAh.Ini
 		/// <summary>
 		/// Sets comment only if it's empty.
 		/// </summary>
-		public static Ini.Setting InitComment(this Ini.Setting setting, string comment, out bool added)
+		public static Ini.Setting InitComment(this Ini.Setting setting, string comment)
 		{
-			if (added = string.IsNullOrEmpty(setting.Comment))
+			if (string.IsNullOrEmpty(setting.Comment))
 				setting.Comment = comment;
 
 			return setting;
