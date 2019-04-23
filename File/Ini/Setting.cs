@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Diagnostics;
 
 namespace MKAh.Ini
 {
@@ -42,6 +43,8 @@ namespace MKAh.Ini
 		}
 
 		public Section Parent { get; set; } = null;
+
+		Type LastType = typeof(string);
 
 		protected override void Altered() => Parent?.ChildAltered(this);
 
@@ -106,12 +109,12 @@ namespace MKAh.Ini
 			{
 				if ((Array?.Length ?? 0) == 0) return null;
 
-				int[] cache = new int[Array.Length];
+				int[] array = new int[Array.Length];
 
 				for (int i = 0; i < Array.Length; i++)
-					cache[i] = int.Parse(Array[i].Trim(), System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands);
+					array[i] = int.Parse(Array[i].Trim(), System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands);
 
-				return cache;
+				return array;
 			}
 		}
 
@@ -122,12 +125,12 @@ namespace MKAh.Ini
 			{
 				if ((Array?.Length ?? 0) == 0) return null;
 
-				float[] cache = new float[Array.Length];
+				float[] array = new float[Array.Length];
 
 				for (int i = 0; i < Array.Length; i++)
-					cache[i] = float.Parse(Array[i].Trim(), System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
+					array[i] = float.Parse(Array[i].Trim(), System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
 
-				return cache;
+				return array;
 			}
 		}
 
@@ -138,16 +141,15 @@ namespace MKAh.Ini
 			{
 				if ((Array?.Length ?? 0) == 0) return null;
 
-				double[] cache = new double[Array.Length];
+				double[] array = new double[Array.Length];
 
 				for (int i = 0; i < Array.Length; i++)
-					cache[i] = double.Parse(Array[i].Trim(), System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
+					array[i] = double.Parse(Array[i].Trim(), System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
 
-				return cache;
+				return array;
 			}
 		}
 
-		object[] ArrayCache = null;
 		Lazy<string> escapedValueCache = null;
 
 		void ResetEscapedCache() => escapedValueCache = new Lazy<string>(CreateEscapedCache);
@@ -201,12 +203,7 @@ namespace MKAh.Ini
 				string[] cache = new string[Array.Length];
 
 				for (int i = 0; i < Array.Length; i++)
-				{
-					if (EscapeValue(Array[i], out string nv))
-						cache[i] = nv;
-					else
-						cache[i] = Array[i];
-				}
+					cache[i] = EscapeValue(Array[i], out string nv) ? nv : Array[i];
 
 				return $"{Constant.ArrayStart} " + string.Join(", ", cache) + $" {Constant.ArrayEnd}";
 			}
