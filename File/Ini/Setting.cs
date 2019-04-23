@@ -152,7 +152,7 @@ namespace MKAh.Ini
 
 		void ResetEscapedCache() => escapedValueCache = new Lazy<string>(CreateEscapedCache);
 
-		public string EscapedValue => escapedValueCache.Value;
+		protected string EscapedValue => escapedValueCache.Value;
 
 		string _comment = null;
 		public string Comment
@@ -216,7 +216,7 @@ namespace MKAh.Ini
 				return string.Empty;
 		}
 
-		public bool EscapeValue(string value, out string nvalue)
+		bool EscapeValue(string value, out string nvalue)
 		{
 			if (string.IsNullOrEmpty(value))
 			{
@@ -245,7 +245,7 @@ namespace MKAh.Ini
 			return false;
 		}
 
-		public bool UnescapeValue(string value, out string nvalue, bool trim = false)
+		internal bool UnescapeValue(string value, out string nvalue, bool trim = false)
 		{
 			if (string.IsNullOrEmpty(value) || value.Length == 0)
 			{
@@ -276,7 +276,7 @@ namespace MKAh.Ini
 			return false;
 		}
 
-		public string[] UnescapeArray(string[] values)
+		internal string[] UnescapeArray(string[] values)
 		{
 			string[] nv = new string[values.Length];
 
