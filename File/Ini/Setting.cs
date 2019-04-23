@@ -187,6 +187,13 @@ namespace MKAh.Ini
 			}
 		}
 
+		// alias for Array
+		public string[] StringArray
+		{
+			get => Array;
+			set => Array = value;
+		}
+
 		string CreateEscapedCache()
 		{
 			if ((Array?.Length ?? 0) > 0)
