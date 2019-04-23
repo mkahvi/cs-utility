@@ -34,7 +34,7 @@ namespace MKAh.Ini
 
 		public int Index { get; internal set; } = 0;
 
-		public Setting(SettingType type = SettingType.Generic, Section parent=null)
+		public Setting(SettingType type = SettingType.Generic, Section parent = null)
 		{
 			ResetEscapedCache();
 			Type = type;
@@ -68,25 +68,32 @@ namespace MKAh.Ini
 			}
 		}
 
-		public bool BoolValue
+		// alias for Value
+		public string String
+		{
+			get => Value;
+			set => Value = value;
+		}
+
+		public bool Bool
 		{
 			set => Set(value);
 			get => bool.Parse(Value);
 		}
 
-		public int IntValue
+		public int Int
 		{
 			set => Set(value);
 			get => int.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands);
 		}
 
-		public float FloatValue
+		public float Float
 		{
 			set => Set(value);
 			get => float.Parse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
 		}
 
-		public double DoubleValue
+		public double Double
 		{
 			set => Set(value);
 			get => double.Parse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
@@ -143,6 +150,8 @@ namespace MKAh.Ini
 		object[] ArrayCache = null;
 		Lazy<string> escapedValueCache = null;
 
+		void ResetEscapedCache() => escapedValueCache = new Lazy<string>(CreateEscapedCache);
+
 		public string EscapedValue => escapedValueCache.Value;
 
 		string _comment = null;
@@ -177,8 +186,6 @@ namespace MKAh.Ini
 				Altered();
 			}
 		}
-
-		void ResetEscapedCache() => escapedValueCache = new Lazy<string>(CreateEscapedCache);
 
 		string CreateEscapedCache()
 		{

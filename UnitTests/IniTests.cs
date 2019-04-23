@@ -17,6 +17,7 @@ namespace IniFile
 	public class Reading
 	{
 		[Test]
+		[Repeat(3)]
 		public void Initialization()
 		{
 			var config = new Ini.Config();
@@ -149,8 +150,8 @@ namespace IniFile
 		{
 			var section = new Ini.Section("TestSection");
 
-			section.Add(new Ini.Setting() { Name = "Test1", IntValue = 5 });
-			section.Add(new Ini.Setting() { Name = "Test2", IntValue = 72 });
+			section.Add(new Ini.Setting() { Name = "Test1", Int = 5 });
+			section.Add(new Ini.Setting() { Name = "Test2", Int = 72 });
 
 			var results = new List<string>();
 			var resultInts = new List<string>();
@@ -194,7 +195,7 @@ namespace IniFile
 
 			var section1 = new Ini.Section(section1Name);
 			section1.Add(new Ini.Setting() { Name = section1Var1Name, IntArray = s1var1value });
-			section1.Add(new Ini.Setting() { Name = section1Var2Name, DoubleValue = s1var2value });
+			section1.Add(new Ini.Setting() { Name = section1Var2Name, Double = s1var2value });
 			config.Add(section1);
 
 			var section2 = new Ini.Section(section2Name);
@@ -247,7 +248,7 @@ namespace IniFile
 			var setVal = section.GetOrSet("NotSet", newVal);
 
 			Assert.AreEqual(mods + 1, config.Changes);
-			Assert.AreEqual(newVal, setVal.IntValue);
+			Assert.AreEqual(newVal, setVal.Int);
 
 			var setVal2 = section.GetOrSet("NotSetArray", new int[] { 1, 2, 3 });
 			Assert.AreEqual(mods + 2, config.Changes);
@@ -274,13 +275,13 @@ namespace IniFile
 			int oldVal = 5;
 			int newVal = 7;
 
-			section[SettingName].IntValue = oldVal;
+			section[SettingName].Int = oldVal;
 
 			int mods = config.Changes;
 			var setting = section.GetOrSet(SettingName, newVal);
 
 			Assert.AreEqual(mods, config.Changes);
-			Assert.AreEqual(oldVal, setting.IntValue);
+			Assert.AreEqual(oldVal, setting.Int);
 
 			section[SettingName2].IntArray = new int[] { 1, 2, 3 };
 
@@ -296,6 +297,7 @@ namespace IniFile
 		}
 
 		[Test]
+		[TestOf(nameof(Ini.Interface.Value.Name))]
 		public void NameChange()
 		{
 			var config = new Ini.Config();
@@ -314,6 +316,7 @@ namespace IniFile
 		}
 
 		[Test]
+		[TestOf(nameof(Ini.Setting.Array))]
 		public void EmptyArray()
 		{
 			var section = new Ini.Section("Test");
