@@ -226,13 +226,21 @@ namespace IniFile
 			section2.Add(new Ini.Setting() { Name = section2Var2Name, Value = s2var2value });
 			config.Add(section2);
 
+
+			const string incrName = "Incrementor";
+			const string rollName = "Roller";
+
+			var section3 = new Section(incrName);
+			section3.Add(new Setting() { Name = rollName, Int = 0 });
+			config.Add(section3);
+
 			var data = config.GetLines();
 
 			for (int i = 0; i < repeats; i++)
 			{
 				config = Ini.Config.FromData(data); // read written config
 
-				Assert.AreEqual(2, config.ItemCount);
+				Assert.AreEqual(3, config.ItemCount);
 				var s1 = config.Get(section1Name);
 				var s2 = config.Get(section2Name);
 
@@ -253,6 +261,10 @@ namespace IniFile
 				Assert.AreEqual(s1var2valueFormatted, s1v2.Value);
 				Assert.AreEqual(s2var1valueEscaped, new ExposedSetting(s2v1).ExposedEscapedValue);
 				Assert.AreEqual(s2var2valueEscaped, new ExposedSetting(s2v2).ExposedEscapedValue);
+
+				int num = config[incrName][rollName].Int;
+				Assert.AreEqual(i, num);
+				config[incrName][rollName].Int = num+1;
 
 				data = config.GetLines(); // re-write config
 			}
