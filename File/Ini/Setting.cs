@@ -294,6 +294,26 @@ namespace MKAh.Ini
 		public void Set(double value) => Value = Converter<double>.Convert(value);
 		public void SetArray(decimal[] values) => Array = Converter<decimal>.Convert(values);
 		public void Set(decimal value) => Value = Converter<decimal>.Convert(value);
-	}
 
+		/// <summary>
+		/// Sets comment only if it's empty.
+		/// </summary>
+		public Setting InitComment(string comment)
+		{
+			if (string.IsNullOrEmpty(Comment))
+				Comment = comment;
+
+			return this;
+		}
+
+		/// <summary>
+		/// Shitty LINQ style comment setting.
+		/// </summary>
+		public Setting PutComment(string comment)
+		{
+			Comment = comment;
+
+			return this;
+		}
+	}
 }

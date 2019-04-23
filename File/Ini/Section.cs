@@ -27,6 +27,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace MKAh.Ini
@@ -157,5 +158,36 @@ namespace MKAh.Ini
 
 		public IEnumerator<Setting> GetEnumerator() => Items.GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+		public Setting GetOrSet<T>(string setting, T[] fallback)
+		{
+			if (!(TryGet(setting, out var rv) && rv.Array != null))
+			{
+				if (rv is null) rv = new Setting() { Name = setting };
+
+				rv.SetArray(Converter<T>.Convert(fallback));
+				Add(rv);
+			}
+
+			return rv;
+		}
+
+		public Setting GetOrSet<T>(string setting, T fallback)
+		{
+			Debug.Assert(!string.IsNullOrEmpty(setting));
+
+			if (!(TryGet(setting, out var rv) && rv.Value != null))
+			{
+				if (rv is null) rv = new Setting() { Name = setting };
+
+				rv.Set(Converter<T>.Convert(fallback));
+
+				Add(rv);
+
+				// TODO: signal owning config that this has been changed
+			}
+
+			return rv;
+		}
 	}
 }
