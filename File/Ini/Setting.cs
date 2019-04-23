@@ -218,11 +218,7 @@ namespace MKAh.Ini
 
 		bool EscapeValue(string value, out string nvalue)
 		{
-			if (string.IsNullOrEmpty(value))
-			{
-				nvalue = null;
-				return false;
-			}
+			Debug.Assert(!string.IsNullOrEmpty(value), nameof(value));
 
 			bool NeedsEscaping = value.IndexOf(Constant.Quote) >= 0;
 			bool NeedsQuotes = value.IndexOfAny(Config.ReservedCharacters) >= 0;
