@@ -90,6 +90,7 @@
     <Compile Include="Logic\BitOperations.cs" />
     <Compile Include="Native\Basic.cs" />
     <Compile Include="Program\NativeImage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wrapper\Windows\PerformanceCounter.cs" />
   </ItemGroup>
   <ItemGroup>
