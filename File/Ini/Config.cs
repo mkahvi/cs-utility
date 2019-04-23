@@ -155,6 +155,8 @@ namespace MKAh.Ini
 				lineNo++;
 				HandleLine(line.Trim(), lineNo, ref section);
 			}
+
+			ResetChangeCount();
 		}
 
 		public void Load(System.IO.StreamReader stream)
@@ -203,7 +205,7 @@ namespace MKAh.Ini
 
 				if (!PreserveWhitespace) SectionName = SectionName.Trim();
 
-				section = new Section(SectionName);
+				section = new Section(SectionName, parent:this);
 				Items.Add(section);
 			}
 			else
@@ -254,7 +256,7 @@ namespace MKAh.Ini
 			{
 				Section section = null;
 				if (!TryGet(name, out section))
-					Add(section = new Section(name));
+					Add(section = new Section(name, parent:this));
 
 				return section;
 			}

@@ -78,7 +78,7 @@ namespace MKAh.Ini
 			{
 				Setting value = null;
 				if (!TryGet(key, out value))
-					Add(value = new Setting() { Name = key });
+					Add(value = new Setting() { Name = key, Parent = this });
 
 				return value;
 			}
@@ -163,7 +163,7 @@ namespace MKAh.Ini
 		{
 			if (!(TryGet(setting, out var rv) && rv.Array != null))
 			{
-				if (rv is null) rv = new Setting() { Name = setting };
+				if (rv is null) rv = new Setting() { Name = setting, Parent = this };
 
 				rv.SetArray(Converter<T>.Convert(fallback));
 				Add(rv);
@@ -172,13 +172,17 @@ namespace MKAh.Ini
 			return rv;
 		}
 
+		/// <summary>
+		/// .
+		/// </summary>
+		/// <remarks>Causes 0 to 2 changes.</remarks>
 		public Setting GetOrSet<T>(string setting, T fallback)
 		{
 			Debug.Assert(!string.IsNullOrEmpty(setting));
 
 			if (!(TryGet(setting, out var rv) && rv.Value != null))
 			{
-				if (rv is null) rv = new Setting() { Name = setting };
+				if (rv is null) rv = new Setting() { Name = setting, Parent = this };
 
 				rv.Set(Converter<T>.Convert(fallback));
 
