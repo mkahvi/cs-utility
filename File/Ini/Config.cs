@@ -133,7 +133,7 @@ namespace MKAh.Ini
 
 		public void Load(string filename, System.Text.Encoding encoding)
 		{
-			Debug.WriteLine("INI LOAD: " + filename);
+			//Debug.WriteLine("INI LOAD: " + filename);
 
 			using (var file = System.IO.File.Open(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
 			using (var reader = new System.IO.StreamReader(file, encoding))
@@ -177,7 +177,7 @@ namespace MKAh.Ini
 
 		void HandleLine(string line, int lineNumber, ref Section section)
 		{
-			Debug.WriteLine($"INI [{lineNumber:000}]: {line}");
+			//Debug.WriteLine($"INI [{lineNumber:000}]: {line}");
 
 			if (string.IsNullOrWhiteSpace(line))
 			{
@@ -217,6 +217,7 @@ namespace MKAh.Ini
 				catch (FormatException ex)
 				{
 					if (IgnoreMalformed) return;
+					// TODO: throw better error
 					Debug.WriteLine("Malformed line:" + lineNumber + " - " + ex.Message);
 					throw;
 				}
@@ -570,7 +571,7 @@ namespace MKAh.Ini
 			foreach (var section in this)
 				totallines += section.Items.Count;
 
-			Debug.WriteLine("INI GET LINES: " + totallines);
+			//Debug.WriteLine("INI GET LINES: " + totallines);
 
 			if (totallines == 0) throw new ArgumentNullException("Empty configuration");
 
