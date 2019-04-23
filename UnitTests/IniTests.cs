@@ -7,6 +7,29 @@ using System.Threading.Tasks;
 using NUnit;
 using NUnit.Framework;
 
+namespace MKAh.Ini
+{
+	class ExposedSetting : Setting
+	{
+		public string ExposedEscapedValue => base.EscapedValue;
+
+		internal ExposedSetting() : base()
+		{
+
+		}
+
+		internal ExposedSetting(Setting setting) : base()
+		{
+			Comment = setting.Comment;
+			if (setting.IsArray)
+				Array = setting.Array;
+			else
+				Value = setting.Value;
+			Name = setting.Name;
+		}
+	}
+}
+
 namespace IniFile
 {
 	using MKAh;
@@ -67,21 +90,21 @@ namespace IniFile
 				Debug.WriteLine(key1.Value);
 				Assert.AreEqual("0.5", key1.Value);
 
-				var intarray = new Ini.Setting { Name = "IntArray", Comment = "ints" };
+				var intarray = new Ini.ExposedSetting { Name = "IntArray", Comment = "ints" };
 				intarray.SetArray(new[] { 1, 2f, 3 });
-				Debug.WriteLine(intarray.EscapedValue);
-				Assert.AreEqual("{ 1, 2, 3 }", intarray.EscapedValue);
+				Debug.WriteLine(intarray.ExposedEscapedValue);
+				Assert.AreEqual("{ 1, 2, 3 }", intarray.ExposedEscapedValue);
 
-				var strarray = new Ini.Setting { Name = "StringArray", Comment = "strings" };
+				var strarray = new Ini.ExposedSetting { Name = "StringArray", Comment = "strings" };
 				strarray.SetArray(new[] { "abc", "xyz" });
-				Debug.WriteLine(strarray.EscapedValue);
-				Assert.AreEqual("{ abc, xyz }", strarray.EscapedValue);
+				Debug.WriteLine(strarray.ExposedEscapedValue);
+				Assert.AreEqual("{ abc, xyz }", strarray.ExposedEscapedValue);
 
-				var badarray = new Ini.Setting { Name = "BadArray", Comment = "bad strings" };
+				var badarray = new Ini.ExposedSetting { Name = "BadArray", Comment = "bad strings" };
 				badarray.SetArray(new[] { "a#b#c", "x\"y\"z", "\"doop\"#", "good", "  spaced", "#bad", "#\"test\"" });
-				Debug.WriteLine(badarray.EscapedValue);
+				Debug.WriteLine(badarray.ExposedEscapedValue);
 
-				Assert.AreEqual("{ \"a#b#c\", \"x\\\"y\\\"z\", \"\\\"doop\\\"#\", good, \"  spaced\", \"#bad\", \"#\\\"test\\\"\" }", badarray.EscapedValue);
+				Assert.AreEqual("{ \"a#b#c\", \"x\\\"y\\\"z\", \"\\\"doop\\\"#\", good, \"  spaced\", \"#bad\", \"#\\\"test\\\"\" }", badarray.ExposedEscapedValue);
 
 				var quotedArray = new Ini.Setting { Name="test", Value = "kakka\"bob\"" };
 
@@ -226,10 +249,10 @@ namespace IniFile
 				Assert.IsNotNull(s2v1);
 				Assert.IsNotNull(s2v2);
 
-				Assert.AreEqual(s1var1valueEscaped, s1v1.EscapedValue);
+				Assert.AreEqual(s1var1valueEscaped, new ExposedSetting(s1v1).ExposedEscapedValue);
 				Assert.AreEqual(s1var2valueFormatted, s1v2.Value);
-				Assert.AreEqual(s2var1valueEscaped, s2v1.EscapedValue);
-				Assert.AreEqual(s2var2valueEscaped, s2v2.EscapedValue);
+				Assert.AreEqual(s2var1valueEscaped, new ExposedSetting(s2v1).ExposedEscapedValue);
+				Assert.AreEqual(s2var2valueEscaped, new ExposedSetting(s2v2).ExposedEscapedValue);
 
 				data = config.GetLines(); // re-write config
 			}
@@ -257,7 +280,7 @@ namespace IniFile
 			Assert.AreEqual(1, array[0]);
 			Assert.AreEqual(2, array[1]);
 			Assert.AreEqual(3, array[2]);
-			Assert.AreEqual("{ 1, 2, 3 }", setVal2.EscapedValue);
+			Assert.AreEqual("{ 1, 2, 3 }", new ExposedSetting(setVal2).ExposedEscapedValue);
 
 			Assert.AreEqual(3, config.Changes);
 		}
@@ -293,7 +316,7 @@ namespace IniFile
 			Assert.AreEqual(1, array[0]);
 			Assert.AreEqual(2, array[1]);
 			Assert.AreEqual(3, array[2]);
-			Assert.AreEqual("{ 1, 2, 3 }", setting2.EscapedValue);
+			Assert.AreEqual("{ 1, 2, 3 }", new ExposedSetting(setting2).ExposedEscapedValue);
 		}
 
 		[Test]
