@@ -282,11 +282,11 @@ namespace IniFile
 			int mods = config.Changes;
 			var setVal = section.GetOrSet("NotSet", newVal);
 
-			Assert.AreEqual(mods + 1, config.Changes);
+			Assert.AreEqual(mods + 2, config.Changes);
 			Assert.AreEqual(newVal, setVal.Int);
 
 			var setVal2 = section.GetOrSet("NotSetArray", new int[] { 1, 2, 3 });
-			Assert.AreEqual(mods + 2, config.Changes);
+			Assert.AreEqual(mods + 4, config.Changes);
 
 			var array = setVal2.IntArray;
 			Assert.AreEqual(1, array[0]);
@@ -294,7 +294,7 @@ namespace IniFile
 			Assert.AreEqual(3, array[2]);
 			Assert.AreEqual("{ 1, 2, 3 }", new ExposedSetting(setVal2).ExposedEscapedValue);
 
-			Assert.AreEqual(3, config.Changes);
+			Assert.AreEqual(5, config.Changes);
 		}
 
 		[Test]
