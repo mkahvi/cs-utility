@@ -160,7 +160,7 @@ namespace MKAh.Ini
 			get => _comment;
 			set
 			{
-				_comment = value.Replace("\n", " "); // HACK
+				_comment = value?.Replace('\n', ' '); // HACK
 				Altered();
 			}
 		}
