@@ -27,6 +27,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 
@@ -121,12 +122,8 @@ namespace MKAh
 			if (iface.NetworkInterfaceType == NetworkInterfaceType.Loopback || iface.NetworkInterfaceType == NetworkInterfaceType.Tunnel)
 				return null;
 
-			var ipa = new List<IPAddress>(2);
-			foreach (UnicastIPAddressInformation ip in iface.GetIPProperties().UnicastAddresses)
-				ipa.Add(ip.Address);
-
-
-			return ipa.ToArray();
+			return (from ip in iface.GetIPProperties().UnicastAddresses
+					select ip.Address).ToArray();
 		}
 	}
 
