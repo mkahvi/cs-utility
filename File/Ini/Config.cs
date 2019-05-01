@@ -424,7 +424,7 @@ namespace MKAh.Ini
 				value = new Setting { Comment = source.Substring(CommentStart + 1).Trim() };
 			}
 
-			if (!string.IsNullOrEmpty(value.Value) && value.UnescapeValue(value.Value, out string nv))
+			if (!string.IsNullOrEmpty(value.Value) && Setting.UnescapeValue(value.Value, out string nv))
 				value.Value = nv;
 
 			return value;

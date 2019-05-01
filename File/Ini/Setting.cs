@@ -213,7 +213,7 @@ namespace MKAh.Ini
 				return string.Empty;
 		}
 
-		bool EscapeValue(string value, out string nvalue)
+		public static bool EscapeValue(string value, out string nvalue)
 		{
 			Debug.Assert(!string.IsNullOrEmpty(value), nameof(value));
 
@@ -238,7 +238,7 @@ namespace MKAh.Ini
 			return false;
 		}
 
-		internal bool UnescapeValue(string value, out string nvalue, bool trim = false)
+		public static bool UnescapeValue(string value, out string nvalue, bool trim = false)
 		{
 			if (string.IsNullOrEmpty(value) || value.Length == 0)
 			{
