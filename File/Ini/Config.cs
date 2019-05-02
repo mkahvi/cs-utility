@@ -205,15 +205,15 @@ namespace MKAh.Ini
 
 				if (!PreserveWhitespace) SectionName = SectionName.Trim();
 
-				section = new Section(SectionName, parent:this);
+				section = new Section(SectionName, parent: this) { Line = lineNumber };
 				Items.Add(section);
 			}
 			else
 			{
-				Setting value = null;
 				try
 				{
-					value = ParseValue(line);
+					var value = ParseValue(line);
+					value.Line = lineNumber;
 					section.Add(value);
 				}
 				catch (FormatException ex)
