@@ -430,6 +430,13 @@ namespace MKAh.Ini
 			return value;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="offset"></param>
+		/// <param name="end">Offset past the array end marker.</param>
+		/// <returns></returns>
 		string[] GetArray(string source, int offset, out int end)
 		{
 			Debug.Assert(source[offset].Equals('{'));

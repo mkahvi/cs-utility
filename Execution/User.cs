@@ -54,11 +54,17 @@ namespace MKAh
 		/// </summary>
 		public static bool IsWin7 => (System.Environment.OSVersion.Platform == PlatformID.Win32NT && System.Environment.OSVersion.Version.Major == 6 && System.Environment.OSVersion.Version.Minor == 1);
 
+		/// <summary>
+		/// Returns true if OS version is higher than 6.2
+		/// </summary>
 		public static bool IsWin8OrBetter
 			=> (System.Environment.OSVersion.Platform == PlatformID.Win32NT
-			&& System.Environment.OSVersion.Version.Major > 6
+			&& (System.Environment.OSVersion.Version.Major > 6)
 			|| (System.Environment.OSVersion.Version.Major == 6 && System.Environment.OSVersion.Version.Minor == 2));
 
+		/// <summary>
+		/// Current code is executing on the main thread.
+		/// </summary>
 		public static bool IsMainThread => Thread.CurrentThread.IsThreadPoolThread == false && Thread.CurrentThread.ManagedThreadId == 1;
 
 		// For figuring out multi-threading related problems

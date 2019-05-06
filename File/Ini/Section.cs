@@ -187,8 +187,6 @@ namespace MKAh.Ini
 				rv.Set(Converter<T>.Convert(fallback));
 
 				Add(rv);
-
-				// TODO: signal owning config that this has been changed
 			}
 
 			return rv;
