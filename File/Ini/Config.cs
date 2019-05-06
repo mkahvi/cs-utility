@@ -81,8 +81,6 @@ namespace MKAh.Ini
 		public bool UniqueSections = false;
 		public bool UniqueKeys { get; } = false; // setting this to true not supported yet
 
-		public bool IgnoreMalformed = false;
-
 		public bool AlwaysQuoteStrings = false;
 		public bool RequireStringQuotes = false;
 
@@ -94,13 +92,18 @@ namespace MKAh.Ini
 
 		public string LineEnd = "\n";
 
+		/// <summary>
+		/// Strict parsing. More exceptions are thrown for malformed input that could've been ignored.
+		/// </summary>
+		public bool Strict = false;
+
 		//HashSet<string> UniqueSectionNames = new HashSet<string>();
 
 		int _changes=0;
 		/// <summary>
 		/// Number of changes to the config tree since creation or since last reset.
 		/// </summary>
-		public int Changes { get => _changes; }
+		public int Changes => _changes;
 
 		/// <summary>
 		/// Resets the change counter.
@@ -137,9 +140,7 @@ namespace MKAh.Ini
 
 			using (var file = System.IO.File.Open(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
 			using (var reader = new System.IO.StreamReader(file, encoding))
-			{
 				Load(reader);
-			}
 		}
 
 		public Section Header { get; private set; } = new Section("HEADER", -1);
@@ -151,30 +152,19 @@ namespace MKAh.Ini
 			Section section = Header;
 
 			foreach (var line in lines)
-			{
-				lineNo++;
-				HandleLine(line.Trim(), lineNo, ref section);
-			}
+				HandleLine(line.Trim(), ++lineNo, ref section);
 
 			ResetChangeCount();
 		}
 
 		public void Load(System.IO.StreamReader stream)
 		{
-			string line;
 			int lineNo = 0;
 
 			Section section = Header;
 
 			while (!stream.EndOfStream)
-			{
-				lineNo++;
-
-				// read line and trim whitespace from start
-				line = stream.ReadLine().TrimStart();
-
-				HandleLine(line, lineNo, ref section);
-			}
+				HandleLine(stream.ReadLine().TrimStart(), ++lineNo, ref section); // read line and trim whitespace from start
 		}
 
 		void HandleLine(string line, int lineNumber, ref Section section)
@@ -192,14 +182,14 @@ namespace MKAh.Ini
 				int SectionEnd = line.IndexOf(Constant.SectionEnd, 1);
 				if (SectionEnd == -1)
 				{
-					if (IgnoreMalformed) return;
+					if (!Strict) return;
 					throw new FormatException($"line:{lineNumber} has malformed section start: " + line.TrimEnd());
 				}
 				string SectionName = line.Substring(1, SectionEnd - 1);
 
 				if (SectionName.IndexOfAny(ReservedCharacters) >= 0)
 				{
-					if (IgnoreMalformed) return;
+					if (!Strict) return;
 					throw new FormatException($"line:{lineNumber} has invalid characters.");
 				}
 
@@ -216,9 +206,15 @@ namespace MKAh.Ini
 					value.Line = lineNumber;
 					section.Add(value);
 				}
+				catch (ParseException ex)
+				{
+					ex.Line = lineNumber;
+					Debug.WriteLine("Malformed line:" + lineNumber + " - " + ex.Message);
+					throw;
+				}
 				catch (FormatException ex)
 				{
-					if (IgnoreMalformed) return;
+					if (!Strict) return;
 					// TODO: throw better error
 					Debug.WriteLine("Malformed line:" + lineNumber + " - " + ex.Message);
 					throw;
@@ -336,7 +332,7 @@ namespace MKAh.Ini
 		/// </summary>
 		Setting ParseValue(string source)
 		{
-			int CommentStart = source.IndexOfAny(CommentChars);
+			int CommentStart = source.IndexOfAny(CommentChars); // Index of comment beginning
 			int KeyValueSeparator = source.IndexOf(Constant.KeyValueSeparator);
 
 			Setting value = null;
@@ -378,6 +374,10 @@ namespace MKAh.Ini
 					// { "" }
 
 					//Debug.WriteLine("GetArray: " + source);
+					
+					// Garbage here means we should've done string value parsing instead.
+					//if (Strict && !string.IsNullOrWhiteSpace(source.Substring(KeyValueSeparator, ArrayStart - KeyValueSeparator)))
+					//	throw new ParseException(source, KeyValueSeparator, ArrayStart - KeyValueSeparator);
 
 					var array = GetArray(source, ArrayStart, out end);
 					value.Array = value.UnescapeArray(array);
@@ -387,6 +387,12 @@ namespace MKAh.Ini
 					//value.Value = source.Substring(ArrayStart, end - ArrayStart).Trim();
 
 					// TODO: check for garbage before and after array delimiters
+
+					if (Strict && CommentStart > 0)
+					{
+						if (!string.IsNullOrWhiteSpace(source.Substring(end, CommentStart - end)))
+							throw new ParseException(source, "Malformed array", end, CommentStart - end);
+					}
 				}
 				else if (QuoteFound && !source[QuoteStart - 1].Equals(Constant.EscapeChar))
 				{
