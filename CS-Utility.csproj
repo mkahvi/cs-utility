@@ -71,13 +71,13 @@
   <ItemGroup>
     <Compile Include="Atomic\Lock.cs" />
     <Compile Include="Data\Generic\Constants.cs" />
-    <Compile Include="Data\Generic\EscapedString.cs" />
+    <Compile Include="Data\Generic\String.cs" />
     <Compile Include="Data\Ini\Config.cs" />
     <Compile Include="Data\Ini\Constant.cs" />
     <Compile Include="Data\Ini\Converter.cs" />
     <Compile Include="Data\Ini\Interface\IContainer.cs" />
     <Compile Include="Data\Ini\Interface\Value.cs" />
-    <Compile Include="Data\Ini\ParseException.cs" />
+    <Compile Include="Data\Exceptions\ParseException.cs" />
     <Compile Include="Data\Ini\Section.cs" />
     <Compile Include="Data\Ini\Setting.cs" />
     <Compile Include="Data\Ini\SettingType.cs" />
@@ -100,7 +100,6 @@
   <ItemGroup>
     <Folder Include=".git\objects\info\" />
     <Folder Include=".git\refs\tags\" />
-    <Folder Include="Data\Exceptions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>
