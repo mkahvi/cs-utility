@@ -70,6 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Atomic\Lock.cs" />
+    <Compile Include="Data\Generic\Constants.cs" />
+    <Compile Include="Data\Generic\EscapedString.cs" />
     <Compile Include="Data\Ini\Config.cs" />
     <Compile Include="Data\Ini\Constant.cs" />
     <Compile Include="Data\Ini\Converter.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Data\Ini\Section.cs" />
     <Compile Include="Data\Ini\Setting.cs" />
     <Compile Include="Data\Ini\SettingType.cs" />
+    <Compile Include="Data\JSON\Value.cs" />
     <Compile Include="Data\JSON\JSON.cs" />
     <Compile Include="Data\YAML\YAML.cs" />
     <Compile Include="Execution\User.cs" />
@@ -97,6 +100,7 @@
   <ItemGroup>
     <Folder Include=".git\objects\info\" />
     <Folder Include=".git\refs\tags\" />
+    <Folder Include="Data\Exceptions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

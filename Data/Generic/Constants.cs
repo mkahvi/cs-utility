@@ -1,5 +1,5 @@
 ﻿//
-// JSON.cs
+// Data.Constants.cs
 //
 // Author:
 //       M.A. (https://github.com/mkahvi)
@@ -24,33 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MKAh.Data
 {
-	public partial class JSON
+	public static partial class Constant
 	{
-		const char DictStart = '{';
-		const char DictyEnd = '}';
-		const char Escape = '\\';
-
-		KeyValue Data = new KeyValue();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public static JSON FromData(string data)
-		{
-			var keydata = new KeyValue();
-
-
-
-			return new JSON() { Data = keydata };
-		}
+		public const char Quote = '"';
+		public const char EscapeChar = '\\';
 	}
 }

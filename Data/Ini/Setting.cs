@@ -217,7 +217,7 @@ namespace MKAh.Ini
 		{
 			Debug.Assert(!string.IsNullOrEmpty(value), nameof(value));
 
-			bool NeedsEscaping = value.IndexOf(Constant.Quote) >= 0;
+			bool NeedsEscaping = value.IndexOf(Data.Constant.Quote) >= 0;
 			bool NeedsQuotes = value.IndexOfAny(Config.ReservedCharacters) >= 0;
 			bool ExcessWhitespace = char.IsWhiteSpace(value[0]) || char.IsWhiteSpace(value[value.Length - 1]);
 			NeedsQuotes |= ExcessWhitespace;
@@ -229,7 +229,7 @@ namespace MKAh.Ini
 				if (NeedsEscaping)
 					nvalue = nvalue.Replace("\"", "\\\"");
 				if (NeedsQuotes)
-					nvalue = Constant.Quote + nvalue + Constant.Quote;
+					nvalue = Data.Constant.Quote + nvalue + Data.Constant.Quote;
 
 				return true;
 			}
@@ -248,8 +248,8 @@ namespace MKAh.Ini
 
 			if (trim) value = value.Trim();
 
-			bool NeedsUnEscaping = value.IndexOf(Constant.EscapeChar) >= 0;
-			bool NeedsUnQuoting = value[0].Equals(Constant.Quote);
+			bool NeedsUnEscaping = value.IndexOf(Data.Constant.EscapeChar) >= 0;
+			bool NeedsUnQuoting = value[0].Equals(Data.Constant.Quote);
 
 			if (NeedsUnEscaping || NeedsUnQuoting || trim)
 			{

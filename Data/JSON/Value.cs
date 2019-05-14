@@ -1,5 +1,5 @@
 ﻿//
-// JSON.cs
+// JSON.Value.cs
 //
 // Author:
 //       M.A. (https://github.com/mkahvi)
@@ -25,8 +25,8 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,22 +35,48 @@ namespace MKAh.Data
 {
 	public partial class JSON
 	{
-		const char DictStart = '{';
-		const char DictyEnd = '}';
-		const char Escape = '\\';
-
-		KeyValue Data = new KeyValue();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public static JSON FromData(string data)
+		public class KeyValue : IEnumerable<KeyValue>
 		{
-			var keydata = new KeyValue();
+			public string Name { get; set; } = string.Empty;
 
+			public bool IsArray { get; set; } = false;
 
+			string _value = string.Empty;
+			public string Value
+			{
+				get => _value;
+				set
+				{
+					_value = value;
+					Values?.Clear();
+				}
+			}
 
-			return new JSON() { Data = keydata };
+			public KeyValue this[string key]
+			{
+				get
+				{
+					KeyValue value = null;
+					if (!Values.TryGetValue(key, out value))
+						Values.Add(key, value = new KeyValue() { Name = key });
+
+					return value;
+				}
+				set
+				{
+					Values[key] = value;
+					_value = string.Empty;
+				}
+			}
+
+			public int Count => Values.Count;
+
+			public void Remove(string key) => Values.Remove(key);
+
+			public IEnumerator<KeyValue> GetEnumerator() => Values.Values.GetEnumerator();
+			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+			Dictionary<string, KeyValue> Values = new Dictionary<string, KeyValue>();
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace MKAh.Ini
 	public class Config : Interface.IContainer<Section>, IEnumerable<Section>
 	{
 		public static readonly char[] ReservedCharacters
-			= new[] { Constant.Quote, Constant.StandardComment, Constant.AlternateComment, Constant.KeyValueSeparator,
+			= new[] { Data.Constant.Quote, Constant.StandardComment, Constant.AlternateComment, Constant.KeyValueSeparator,
 					Constant.ArrayStart, Constant.ArrayEnd, Constant.SectionStart, Constant.SectionEnd };
 
 		/// <summary>
@@ -349,12 +349,12 @@ namespace MKAh.Ini
 
 				int ArrayStart = source.IndexOf(Constant.ArrayStart, KeyValueSeparator);
 
-				int QuoteStart = source.IndexOf(Constant.Quote, KeyValueSeparator);
+				int QuoteStart = source.IndexOf(Data.Constant.Quote, KeyValueSeparator);
 
 				int start = QuoteStart;
 
 				bool CommentFound = CommentStart >= 0;
-				bool QuoteFound = QuoteStart >= 0 && !source[QuoteStart - 1].Equals(Constant.EscapeChar);
+				bool QuoteFound = QuoteStart >= 0 && !source[QuoteStart - 1].Equals(Data.Constant.EscapeChar);
 				bool ArrayFound = ArrayStart >= 0;
 				bool QuoteAndArray = QuoteFound && ArrayFound;
 				bool QuoteOrArray = QuoteFound || ArrayFound;
@@ -394,14 +394,14 @@ namespace MKAh.Ini
 							throw new ParseException(source, "Malformed array", end, CommentStart - end);
 					}
 				}
-				else if (QuoteFound && !source[QuoteStart - 1].Equals(Constant.EscapeChar))
+				else if (QuoteFound && !source[QuoteStart - 1].Equals(Data.Constant.EscapeChar))
 				{
 					// properly quoted string
 					// "
 
 					start = QuoteStart;
 
-					value.Value = GetQuotedString(source, QuoteStart, out end);
+					value.Value = Data.String.GetQuotedString(source, QuoteStart, out end);
 
 					// TODO: check for garbage before and after quote delimiters
 				}
@@ -462,7 +462,7 @@ namespace MKAh.Ini
 
 			for (int i = offset; i < source.Length; i++)
 			{
-				UnescapedQuote = source[i].Equals(Constant.Quote) && !source[i - 1].Equals(Constant.EscapeChar);
+				UnescapedQuote = source[i].Equals(Data.Constant.Quote) && !source[i - 1].Equals(Data.Constant.EscapeChar);
 
 				if (Quotes % 2 != 0) // inside quotes
 				{
@@ -510,27 +510,6 @@ namespace MKAh.Ini
 			}
 
 			throw new FormatException("Array end not found.");
-		}
-
-		string GetQuotedString(string source, int offset, out int end)
-		{
-			Debug.Assert(source[offset].Equals(Constant.Quote));
-
-			offset++; // skip "
-
-			bool UnescapedQuote = false;
-			for (int i = offset; i < source.Length; i++)
-			{
-				UnescapedQuote = source[i].Equals(Constant.Quote) && !source[i - 1].Equals(Constant.EscapeChar);
-				if (UnescapedQuote)
-				{
-					end = i + 1;
-					var final = source.Substring(offset, i - offset);
-					return final;
-				}
-			}
-
-			throw new FormatException("Quoted string end not found.");
 		}
 
 		public IEnumerable<string> EnumerateLines()

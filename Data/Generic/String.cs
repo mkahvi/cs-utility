@@ -1,5 +1,5 @@
 ﻿//
-// JSON.cs
+// Data.String.cs
 //
 // Author:
 //       M.A. (https://github.com/mkahvi)
@@ -25,32 +25,31 @@
 // THE SOFTWARE.
 
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MKAh.Data
 {
-	public partial class JSON
+	public static partial class String
 	{
-		const char DictStart = '{';
-		const char DictyEnd = '}';
-		const char Escape = '\\';
-
-		KeyValue Data = new KeyValue();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public static JSON FromData(string data)
+		public static string GetQuotedString(string source, int offset, out int end)
 		{
-			var keydata = new KeyValue();
+			Debug.Assert(source[offset].Equals(Constant.Quote));
 
+			offset++; // skip "
 
+			bool UnescapedQuote = false;
+			for (int i = offset; i < source.Length; i++)
+			{
+				UnescapedQuote = source[i].Equals(Constant.Quote) && !source[i - 1].Equals(Constant.EscapeChar);
+				if (UnescapedQuote)
+				{
+					end = i + 1;
+					var final = source.Substring(offset, i - offset);
+					return final;
+				}
+			}
 
-			return new JSON() { Data = keydata };
+			throw new FormatException("Quoted string end not found.");
 		}
 	}
 }

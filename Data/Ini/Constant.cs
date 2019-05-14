@@ -32,11 +32,9 @@ namespace MKAh.Ini
 		public const char ArrayDelimiter = ',';
 		public const char ArrayStart = '{';
 		public const char ArrayEnd = '}';
-		public const char Quote = '"';
 		public const char SectionStart = '[';
 		public const char SectionEnd = ']';
 		public const char StandardComment = '#';
 		public const char AlternateComment = ';';
-		public const char EscapeChar = '\\';
 	}
 }
