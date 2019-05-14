@@ -70,18 +70,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Atomic\Lock.cs" />
+    <Compile Include="Data\Ini\Config.cs" />
+    <Compile Include="Data\Ini\Constant.cs" />
+    <Compile Include="Data\Ini\Converter.cs" />
+    <Compile Include="Data\Ini\Interface\IContainer.cs" />
+    <Compile Include="Data\Ini\Interface\Value.cs" />
+    <Compile Include="Data\Ini\ParseException.cs" />
+    <Compile Include="Data\Ini\Section.cs" />
+    <Compile Include="Data\Ini\Setting.cs" />
+    <Compile Include="Data\Ini\SettingType.cs" />
+    <Compile Include="Data\JSON\JSON.cs" />
+    <Compile Include="Data\YAML\YAML.cs" />
     <Compile Include="Execution\User.cs" />
     <Compile Include="Execution\UserActivity.cs" />
     <Compile Include="Extensions\CoreExtensions.cs" />
     <Compile Include="File\Allocation.cs" />
-    <Compile Include="File\Ini\SettingType.cs" />
-    <Compile Include="File\Ini\Constant.cs" />
-    <Compile Include="File\Ini\Converter.cs" />
-    <Compile Include="File\Ini\Config.cs" />
-    <Compile Include="File\Ini\Interface\IContainer.cs" />
-    <Compile Include="File\Ini\Interface\Value.cs" />
-    <Compile Include="File\Ini\Section.cs" />
-    <Compile Include="File\Ini\Setting.cs" />
     <Compile Include="File\NativeMethods.cs" />
     <Compile Include="Handling\DiscardException.cs" />
     <Compile Include="Human\Readable\Time.cs" />
