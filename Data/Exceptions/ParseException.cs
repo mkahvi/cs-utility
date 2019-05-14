@@ -35,11 +35,9 @@ namespace MKAh.Ini
 		public int Length = -1;
 		public int Line = -1;
 
-		readonly public string Message = string.Empty;
-
 		public ParseException(string input, string message = "", int offset=-1, int length=-1, int line=-1)
+			: base(message)
 		{
-			Message = message;
 			Input = input;
 			Offset = offset;
 			Length = length;
