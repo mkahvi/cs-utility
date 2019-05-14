@@ -1,5 +1,5 @@
 ﻿//
-// Ini.cs
+// Ini.Config.cs
 //
 // Author:
 //       M.A. (https://github.com/mkahvi)
