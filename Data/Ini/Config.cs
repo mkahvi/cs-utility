@@ -505,7 +505,7 @@ namespace MKAh.Ini
 				else if (expectArrayDelimiter && !ArrayDelimiter)
 					throw new FormatException($"Array item delimiter expected at {i}, found {source[i]} instead");
 
-				if (CommentChars.Contains(source[i])) // comment char outside of quotes
+				if (CommentChars.Any((x) => x.Equals(source[i]))) // comment char outside of quotes
 					throw new FormatException("Unexpected comment start before array closure [" + i + "]: " + source);
 			}
 
