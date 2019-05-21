@@ -250,8 +250,7 @@ namespace MKAh.Ini
 		{
 			get
 			{
-				Section section = null;
-				if (!TryGet(name, out section))
+				if (!TryGet(name, out Section section))
 					Add(section = new Section(name, parent:this));
 
 				return section;

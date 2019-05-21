@@ -76,8 +76,7 @@ namespace MKAh.Ini
 		{
 			get
 			{
-				Setting value = null;
-				if (!TryGet(key, out value))
+				if (!TryGet(key, out Setting value))
 					Add(value = new Setting() { Name = key, Parent = this });
 
 				return value;

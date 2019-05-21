@@ -34,27 +34,27 @@ namespace MKAh.Wrapper.Windows
 	{
 		System.Diagnostics.PerformanceCounter Counter { get; set; } = null;
 
-		readonly string p_CategoryName = null;
-		readonly string p_CounterName = null;
-		readonly string p_InstanceName = null;
-		readonly bool p_ScrapFirst = true;
+		readonly string CategoryName = null;
+		readonly string CounterName = null;
+		readonly string InstanceName = null;
+		readonly bool ScrapFirst = true;
 
 		public PerformanceCounter(string category, string counter, string instance = null, bool scrapfirst = true)
 		{
-			p_CategoryName = category;
-			p_CounterName = counter;
-			p_InstanceName = instance;
-			p_ScrapFirst = scrapfirst;
+			CategoryName = category;
+			CounterName = counter;
+			InstanceName = instance;
+			ScrapFirst = scrapfirst;
 
 			Counter = new System.Diagnostics.PerformanceCounter()
 			{
-				CategoryName = p_CategoryName,
-				CounterName = p_CounterName,
-				InstanceName = p_InstanceName,
+				CategoryName = CategoryName,
+				CounterName = CounterName,
+				InstanceName = InstanceName,
 				ReadOnly = true,
 			};
 
-			if (p_ScrapFirst) { var scrap = Value; }
+			if (ScrapFirst) { _ = Value; }
 
 			Manager.Sensors.Add(this);
 		}
