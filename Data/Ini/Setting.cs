@@ -152,7 +152,7 @@ namespace MKAh.Ini
 
 		Lazy<string> escapedValueCache = null;
 
-		void ResetEscapedCache() => escapedValueCache = new Lazy<string>(CreateEscapedCache);
+		void ResetEscapedCache() => escapedValueCache = new Lazy<string>(CreateEscapedCache, false);
 
 		protected string EscapedValue => escapedValueCache.Value;
 
