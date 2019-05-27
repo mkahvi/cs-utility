@@ -176,9 +176,9 @@ namespace MKAh.Cache
 		/// </summary>
 		/// <returns>The add.</returns>
 		/// <param name="accesskey">Accesskey.</param>
-		/// <param name="returnkey">Returnkey.</param>
 		/// <param name="item">Item.</param>
-		public bool Add(KT accesskey, RT returnkey, VT item)
+		/// <param name="returntestkey">Returnkey.</param>
+		public bool Add(KT accesskey, VT item, RT returntestkey=null)
 		{
 			Misses++;
 
@@ -190,7 +190,7 @@ namespace MKAh.Cache
 				Items.TryRemove(accesskey, out _); // .Replace
 			}
 
-			var ci = new CacheItem<KT, RT, VT> { AccessKey = accesskey, ReturnKey = returnkey, Item = item, Access = DateTimeOffset.UtcNow, Desirability = 1 };
+			var ci = new CacheItem<KT, RT, VT> { AccessKey = accesskey, ReturnKey = returntestkey, Item = item, Access = DateTimeOffset.UtcNow, Desirability = 1 };
 			CacheItem<KT, RT, VT> t = ci;
 			Items.TryAdd(accesskey, t);
 
