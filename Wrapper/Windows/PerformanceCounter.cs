@@ -30,7 +30,7 @@ using System.Diagnostics;
 
 namespace MKAh.Wrapper.Windows
 {
-	sealed public class PerformanceCounter : IDisposable
+	public class PerformanceCounter : IDisposable
 	{
 		System.Diagnostics.PerformanceCounter Counter { get; set; } = null;
 
