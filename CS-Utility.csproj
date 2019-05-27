@@ -70,6 +70,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Atomic\Lock.cs" />
+    <Compile Include="Data\Cache\CacheEventArgs.cs" />
+    <Compile Include="Data\Cache\CacheItem.cs" />
+    <Compile Include="Data\Cache\EvictStrategy.cs" />
+    <Compile Include="Data\Cache\SimpleCache.cs" />
+    <Compile Include="Data\Cache\StoreStrategy.cs" />
     <Compile Include="Data\Generic\Constants.cs" />
     <Compile Include="Data\Generic\String.cs" />
     <Compile Include="Data\Ini\Config.cs" />
