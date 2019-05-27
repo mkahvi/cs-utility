@@ -28,11 +28,10 @@ using System;
 
 namespace MKAh.Cache
 {
-	struct CacheItem<K1, K2, T> where T : class where K2 : class
+	struct CacheItem<KT, VT> where VT : class
 	{
-		public K1 AccessKey;
-		public K2 ReturnKey;
-		public T Item;
+		public KT AccessKey;
+		public VT Item;
 		public DateTimeOffset Access;
 		public long Desirability;
 	}

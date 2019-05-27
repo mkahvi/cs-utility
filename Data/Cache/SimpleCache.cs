@@ -26,7 +26,6 @@
 
 using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Linq;
 
 namespace MKAh.Cache
@@ -35,14 +34,13 @@ namespace MKAh.Cache
 	/// 
 	/// </summary>
 	/// <typeparam name="KT">Access key.</typeparam>
-	/// <typeparam name="RT">Secondary value, returned with the value.</typeparam>
 	/// <typeparam name="VT">Value.</typeparam>
-	public class SimpleCache<KT, RT, VT> : IDisposable where VT : class where RT : class
+	public class SimpleCache<KT, VT> : IDisposable where VT : class
 	{
 		readonly EvictStrategy CacheEvictStrategy = EvictStrategy.LeastRecent;
 		readonly StoreStrategy CacheStoreStrategy = StoreStrategy.ReplaceNoMatch;
 
-		readonly ConcurrentDictionary<KT, CacheItem<KT, RT, VT>> Items = new ConcurrentDictionary<KT, CacheItem<KT, RT, VT>>();
+		readonly ConcurrentDictionary<KT, CacheItem<KT, VT>> Items = new ConcurrentDictionary<KT, CacheItem<KT, VT>>();
 
 		public ulong Count => Convert.ToUInt64(Items.Count);
 		public ulong Hits { get; private set; } = 0;
@@ -102,7 +100,7 @@ namespace MKAh.Cache
 
 				var list = Items.Values.ToList(); // would be nice to cache this list
 
-				list.Sort(delegate (CacheItem<KT, RT, VT> x, CacheItem<KT, RT, VT> y)
+				list.Sort(delegate (CacheItem<KT, VT> x, CacheItem<KT, VT> y)
 				{
 					if (CacheEvictStrategy == EvictStrategy.LeastRecent)
 					{
@@ -178,7 +176,7 @@ namespace MKAh.Cache
 		/// <param name="accesskey">Accesskey.</param>
 		/// <param name="item">Item.</param>
 		/// <param name="returntestkey">Returnkey.</param>
-		public bool Add(KT accesskey, VT item, RT returntestkey=null)
+		public bool Add(KT accesskey, VT item)
 		{
 			Misses++;
 
@@ -190,8 +188,8 @@ namespace MKAh.Cache
 				Items.TryRemove(accesskey, out _); // .Replace
 			}
 
-			var ci = new CacheItem<KT, RT, VT> { AccessKey = accesskey, ReturnKey = returntestkey, Item = item, Access = DateTimeOffset.UtcNow, Desirability = 1 };
-			CacheItem<KT, RT, VT> t = ci;
+			var ci = new CacheItem<KT, VT> { AccessKey = accesskey, Item = item, Access = DateTimeOffset.UtcNow, Desirability = 1 };
+			CacheItem<KT, VT> t = ci;
 			Items.TryAdd(accesskey, t);
 
 			return true;
@@ -200,29 +198,21 @@ namespace MKAh.Cache
 		/// <summary>
 		/// Get cached entry.
 		/// </summary>
-		/// <returns>The get.</returns>
+		/// <returns>True if value was found.</returns>
 		/// <param name="key">Key.</param>
-		/// <param name="item">Cacheditem.</param>
+		/// <param name="item">Cached item.</param>
 		/// <param name="testvalue">RT is tested for matching. Cache item is dropped if they don't match. Ignored if null.</param>
-		public RT Get(KT key, out VT item, RT testvalue = null)
+		public bool Get(KT key, out VT item)
 		{
 			try
 			{
 				if (Items.TryGetValue(key, out var citem))
 				{
-					if (testvalue?.Equals(citem.ReturnKey) ?? false)
-					{
-						item = null;
-						Misses++;
-						Drop(key);
-						return null;
-					}
-
 					citem.Desirability++;
 					citem.Access = DateTimeOffset.UtcNow;
 					item = citem.Item;
 					Hits++;
-					return citem.ReturnKey;
+					return true;
 				}
 			}
 			catch (OutOfMemoryException) { throw; }
@@ -242,7 +232,7 @@ namespace MKAh.Cache
 
 			Misses++;
 			item = null;
-			return null;
+			return false;
 		}
 
 		/// <summary>
