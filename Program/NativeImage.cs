@@ -54,7 +54,7 @@ namespace MKAh.Program
 				Update(prc).WaitForExit();
 		}
 
-		public static bool Exists(Process process=null)
+		public static bool Exists(Process process = null)
 		{
 			bool rv = false;
 
@@ -83,13 +83,13 @@ namespace MKAh.Program
 		/// Calls Ngen to generate native image. Returns Process for the
 		/// </summary>
 		/// <returns>Process for Ngen</returns>
-		public static Process Create(Process process=null) => Ngen($"install \"{process.MainModule.FileName}\"", process);
+		public static Process Create(Process process = null) => Ngen($"install \"{process.MainModule.FileName}\"", process);
 
-		public static Process Remove(Process process=null) => Ngen($"uninstall \"{process.MainModule.FileName}\"", process);
+		public static Process Remove(Process process = null) => Ngen($"uninstall \"{process.MainModule.FileName}\"", process);
 
-		public static Process Update(Process process=null) => Ngen($"update \"{process.MainModule.FileName}\"", process);
+		public static Process Update(Process process = null) => Ngen($"update \"{process.MainModule.FileName}\"", process);
 
-		static Process Ngen(string argument, Process process=null)
+		static Process Ngen(string argument, Process process = null)
 		{
 			if (process == null) process = Process.GetCurrentProcess();
 

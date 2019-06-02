@@ -35,7 +35,7 @@ namespace MKAh.Ini
 		public int Length = -1;
 		public int Line = -1;
 
-		public ParseException(string input, string message = "", int offset=-1, int length=-1, int line=-1)
+		public ParseException(string input, string message = "", int offset = -1, int length = -1, int line = -1)
 			: base(message)
 		{
 			Input = input;

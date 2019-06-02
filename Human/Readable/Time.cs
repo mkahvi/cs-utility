@@ -38,14 +38,14 @@ namespace MKAh.Human.Readable
 			Hours,
 		}
 
-		public static string TimescaleString(Timescale t, bool plural=true)
+		public static string TimescaleString(Timescale t, bool plural = true)
 		{
 			switch (t)
 			{
 				case Timescale.Seconds:
-					return $"second{(plural?"s":"")}";
+					return $"second{(plural ? "s" : "")}";
 				case Timescale.Minutes:
-					return $"minute{(plural?"s":"")}";
+					return $"minute{(plural ? "s" : "")}";
 				case Timescale.Hours:
 					return $"hour{(plural ? "s" : "")}";
 			}

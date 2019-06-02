@@ -34,7 +34,7 @@ namespace MKAh.Ini
 {
 	public class Section : Interface.Value, Interface.IContainer<Setting>, IEnumerable<Setting>
 	{
-		public Section(string name, int index = 0, Config parent=null)
+		public Section(string name, int index = 0, Config parent = null)
 		{
 			Name = name;
 			Index = index;

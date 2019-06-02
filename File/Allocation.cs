@@ -51,7 +51,7 @@ namespace MKAh.File
 			try
 			{
 				fs = System.IO.File.Open(fullpath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-					var oldsize = fs.Length;
+				var oldsize = fs.Length;
 
 				if (fs.Length < (boundary * allockb))
 				{

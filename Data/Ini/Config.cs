@@ -99,7 +99,7 @@ namespace MKAh.Ini
 
 		//HashSet<string> UniqueSectionNames = new HashSet<string>();
 
-		int _changes=0;
+		int _changes = 0;
 		/// <summary>
 		/// Number of changes to the config tree since creation or since last reset.
 		/// </summary>
@@ -251,7 +251,7 @@ namespace MKAh.Ini
 			get
 			{
 				if (!TryGet(name, out Section section))
-					Add(section = new Section(name, parent:this));
+					Add(section = new Section(name, parent: this));
 
 				return section;
 			}
@@ -373,7 +373,7 @@ namespace MKAh.Ini
 					// { "" }
 
 					//Debug.WriteLine("GetArray: " + source);
-					
+
 					// Garbage here means we should've done string value parsing instead.
 					//if (Strict && !string.IsNullOrWhiteSpace(source.Substring(KeyValueSeparator, ArrayStart - KeyValueSeparator)))
 					//	throw new ParseException(source, KeyValueSeparator, ArrayStart - KeyValueSeparator);

@@ -38,7 +38,7 @@ namespace MKAh
 		/// Returns true if as equal as possible.
 		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public static bool RoughlyEqual(this double value, double other) =>  Math.Abs(value - other) <= double.Epsilon;
+		public static bool RoughlyEqual(this double value, double other) => Math.Abs(value - other) <= double.Epsilon;
 
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static bool RoughlyEqual(this float value, float other) => Math.Abs(value - other) <= float.Epsilon;

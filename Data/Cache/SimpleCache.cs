@@ -240,7 +240,7 @@ namespace MKAh.Cache
 		/// </summary>
 		public void Empty() => Items.Clear();
 
-		public void Drop(KT key) =>  Items.TryRemove(key, out _);
+		public void Drop(KT key) => Items.TryRemove(key, out _);
 
 		#region IDisposable Support
 		bool disposed = false; // To detect redundant calls
