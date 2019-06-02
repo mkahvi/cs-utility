@@ -40,9 +40,11 @@ namespace MKAh
 				if (!isAdmin.HasValue)
 				{
 					// https://stackoverflow.com/a/10905713
-					var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-					var principal = new System.Security.Principal.WindowsPrincipal(identity);
-					isAdmin = principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+					using (var identity = System.Security.Principal.WindowsIdentity.GetCurrent())
+					{
+						var principal = new System.Security.Principal.WindowsPrincipal(identity);
+						isAdmin = principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+					}
 				}
 
 				return isAdmin.Value;
