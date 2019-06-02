@@ -188,7 +188,7 @@ namespace MKAh.Cache
 				Items.TryRemove(accesskey, out _); // .Replace
 			}
 
-			var ci = new CacheItem<KT, VT> { AccessKey = accesskey, Item = item, Access = DateTimeOffset.UtcNow, Desirability = 1 };
+			var ci = new CacheItem<KT, VT>(accesskey, item);
 			CacheItem<KT, VT> t = ci;
 			Items.TryAdd(accesskey, t);
 

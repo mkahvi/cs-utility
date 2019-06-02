@@ -30,9 +30,17 @@ namespace MKAh.Cache
 {
 	struct CacheItem<KT, VT> where VT : class
 	{
-		public KT AccessKey;
+		public readonly KT AccessKey;
 		public VT Item;
 		public DateTimeOffset Access;
 		public long Desirability;
+
+		public CacheItem(KT key, VT item)
+		{
+			AccessKey = key;
+			Item = item;
+			Access = DateTimeOffset.UtcNow;
+			Desirability = 1;
+		}
 	}
 }
