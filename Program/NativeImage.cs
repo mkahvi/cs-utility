@@ -51,7 +51,7 @@ namespace MKAh.Program
 		{
 			var prc = Process.GetCurrentProcess();
 			if (Exists(prc))
-				Update(prc);
+				Update(prc).WaitForExit();
 		}
 
 		public static bool Exists(Process process=null)
