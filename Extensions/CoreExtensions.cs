@@ -129,22 +129,15 @@ namespace MKAh
 	static public class PriorityClassExtensions
 	{
 		public static int ToInt32(this ProcessPriorityClass pc)
-		{
-			switch (pc)
+			=> pc switch
 			{
-				case ProcessPriorityClass.Idle:
-					return 0;
-				case ProcessPriorityClass.BelowNormal:
-					return 1;
-				default:
-				case ProcessPriorityClass.Normal:
-					return 2;
-				case ProcessPriorityClass.AboveNormal:
-					return 3;
-				case ProcessPriorityClass.High:
-					return 4;
-			}
-		}
+				ProcessPriorityClass.Idle => 0,
+				ProcessPriorityClass.BelowNormal => 1,
+				ProcessPriorityClass.AboveNormal => 3,
+				ProcessPriorityClass.High => 4,
+				//ProcessPriorityClass.Normal => 2,
+				_ => 2,
+			};
 	}
 
 	static public class DateExtensions

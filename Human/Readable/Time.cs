@@ -39,19 +39,13 @@ namespace MKAh.Human.Readable
 		}
 
 		public static string TimescaleString(Timescale t, bool plural = true)
-		{
-			switch (t)
+			=> t switch
 			{
-				case Timescale.Seconds:
-					return $"second{(plural ? "s" : "")}";
-				case Timescale.Minutes:
-					return $"minute{(plural ? "s" : "")}";
-				case Timescale.Hours:
-					return $"hour{(plural ? "s" : "")}";
-			}
-
-			return string.Empty;
-		}
+				Timescale.Seconds => $"second{(plural ? "s" : "")}",
+				Timescale.Minutes => $"minute{(plural ? "s" : "")}",
+				Timescale.Hours => $"hour{(plural ? "s" : "")}",
+				_ => string.Empty,
+			};
 
 		/// <summary>
 		/// Returns very large time unit representing the time.

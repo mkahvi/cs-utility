@@ -138,9 +138,9 @@ namespace MKAh.Ini
 		{
 			//Debug.WriteLine("INI LOAD: " + filename);
 
-			using (var file = System.IO.File.Open(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
-			using (var reader = new System.IO.StreamReader(file, encoding))
-				Load(reader);
+			using var file = System.IO.File.Open(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read);
+			using var reader = new System.IO.StreamReader(file, encoding);
+			Load(reader);
 		}
 
 		public Section Header { get; private set; } = new Section("HEADER", -1);
@@ -645,14 +645,11 @@ namespace MKAh.Ini
 		{
 			var lines = GetLines();
 
-			using (var file = System.IO.File.Open(filename, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write, System.IO.FileShare.None))
-			using (var writer = new System.IO.StreamWriter(file, encoding, 1024 * 1024 * 64))
-			{
-				file.SetLength(0); // dumb, but StreamWriter is unhelpful
+			using var file = System.IO.File.Open(filename, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write, System.IO.FileShare.None);
+			using var writer = new System.IO.StreamWriter(file, encoding, 1024 * 1024 * 64);
 
-				SaveToStream(writer, lines);
-			}
-			lines = null;
+			file.SetLength(0); // dumb, but StreamWriter is unhelpful
+			SaveToStream(writer, lines);
 		}
 
 		public void SaveToStream(System.IO.StreamWriter writer, string[] lines = null)
