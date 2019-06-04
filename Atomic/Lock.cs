@@ -84,8 +84,8 @@ namespace MKAh
 
 		AutoUnlocker(NonBlockingLock nblock)
 		{
-			if (nblock == null) throw new ArgumentNullException("nblock");
-			if (!nblock.Lock()) throw new ArgumentException("Already locked");
+			if (nblock == null) throw new ArgumentNullException(nameof(nblock));
+			if (!nblock.Lock()) throw new ArgumentException("Already locked", nameof(nblock));
 
 			internal_lock = nblock;
 		}
