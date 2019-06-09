@@ -67,7 +67,7 @@ namespace MKAh.Ini
 		/// <summary>
 		/// Remove empty lines.
 		/// </summary>
-		const bool StripEmptyLines = true; // disabling not supported
+		public bool StripEmptyLines = true; // disabling not supported
 
 		/// <summary>
 		/// Add empty line above each section.
@@ -90,6 +90,9 @@ namespace MKAh.Ini
 		public List<Section> Items { get; private set; } = new List<Section>();
 		public int ItemCount => Items.Count;
 
+		/// <summary>
+		/// Line endings.
+		/// </summary>
 		public string LineEnd = "\n";
 
 		/// <summary>
@@ -167,14 +170,14 @@ namespace MKAh.Ini
 				HandleLine(stream.ReadLine().TrimStart(), ++lineNo, ref section); // read line and trim whitespace from start
 		}
 
-		void HandleLine(string line, int lineNumber, ref Section section)
+		void HandleLine(string line, int lineNumber, ref Section lastSection)
 		{
 			//Debug.WriteLine($"INI [{lineNumber:000}]: {line}");
 
 			if (string.IsNullOrWhiteSpace(line))
 			{
-				if (StripEmptyLines) return;
-				else section.Add(new Ini.Setting(SettingType.Empty));
+				if (!StripEmptyLines) lastSection.Add(new Ini.Setting(SettingType.Empty));
+				return;
 			}
 
 			if (line[0].Equals(Constant.SectionStart)) // section start
@@ -195,8 +198,8 @@ namespace MKAh.Ini
 
 				if (!PreserveWhitespace) SectionName = SectionName.Trim();
 
-				section = new Section(SectionName, parent: this) { Line = lineNumber };
-				Items.Add(section);
+				lastSection = new Section(SectionName, parent: this) { Line = lineNumber };
+				Items.Add(lastSection);
 			}
 			else
 			{
@@ -204,7 +207,7 @@ namespace MKAh.Ini
 				{
 					var value = ParseValue(line);
 					value.Line = lineNumber;
-					section.Add(value);
+					lastSection.Add(value);
 				}
 				catch (ParseException ex)
 				{
@@ -559,7 +562,12 @@ namespace MKAh.Ini
 				totallines--;
 			}
 
-			if (Header.ItemCount > 0) totallines += Header.ItemCount + (PadSections ? 1 : 0);
+			// Don't pad if there was empty line before
+			if (Header.ItemCount > 0)
+			{
+				totallines += Header.ItemCount + (PadSections ? 1 : 0);
+				if (Header.Items.Last().IsEmpty) totallines--;
+			}
 
 			foreach (var section in this)
 				totallines += section.Items.Count;
@@ -596,8 +604,11 @@ namespace MKAh.Ini
 				}
 				if (PadSections)
 				{
-					output.Add(LineEnd);
-					LineNo++;
+					if (!Header.Items.Last().IsEmpty)
+					{
+						output.Add(LineEnd);
+						LineNo++;
+					}
 				}
 			}
 
@@ -610,8 +621,10 @@ namespace MKAh.Ini
 					section.Line = LineNo++;
 				}
 
+				bool LastEmpty = false;
 				foreach (var kval in section.Items)
 				{
+					LastEmpty = false;
 					switch (kval.Type)
 					{
 						default:
@@ -624,13 +637,15 @@ namespace MKAh.Ini
 							{
 								output.Add(LineEnd);
 								kval.Line = LineNo++;
+								LastEmpty = true;
 							}
 							break;
 					}
 				}
 
-				if (PadSections)
+				if (PadSections && !LastEmpty)
 				{
+					Debug.WriteLine("Padding end of: " + section.Name);
 					output.Add(LineEnd);
 					LineNo++;
 				}

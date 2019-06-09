@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit;
 using NUnit.Framework;
 
 namespace MKAh.Ini
@@ -65,7 +62,7 @@ namespace IniFile
 		[Test]
 		public void LoadFromText()
 		{
-			var data = UnitTests.Properties.Resources.Test_ini;
+			var data = UnitTests.Properties.Resources.MixedTest;
 
 			var config = new Ini.Config();
 
@@ -106,7 +103,7 @@ namespace IniFile
 
 				Assert.AreEqual("{ \"a#b#c\", \"x\\\"y\\\"z\", \"\\\"doop\\\"#\", good, \"  spaced\", \"#bad\", \"#\\\"test\\\"\" }", badarray.ExposedEscapedValue);
 
-				var quotedArray = new Ini.Setting { Name="test", Value = "kakka\"bob\"" };
+				var quotedArray = new Ini.Setting { Name = "test", Value = "kakka\"bob\"" };
 
 				section.Add(key0);
 				section.Add(key1);
@@ -264,7 +261,7 @@ namespace IniFile
 
 				int num = config[incrName][rollName].Int;
 				Assert.AreEqual(i, num);
-				config[incrName][rollName].Int = num+1;
+				config[incrName][rollName].Int = num + 1;
 
 				data = config.GetLines(); // re-write config
 			}
@@ -371,6 +368,28 @@ namespace IniFile
 			Assert.AreEqual(null, nullArray?.Length ?? null);
 			Assert.AreEqual(null, intArray?.Length ?? null);
 			Assert.AreEqual(null, stringArray?.Length ?? null);
+		}
+
+		[Test]
+		public void PreserveEmptyLines()
+		{
+			var data = UnitTests.Properties.Resources.EmptyLines;
+
+			var config = new Ini.Config();
+
+			config.StripEmptyLines = false;
+
+			var datalines = data.Split('\n');
+
+			config.Load(datalines);
+
+			var newlines = config.GetLines();
+
+			foreach (var line in newlines)
+				Debug.Write(line);
+			Debug.WriteLine("");
+
+			Assert.AreEqual(datalines.Length, newlines.Length);
 		}
 	}
 }

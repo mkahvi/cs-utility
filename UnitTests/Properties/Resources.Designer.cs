@@ -61,6 +61,14 @@ namespace UnitTests.Properties {
         }
         
         /// <summary>
+        /// </summary>
+        internal static string EmptyLines {
+            get {
+                return ResourceManager.GetString("EmptyLines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #no section here = haha
         ///[ test]
         ///  value     =    hohohoohoho
@@ -82,9 +90,9 @@ namespace UnitTests.Properties {
         ///
         ///.
         /// </summary>
-        internal static string Test_ini {
+        internal static string MixedTest {
             get {
-                return ResourceManager.GetString("Test.ini", resourceCulture);
+                return ResourceManager.GetString("MixedTest", resourceCulture);
             }
         }
     }

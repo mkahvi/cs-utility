@@ -71,6 +71,8 @@ namespace MKAh.Ini
 			}
 		}
 
+		public bool IsEmpty => string.IsNullOrEmpty(Name);
+
 		// alias for Value
 		public string String
 		{
