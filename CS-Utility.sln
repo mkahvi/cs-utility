@@ -9,18 +9,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit Tests", "UnitTests\Uni
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E850FF8A-72F4-498C-B3DD-BF0802E18F1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E850FF8A-72F4-498C-B3DD-BF0802E18F1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E850FF8A-72F4-498C-B3DD-BF0802E18F1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E850FF8A-72F4-498C-B3DD-BF0802E18F1B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{62A9B4FE-E320-428F-97A6-0956A20D601D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{62A9B4FE-E320-428F-97A6-0956A20D601D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{62A9B4FE-E320-428F-97A6-0956A20D601D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{62A9B4FE-E320-428F-97A6-0956A20D601D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E850FF8A-72F4-498C-B3DD-BF0802E18F1B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E850FF8A-72F4-498C-B3DD-BF0802E18F1B}.Debug|x64.Build.0 = Debug|Any CPU
+		{E850FF8A-72F4-498C-B3DD-BF0802E18F1B}.Release|x64.ActiveCfg = Release|Any CPU
+		{E850FF8A-72F4-498C-B3DD-BF0802E18F1B}.Release|x64.Build.0 = Release|Any CPU
+		{62A9B4FE-E320-428F-97A6-0956A20D601D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{62A9B4FE-E320-428F-97A6-0956A20D601D}.Debug|x64.Build.0 = Debug|Any CPU
+		{62A9B4FE-E320-428F-97A6-0956A20D601D}.Release|x64.ActiveCfg = Release|Any CPU
+		{62A9B4FE-E320-428F-97A6-0956A20D601D}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
