@@ -106,7 +106,13 @@ namespace MKAh.Ini
 		/// <summary>
 		/// Number of changes to the config tree since creation or since last reset.
 		/// </summary>
-		public int Changes => _changes;
+		public int Changes
+		{
+			get => _changes;
+			private set => _changes = value;
+		}
+
+		internal void Stagnate() => Changes = 0;
 
 		/// <summary>
 		/// Resets the change counter.
