@@ -36,34 +36,50 @@ namespace MKAh.Program
 	public static partial class NativeImage
 	{
 		/// <summary>
-		/// Wrapper.
+		/// Full wrapper for creating and/or updating.
 		/// </summary>
-		public static void Full()
+		public static Process InstallOrUpdateCurrent()
 		{
 			var prc = Process.GetCurrentProcess();
 			if (!Exists(prc))
-				Create(prc).WaitForExit();
+				return Create(prc);
 			else
-				Update(prc).WaitForExit();
+				return Update(prc);
 		}
 
-		public static void UpdateOnly()
+		/// <summary>
+		/// Update current process' image.
+		/// </summary>
+		public static Process UpdateCurrent()
 		{
 			var prc = Process.GetCurrentProcess();
 			if (Exists(prc))
-				Update(prc).WaitForExit();
+				return Update(prc);
+			return null;
+		}
+		
+		public static Process RemoveCurrent()
+		{
+			var prc = Process.GetCurrentProcess();
+			if (Exists(prc))
+				return Remove(prc);
+			return null;
 		}
 
+		/// <summary>
+		/// Check if the native image exists.
+		/// </summary>
+		/// <param name="process">Process to check this for, current process if null.</param>
 		public static bool Exists(Process process = null)
 		{
 			bool rv = false;
 
-			if (process == null) process = Process.GetCurrentProcess();
+			if (process is null) process = Process.GetCurrentProcess();
 
 			var modules = new ProcessModule[process.Modules.Count];
 			process.Modules.CopyTo(modules, 0);
 
-			var query = from mod in modules where mod.FileName.Contains($"\\{process.ProcessName}.ni") select mod.FileName;
+			var query = from mod in modules where mod.FileName.EndsWith($"\\{process.ProcessName}.ni") select mod.FileName;
 
 			rv = query.Count() > 0;
 
@@ -83,17 +99,23 @@ namespace MKAh.Program
 		/// Calls Ngen to generate native image. Returns Process for the
 		/// </summary>
 		/// <returns>Process for Ngen</returns>
-		public static Process Create(Process process = null) => Ngen($"install \"{process.MainModule.FileName}\"", process);
+		public static Process Create(Process process = null) => Ngen(NgenAction.Install, process);
 
-		public static Process Remove(Process process = null) => Ngen($"uninstall \"{process.MainModule.FileName}\"", process);
+		/// <summary>
+		/// Uninstall native image.
+		/// </summary>
+		public static Process Remove(Process process = null) => Ngen(NgenAction.Uninstall, process);
 
-		public static Process Update(Process process = null) => Ngen($"update \"{process.MainModule.FileName}\"", process);
+		/// <summary>
+		/// Update existing native image.
+		/// </summary>
+		public static Process Update(Process process = null) => Ngen(NgenAction.Update, process);
 
-		static Process Ngen(string argument, Process process = null)
+		static Process Ngen(NgenAction action, Process process = null)
 		{
 			if (process == null) process = Process.GetCurrentProcess();
 
-			var startInfo = new ProcessStartInfo(ngenpath, argument)
+			var startInfo = new ProcessStartInfo(ngenpath, $"{action.ToString().ToLowerInvariant()} \"{process.MainModule.FileName}\"")
 			{
 				CreateNoWindow = false,
 				UseShellExecute = false,
@@ -101,5 +123,12 @@ namespace MKAh.Program
 
 			return Process.Start(startInfo);
 		}
+
+		enum NgenAction
+		{
+			Install,
+			Uninstall,
+			Update,
+		};
 	}
 }
