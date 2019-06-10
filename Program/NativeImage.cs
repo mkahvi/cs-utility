@@ -80,7 +80,7 @@ namespace MKAh.Program
 			var modules = new ProcessModule[process.Modules.Count];
 			process.Modules.CopyTo(modules, 0);
 
-			var query = from mod in modules where mod.FileName.EndsWith($"\\{process.ProcessName}.ni") select mod.FileName;
+			var query = from mod in modules where mod.FileName.Contains($"\\{process.ProcessName}.ni") select mod.FileName;
 
 			rv = query.Count() > 0;
 
