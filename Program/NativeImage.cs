@@ -94,7 +94,7 @@ namespace MKAh.Program
 
 		static readonly string ngenpath = System.IO.Path.Combine(
 			System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows),
-			"Microsoft.NET", "Framework", "v4.0.30319", "ngen.exe");
+			"Microsoft.NET", "Framework64", "v4.0.30319", "ngen.exe");
 
 		/// <summary>
 		/// Calls Ngen to generate native image. Returns Process for the
