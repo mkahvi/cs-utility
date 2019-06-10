@@ -32,37 +32,38 @@ namespace MKAh.Program
 	/// <summary>
 	/// TODO: Detect when the native image needs to be regenerated.
 	/// Failure to regenerate or remove the native image can result in the application becoming nonfunctional.
+	/// Does not support 32 bit executables.
 	/// </summary>
 	public static partial class NativeImage
 	{
 		/// <summary>
 		/// Full wrapper for creating and/or updating.
 		/// </summary>
-		public static Process InstallOrUpdateCurrent()
+		public static Process InstallOrUpdateCurrent(bool withWindow = false)
 		{
 			var prc = Process.GetCurrentProcess();
 			if (!Exists(prc))
-				return Create(prc);
+				return Create(prc, withWindow);
 			else
-				return Update(prc);
+				return Update(prc, withWindow);
 		}
 
 		/// <summary>
 		/// Update current process' image.
 		/// </summary>
-		public static Process UpdateCurrent()
+		public static Process UpdateCurrent(bool withWindow = false)
 		{
 			var prc = Process.GetCurrentProcess();
 			if (Exists(prc))
-				return Update(prc);
+				return Update(prc, withWindow);
 			return null;
 		}
 		
-		public static Process RemoveCurrent()
+		public static Process RemoveCurrent(bool withWindow = false)
 		{
 			var prc = Process.GetCurrentProcess();
 			if (Exists(prc))
-				return Remove(prc);
+				return Remove(prc, withWindow);
 			return null;
 		}
 
@@ -99,26 +100,28 @@ namespace MKAh.Program
 		/// Calls Ngen to generate native image. Returns Process for the
 		/// </summary>
 		/// <returns>Process for Ngen</returns>
-		public static Process Create(Process process = null) => Ngen(NgenAction.Install, process);
+		public static Process Create(Process process = null, bool withWindow = false) => Ngen(NgenAction.Install, process, withWindow);
 
 		/// <summary>
 		/// Uninstall native image.
 		/// </summary>
-		public static Process Remove(Process process = null) => Ngen(NgenAction.Uninstall, process);
+		public static Process Remove(Process process = null, bool withWindow = false) => Ngen(NgenAction.Uninstall, process, withWindow);
 
 		/// <summary>
 		/// Update existing native image.
 		/// </summary>
-		public static Process Update(Process process = null) => Ngen(NgenAction.Update, process);
+		public static Process Update(Process process = null, bool withWindow = false) => Ngen(NgenAction.Update, process, withWindow);
 
-		static Process Ngen(NgenAction action, Process process = null)
+		static Process Ngen(NgenAction action, Process process = null, bool withWindow = false)
 		{
 			if (process == null) process = Process.GetCurrentProcess();
 
-			var startInfo = new ProcessStartInfo(ngenpath, $"{action.ToString().ToLowerInvariant()} \"{process.MainModule.FileName}\"")
+			Debug.WriteLine(ngenpath + $" {action.ToString().ToLowerInvariant()} \"{process.MainModule.FileName}\" /nologo");
+
+			var startInfo = new ProcessStartInfo(ngenpath, $"{action.ToString().ToLowerInvariant()} \"{process.MainModule.FileName}\" /nologo")
 			{
-				CreateNoWindow = false,
-				UseShellExecute = false,
+				CreateNoWindow = !withWindow,
+				WindowStyle = withWindow ? ProcessWindowStyle.Normal : ProcessWindowStyle.Hidden,
 			};
 
 			return Process.Start(startInfo);
