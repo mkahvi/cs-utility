@@ -651,7 +651,6 @@ namespace MKAh.Ini
 
 				if (PadSections && !LastEmpty)
 				{
-					Debug.WriteLine("Padding end of: " + section.Name);
 					output.Add(LineEnd);
 					LineNo++;
 				}
