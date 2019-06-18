@@ -672,13 +672,12 @@ namespace MKAh.Ini
 			SaveToStream(writer, lines);
 		}
 
-		public void SaveToStream(System.IO.StreamWriter writer, string[] lines = null)
+		public async void SaveToStream(System.IO.StreamWriter writer, string[] lines = null)
 		{
-			if (lines == null)
-				lines = GetLines();
+			if (lines is null) lines = GetLines();
 
 			foreach (var line in lines)
-				writer.Write(line);
+				await writer.WriteAsync(line);
 		}
 
 		public IEnumerator<Section> GetEnumerator() => Items.GetEnumerator();

@@ -32,9 +32,7 @@ namespace MKAh.Flow
 	{
 		internal Action disposeAction = null;
 
-		internal OnDispose(Action action) {
-			disposeAction = action;
-		}
+		internal OnDispose(Action action) => disposeAction = action;
 
 		public static OnDispose Callback(Action action)
 		{
