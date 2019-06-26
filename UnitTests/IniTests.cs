@@ -379,7 +379,7 @@ namespace IniFile
 
 			config.StripEmptyLines = false;
 
-			var datalines = data.Split('\n');
+			var datalines = data.Split(new[] { '\n' }, StringSplitOptions.None);
 
 			config.Load(datalines);
 
@@ -390,6 +390,21 @@ namespace IniFile
 			Debug.WriteLine("");
 
 			Assert.AreEqual(datalines.Length, newlines.Length);
+		}
+
+		/// <summary>
+		/// Tests if comments leak into actual variables.
+		/// </summary>
+		[Test]
+		public void CommentTainting()
+		{
+			string testsite = @"Taint = 5 # 0 = I, 1 = D, 2 = V, 3 = E; 2";
+			string full = "[Test]\n" + testsite + "\n\n";
+
+			var config = new Ini.Config();
+			config.Load(full.Split(new[] { '\n' }, StringSplitOptions.None));
+
+			Assert.AreEqual(5, config.Get("Test").Get("Taint").Int);
 		}
 	}
 }
