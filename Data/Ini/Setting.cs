@@ -315,8 +315,8 @@ namespace MKAh.Ini
 		/// </summary>
 		public Setting InitComment(string comment)
 		{
-			if (string.IsNullOrEmpty(Comment))
-				Comment = comment;
+			if (string.IsNullOrWhiteSpace(Comment))
+				PutComment(comment);
 
 			return this;
 		}
