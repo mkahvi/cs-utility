@@ -92,6 +92,12 @@ namespace MKAh.Ini
 			get => int.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands);
 		}
 
+		public long Long
+		{
+			set => Set(value);
+			get => long.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands);
+		}
+
 		public float Float
 		{
 			set => Set(value);
