@@ -59,6 +59,7 @@ namespace MKAh.Ini
 		}
 
 		string _value = null;
+
 		public string Value
 		{
 			get => _value;
@@ -165,6 +166,7 @@ namespace MKAh.Ini
 		protected string EscapedValue => escapedValueCache.Value;
 
 		string _comment = null;
+
 		public string Comment
 		{
 			get => _comment;
@@ -180,6 +182,7 @@ namespace MKAh.Ini
 		public bool IsArray => (Array?.Length ?? 0) > 0;
 
 		string[] _array = null;
+
 		public string[] Array
 		{
 			get => _array;

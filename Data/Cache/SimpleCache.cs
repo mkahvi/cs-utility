@@ -124,7 +124,7 @@ namespace MKAh.Cache
 
 				while (Items.Count > MaxCache)
 				{
-					var bu = list.ElementAt(0);
+					var bu = list[0];
 					var key = bu.AccessKey;
 					Items.TryRemove(key, out _);
 					list.Remove(bu);
@@ -144,7 +144,7 @@ namespace MKAh.Cache
 				var now = DateTimeOffset.UtcNow;
 				while (list.Count > 0)
 				{
-					var bu = list.ElementAt(0);
+					var bu = list[0];
 					bi = now.TimeSince(bu.Access).TotalMinutes;
 
 					if (CacheEvictStrategy == EvictStrategy.LeastRecent)

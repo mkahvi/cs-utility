@@ -82,7 +82,7 @@ namespace MKAh.Program
 
 			var query = from mod in modules where mod.FileName.Contains($"\\{process.ProcessName}.ni") select mod.FileName;
 
-			rv = query.Count() > 0;
+			rv = query.Any();
 
 			if (rv)
 				Debug.WriteLine("Native image: " + query.ElementAt(0));

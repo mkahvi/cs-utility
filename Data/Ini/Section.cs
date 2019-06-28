@@ -151,7 +151,7 @@ namespace MKAh.Ini
 
 		public void RemoveAt(int index)
 		{
-			var setting = Items.ElementAt(index);
+			var setting = Items[index];
 			Remove(setting);
 		}
 

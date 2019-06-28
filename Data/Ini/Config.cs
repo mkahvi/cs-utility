@@ -103,6 +103,7 @@ namespace MKAh.Ini
 		//HashSet<string> UniqueSectionNames = new HashSet<string>();
 
 		int _changes = 0;
+
 		/// <summary>
 		/// Number of changes to the config tree since creation or since last reset.
 		/// </summary>
@@ -124,7 +125,7 @@ namespace MKAh.Ini
 
 		public Config()
 		{
-
+			// NOP
 		}
 
 		public static Config FromData(string[] lines)
@@ -302,7 +303,7 @@ namespace MKAh.Ini
 
 		public void RemoveAt(int index)
 		{
-			var section = Items.ElementAt(index);
+			var section = Items[index];
 			Remove(section);
 		}
 

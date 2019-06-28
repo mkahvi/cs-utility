@@ -48,7 +48,7 @@ namespace MKAh.Logic
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Count(int i)
 		{
-			i = i - ((i >> 1) & 0x55555555);
+			i -= ((i >> 1) & 0x55555555);
 			i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
 			return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
 		}
@@ -57,24 +57,27 @@ namespace MKAh.Logic
 		/// <summary>
 		/// Fills in unset bits up to maximum number of of bits.
 		/// </summary>
-		/// <param name="num"></param>
-		/// <param name="mask"></param>
-		/// <param name="maxbits"></param>
-		/// <returns></returns>
-		public static int Fill(int num, int mask, int maxbits)
+		/// <param name="value">Value to adjust.</param>
+		/// <param name="allowedbits">Mask of allowed bit positions.</param>
+		/// <param name="maxbits">Maximum number of toggled bits.</param>
+		// TODO: More approaches to bit filling than just linear.
+		public static int Fill(int value, int allowedbits, int maxbits)
 		{
-			var bits = Count(num);
+			var bits = Count(value);
+
+			int filled = 0;
 
 			for (int i = 0; i < 32; i++)
 			{
-				if (IsSet(mask, i) && !IsSet(num, i))
+				if (IsSet(allowedbits, i) && !IsSet(value, i))
 				{
-					num = Set(num, i);
+					value = Set(value, i);
 					bits++;
+					if (++filled >= maxbits) break;
 				}
 			}
 
-			return num;
+			return value;
 		}
 	}
 }

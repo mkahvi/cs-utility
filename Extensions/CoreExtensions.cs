@@ -150,17 +150,17 @@ namespace MKAh
 		public static long Unixstamp(this DateTimeOffset dt) => Convert.ToInt64(dt.Subtract(UnixEpoch).TotalSeconds);
 
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public static DateTimeOffset Unixstamp(this long unixstamp) => (UnixEpoch + TimeSpan.FromSeconds(unixstamp));
+		public static DateTimeOffset Unixstamp(this long unixstamp) => UnixEpoch + TimeSpan.FromSeconds(unixstamp);
 
 		/// <summary>
 		/// Time since, because (now - since) just confuses me.
 		/// </summary>
 		//public static TimeSpan TimeSince(this DateTime now, DateTime since) => (now - since);
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public static TimeSpan TimeSince(this DateTimeOffset now, DateTimeOffset since) => (now - since);
+		public static TimeSpan TimeSince(this DateTimeOffset now, DateTimeOffset since) => now - since;
 
 		//public static TimeSpan TimeTo(this DateTime now, DateTime to) => (to - now);
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public static TimeSpan TimeTo(this DateTimeOffset now, DateTimeOffset to) => (to - now);
+		public static TimeSpan TimeTo(this DateTimeOffset now, DateTimeOffset to) => to - now;
 	}
 }
