@@ -119,6 +119,7 @@ namespace MKAh.Wrapper.Windows
 
 		// weird hack
 		static readonly Finalizer finalizer = new Finalizer();
+
 		sealed class Finalizer
 		{
 			~Finalizer()

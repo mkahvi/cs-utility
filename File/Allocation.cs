@@ -47,29 +47,21 @@ namespace MKAh.File
 
 			long boundary = kib ? 1024 : 1000;
 
-			System.IO.FileStream fs = null;
-			try
-			{
-				fs = System.IO.File.Open(fullpath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-				var oldsize = fs.Length;
+			using var fs = System.IO.File.Open(fullpath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+			var oldsize = fs.Length;
 
-				if (fs.Length < (boundary * allockb))
-				{
-					// TODO: Make sparse. Unfortunately requires P/Invoke.
-					fs.SetLength(boundary * allockb); // 1024 was dumb for HDDs but makes sense for SSDs again.
-					if (writeonebyte)
-					{
-						fs.Seek((boundary * allockb) - 1, SeekOrigin.Begin);
-						byte[] nullarray = { 0 };
-						fs.Write(nullarray, 0, 1);
-					}
-					Debug.WriteLine($"<Core> Pre-allocated file: {fullpath} ({(oldsize / boundary).ToString()} kB -> {allockb.ToString()} kB)");
-				}
-			}
-			finally
+			if (fs.Length < (boundary * allockb))
 			{
-				fs?.Close();
-				fs?.Dispose();
+				// TODO: Make sparse. Unfortunately requires P/Invoke.
+				fs.SetLength(boundary * allockb); // 1024 was dumb for HDDs but makes sense for SSDs again.
+				if (writeonebyte)
+				{
+					fs.Seek((boundary * allockb) - 1, SeekOrigin.Begin);
+					byte[] nullarray = { 0 };
+					fs.Write(nullarray, 0, 1);
+				}
+
+				Debug.WriteLine($"<Core> Pre-allocated file: {fullpath} ({(oldsize / boundary).ToString()} kB -> {allockb.ToString()} kB)");
 			}
 		}
 
@@ -84,13 +76,12 @@ namespace MKAh.File
 		/// <param name="ssd">UNUSED</param>
 		static public void SparsePrealloc(string fullpath, long allockb = 64, bool ssd = true)
 		{
-			int brv = 0;
-			var ol = new System.Threading.NativeOverlapped();
-
-			FileStream fs = null;
 			try
 			{
-				fs = System.IO.File.Open(fullpath, FileMode.Open, FileAccess.Write);
+				using var fs = System.IO.File.Open(fullpath, FileMode.Open, FileAccess.Write);
+
+				var ol = new System.Threading.NativeOverlapped(); // discard
+				int brv = 0; // discarded
 
 				bool rv = NativeMethods.DeviceIoControl(
 					fs.SafeFileHandle, FSCTL_SET_SPARSE,
@@ -101,10 +92,6 @@ namespace MKAh.File
 			}
 			catch (Exception ex) when (ex is NullReferenceException || ex is OutOfMemoryException) { throw; }
 			//catch { } // ignore, no access probably
-			finally
-			{
-				fs?.Dispose();
-			}
 		}
 	}
 }

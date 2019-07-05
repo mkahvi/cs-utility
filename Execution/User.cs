@@ -62,9 +62,9 @@ namespace MKAh
 		/// Returns true if OS version is higher than 6.2
 		/// </summary>
 		public static bool IsWin8OrBetter
-			=> System.Environment.OSVersion.Platform == PlatformID.Win32NT
-			&& (System.Environment.OSVersion.Version.Major > 6)
-			|| (System.Environment.OSVersion.Version.Major == 6 && System.Environment.OSVersion.Version.Minor == 2);
+			=> Environment.OSVersion.Platform == PlatformID.Win32NT
+			&& ((System.Environment.OSVersion.Version.Major > 6)
+			|| (System.Environment.OSVersion.Version.Major == 6 && System.Environment.OSVersion.Version.Minor == 2));
 
 		/// <summary>
 		/// Current code is executing on the main thread.

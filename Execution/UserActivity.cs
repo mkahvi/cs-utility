@@ -96,6 +96,7 @@ namespace MKAh
 
 			[MarshalAs(UnmanagedType.U4)]
 			public UInt32 cbSize;
+
 			[MarshalAs(UnmanagedType.U4)]
 			public UInt32 dwTime;
 		}

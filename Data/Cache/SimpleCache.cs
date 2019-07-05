@@ -100,7 +100,7 @@ namespace MKAh.Cache
 
 				var list = Items.Values.ToList(); // would be nice to cache this list
 
-				list.Sort(delegate (CacheItem<KT, VT> x, CacheItem<KT, VT> y)
+				list.Sort((CacheItem<KT, VT> x, CacheItem<KT, VT> y) =>
 				{
 					if (CacheEvictStrategy == EvictStrategy.LeastRecent)
 					{

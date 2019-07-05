@@ -35,12 +35,13 @@ namespace MKAh.Ini.Interface
 		protected abstract void Altered();
 
 		string _name = string.Empty;
+
 		public string Name
 		{
 			get => _name;
 			set
 			{
-				if (value != null && value.IndexOfAny(Config.ReservedCharacters) >= 0)
+				if (value?.IndexOfAny(Config.ReservedCharacters) >= 0)
 					throw new ArgumentException("Name contains invalid characters.");
 				_name = value;
 				Altered();

@@ -31,7 +31,7 @@ namespace MKAh.File
 {
 	static partial class NativeMethods
 	{
-		[DllImport("Kernel32.dll", CharSet = CharSet.Auto)] // SetLastError = true
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode)] // SetLastError = true
 		public static extern bool DeviceIoControl(
 			Microsoft.Win32.SafeHandles.SafeFileHandle hDevice,
 			int dwIoControlCode,

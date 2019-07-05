@@ -31,7 +31,7 @@ namespace MKAh.Ini
 {
 	public class Setting : Interface.Value
 	{
-		public SettingType Type { get; private set; } = SettingType.Generic;
+		public SettingType Type { get; } = SettingType.Generic;
 
 		public int Index { get; internal set; } = 0;
 

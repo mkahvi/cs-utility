@@ -69,7 +69,7 @@ namespace MKAh
 	{
 		int internal_lock = Atomic.Unlocked;
 
-		NonBlockingLock(bool locked = false) => internal_lock = locked ? Atomic.Locked : Atomic.Unlocked;
+		public NonBlockingLock(bool locked = false) => internal_lock = locked ? Atomic.Locked : Atomic.Unlocked;
 
 		public bool Locked => internal_lock == Atomic.Locked;
 

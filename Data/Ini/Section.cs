@@ -46,7 +46,7 @@ namespace MKAh.Ini
 
 		protected override void Altered() => ChildAltered(null);
 
-		public List<Setting> Items { get; private set; } = new List<Setting>();
+		public List<Setting> Items { get; } = new List<Setting>();
 		public int ItemCount => Items.Count;
 
 		HashSet<string> hUniqueKeys = null;

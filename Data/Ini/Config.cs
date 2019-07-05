@@ -87,7 +87,7 @@ namespace MKAh.Ini
 		public char CommentChar = Constant.StandardComment;
 		public char[] CommentChars = { Constant.StandardComment, Constant.AlternateComment };
 
-		public List<Section> Items { get; private set; } = new List<Section>();
+		public List<Section> Items { get; } = new List<Section>();
 		public int ItemCount => Items.Count;
 
 		/// <summary>
@@ -153,7 +153,7 @@ namespace MKAh.Ini
 			Load(reader);
 		}
 
-		public Section Header { get; private set; } = new Section("HEADER", -1);
+		public Section Header { get; } = new Section("HEADER", -1);
 
 		public void Load(string[] lines)
 		{
@@ -678,7 +678,7 @@ namespace MKAh.Ini
 			if (lines is null) lines = GetLines();
 
 			foreach (var line in lines)
-				await writer.WriteAsync(line);
+				await writer.WriteAsync(line).ConfigureAwait(false);
 		}
 
 		public IEnumerator<Section> GetEnumerator() => Items.GetEnumerator();
