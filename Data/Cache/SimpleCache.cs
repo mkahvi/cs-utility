@@ -145,7 +145,7 @@ namespace MKAh.Cache
 				while (list.Count > 0)
 				{
 					var bu = list[0];
-					bi = now.TimeSince(bu.Access).TotalMinutes;
+					bi = now.Since(bu.Access).TotalMinutes;
 
 					if (CacheEvictStrategy == EvictStrategy.LeastRecent)
 					{
