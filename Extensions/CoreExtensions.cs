@@ -157,10 +157,16 @@ namespace MKAh
 		/// </summary>
 		//public static TimeSpan TimeSince(this DateTime now, DateTime since) => (now - since);
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public static TimeSpan TimeSince(this DateTimeOffset now, DateTimeOffset since) => now - since;
+		public static TimeSpan Since(this DateTimeOffset now, DateTimeOffset since) => now - since;
+
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static TimeSpan Since(this DateTime now, DateTime since) => now - since;
 
 		//public static TimeSpan TimeTo(this DateTime now, DateTime to) => (to - now);
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public static TimeSpan TimeTo(this DateTimeOffset now, DateTimeOffset to) => to - now;
+		public static TimeSpan To(this DateTimeOffset now, DateTimeOffset to) => to - now;
+
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static TimeSpan To(this DateTime now, DateTime to) => to - now;
 	}
 }
