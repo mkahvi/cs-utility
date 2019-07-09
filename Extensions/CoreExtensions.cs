@@ -154,18 +154,28 @@ namespace MKAh
 
 		/// <summary>
 		/// Time since, because (now - since) just confuses me.
+		/// <para>BUG: Same timezone required.</para>
 		/// </summary>
 		//public static TimeSpan TimeSince(this DateTime now, DateTime since) => (now - since);
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static TimeSpan Since(this DateTimeOffset now, DateTimeOffset since) => now - since;
 
+		/// <summary>
+		/// <para>BUG: Same timezone required.</para>
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static TimeSpan Since(this DateTime now, DateTime since) => now - since;
 
+		/// <summary>
+		/// <para>BUG: Same timezone required.</para>
+		/// </summary>
 		//public static TimeSpan TimeTo(this DateTime now, DateTime to) => (to - now);
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static TimeSpan To(this DateTimeOffset now, DateTimeOffset to) => to - now;
 
+		/// <summary>
+		/// <para>BUG: Same timezone required.</para>
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static TimeSpan To(this DateTime now, DateTime to) => to - now;
 	}
