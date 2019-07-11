@@ -104,6 +104,8 @@ namespace MKAh.Wrapper.Windows
 			}
 		}
 
+		public long Raw => Counter.RawValue;
+
 		public CounterSample Sample => Counter.NextSample();
 	}
 

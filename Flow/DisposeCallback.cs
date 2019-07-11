@@ -42,7 +42,7 @@ namespace MKAh.Flow
 		}
 
 		#region IDisposable Support
-		private bool disposed = false; // To detect redundant calls
+		bool disposed = false; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing)
 		{
