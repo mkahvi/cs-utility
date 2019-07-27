@@ -34,17 +34,13 @@ namespace MKAh.Wrapper.Windows
 	{
 		System.Diagnostics.PerformanceCounter Counter { get; set; } = null;
 
-		readonly string CategoryName = null;
-		readonly string CounterName = null;
-		readonly string InstanceName = null;
-		readonly bool ScrapFirst = true;
+		//readonly string CategoryName, CounterName, InstanceName;
 
 		public PerformanceCounter(string category, string counter, string instance = null, bool scrapfirst = true)
 		{
-			CategoryName = category;
-			CounterName = counter;
-			InstanceName = instance;
-			ScrapFirst = scrapfirst;
+			var CategoryName = category;
+			var CounterName = counter;
+			var InstanceName = instance;
 
 			Counter = new System.Diagnostics.PerformanceCounter()
 			{
@@ -54,16 +50,20 @@ namespace MKAh.Wrapper.Windows
 				ReadOnly = true,
 			};
 
-			if (ScrapFirst) { _ = Value; }
+			if (scrapfirst) _ = Value;
 
 			Manager.Sensors.Add(this);
 		}
 
 		bool disposed = false;
 
-		public void Dispose() => Dispose(true);
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
-		void Dispose(bool disposing)
+		protected void Dispose(bool disposing)
 		{
 			if (disposed) return;
 			if (disposing)

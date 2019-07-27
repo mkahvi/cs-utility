@@ -119,7 +119,7 @@ namespace MKAh
 			Debug.Assert(iface != null);
 
 			if (iface.NetworkInterfaceType == NetworkInterfaceType.Loopback || iface.NetworkInterfaceType == NetworkInterfaceType.Tunnel)
-				return null;
+				return Array.Empty<IPAddress>();
 
 			return (from ip in iface.GetIPProperties().UnicastAddresses
 					select ip.Address).ToArray();

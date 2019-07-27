@@ -37,8 +37,8 @@ namespace MKAh.Cache
 	/// <typeparam name="VT">Value.</typeparam>
 	public class SimpleCache<KT, VT> : IDisposable where VT : class
 	{
-		readonly EvictStrategy CacheEvictStrategy = EvictStrategy.LeastRecent;
-		readonly StoreStrategy CacheStoreStrategy = StoreStrategy.ReplaceNoMatch;
+		readonly EvictStrategy CacheEvictStrategy;
+		readonly StoreStrategy CacheStoreStrategy;
 
 		readonly ConcurrentDictionary<KT, CacheItem<KT, VT>> Items = new ConcurrentDictionary<KT, CacheItem<KT, VT>>();
 
@@ -48,12 +48,8 @@ namespace MKAh.Cache
 
 		readonly System.Timers.Timer PruneTimer = null;
 
-		uint Overflow = 10;
-		uint MaxCache = 20;
-		uint MinCache = 10;
-
-		uint MinAge = 5;
-		uint MaxAge = 60;
+		uint Overflow, MaxCache, MinCache;
+		int MaxAge = 60, MinAge = 5;
 
 		/// <summary>
 		/// 
@@ -87,7 +83,7 @@ namespace MKAh.Cache
 		/// <summary>
 		/// Prune cache.
 		/// </summary>
-		void Prune(object _discard, EventArgs _ea)
+		void Prune(object _discard, System.Timers.ElapsedEventArgs _ea)
 		{
 			if (disposed) return; // dumbness with timers
 			if (!Atomic.Lock(ref prune_in_progress)) return; // only one instance.
@@ -130,8 +126,6 @@ namespace MKAh.Cache
 					list.Remove(bu);
 				}
 
-				double bi = double.NaN;
-
 				var deleteItem = new Action<KT>(
 					(KT key) =>
 					{
@@ -145,7 +139,7 @@ namespace MKAh.Cache
 				while (list.Count > 0)
 				{
 					var bu = list[0];
-					bi = now.Since(bu.Access).TotalMinutes;
+					double bi = now.Since(bu.Access).TotalMinutes;
 
 					if (CacheEvictStrategy == EvictStrategy.LeastRecent)
 					{
@@ -258,7 +252,11 @@ namespace MKAh.Cache
 			disposed = true;
 		}
 
-		public void Dispose() => Dispose(true);
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 		#endregion
 	}
 }

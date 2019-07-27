@@ -30,10 +30,8 @@ namespace MKAh.Ini
 {
 	public class ParseException : Exception
 	{
-		readonly public string Input = string.Empty;
-		public int Offset = -1;
-		public int Length = -1;
-		public int Line = -1;
+		readonly public string Input;
+		public int Offset, Length, Line;
 
 		public ParseException(string input, string message = "", int offset = -1, int length = -1, int line = -1)
 			: base(message)

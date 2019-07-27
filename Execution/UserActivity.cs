@@ -53,7 +53,7 @@ namespace MKAh
 			long fms = currentTickCount;
 			if (lastActiveTick > currentTickCount) fms = (uint.MaxValue - lastActiveTick) + currentTickCount; // overflow
 			else fms -= lastActiveTick;
-			Debug.WriteLine($"IdleTime\n- Idle:  {lastActiveTick}\n- Env:   {currentTickCount}\n-   {(lastActiveTick > currentTickCount ? "Over+" + (uint.MaxValue - currentTickCount) : "Std")}\n- Final: {fms}");
+			Debug.WriteLine($"IdleTime\n- Idle:  {lastActiveTick}\n- Env:   {currentTickCount}\n-   {(lastActiveTick > currentTickCount ? "Over+" + (uint.MaxValue - currentTickCount).ToString() : "Std")}\n- Final: {fms}");
 
 			return fms;
 		}
@@ -69,7 +69,7 @@ namespace MKAh
 		// https://docs.microsoft.com/en-us/windows/desktop/api/winuser/ns-winuser-taglastinputinfo
 		public static uint LastActive()
 		{
-			var info = new NativeMethods.LASTINPUTINFO();
+			var info = new NativeMethods.LastInputInfo();
 			info.cbSize = (uint)Marshal.SizeOf(info);
 			info.dwTime = 0;
 			NativeMethods.GetLastInputInfo(ref info); // ignore failure to retrieve data
@@ -87,12 +87,12 @@ namespace MKAh
 		/// <param name="lastinputinfo"></param>
 		/// <returns></returns>
 		[DllImport("user32.dll")]
-		internal static extern bool GetLastInputInfo(ref LASTINPUTINFO lastinputinfo);
+		internal static extern bool GetLastInputInfo(ref LastInputInfo lastinputinfo);
 
 		[StructLayout(LayoutKind.Sequential)]
-		internal struct LASTINPUTINFO
+		internal struct LastInputInfo
 		{
-			public static readonly int SizeOf = Marshal.SizeOf(typeof(LASTINPUTINFO));
+			public static readonly int SizeOf = Marshal.SizeOf(typeof(LastInputInfo));
 
 			[MarshalAs(UnmanagedType.U4)]
 			public UInt32 cbSize;

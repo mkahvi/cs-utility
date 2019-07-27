@@ -37,7 +37,7 @@ namespace MKAh.Data
 
 			offset++; // skip "
 
-			bool UnescapedQuote = false;
+			bool UnescapedQuote;
 			for (int i = offset; i < source.Length; i++)
 			{
 				UnescapedQuote = source[i].Equals(Constant.Quote) && !source[i - 1].Equals(Constant.EscapeChar);

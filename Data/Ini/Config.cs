@@ -29,6 +29,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MKAh.Ini
 {
@@ -150,7 +151,7 @@ namespace MKAh.Ini
 
 			using var file = System.IO.File.Open(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read);
 			using var reader = new System.IO.StreamReader(file, encoding);
-			Load(reader);
+			Load(reader).Wait();
 		}
 
 		public Section Header { get; } = new Section("HEADER", -1);
@@ -167,14 +168,14 @@ namespace MKAh.Ini
 			ResetChangeCount();
 		}
 
-		public void Load(System.IO.StreamReader stream)
+		public async Task Load(System.IO.StreamReader stream)
 		{
 			int lineNo = 0;
 
 			Section section = Header;
 
 			while (!stream.EndOfStream)
-				HandleLine(stream.ReadLine().TrimStart(), ++lineNo, ref section); // read line and trim whitespace from start
+				HandleLine((await stream.ReadLineAsync().ConfigureAwait(false)).TrimStart(), ++lineNo, ref section); // read line and trim whitespace from start
 		}
 
 		void HandleLine(string line, int lineNumber, ref Section lastSection)
@@ -219,19 +220,19 @@ namespace MKAh.Ini
 				catch (ParseException ex)
 				{
 					ex.Line = lineNumber;
-					Debug.WriteLine("Malformed line:" + lineNumber + " - " + ex.Message);
+					Debug.WriteLine("Malformed line:" + lineNumber.ToString() + " - " + ex.Message);
 					throw;
 				}
 				catch (FormatException ex)
 				{
 					if (!Strict) return;
 					// TODO: throw better error
-					Debug.WriteLine("Malformed line:" + lineNumber + " - " + ex.Message);
+					Debug.WriteLine("Malformed line:" + lineNumber.ToString() + " - " + ex.Message);
 					throw;
 				}
 				catch (Exception ex)
 				{
-					Debug.WriteLine(lineNumber + ": " + ex.Message);
+					Debug.WriteLine(lineNumber.ToString() + ": " + ex.Message);
 					throw;
 				}
 			}
@@ -295,10 +296,10 @@ namespace MKAh.Ini
 			return false;
 		}
 
-		public bool Remove(Section section)
+		public bool Remove(Section value)
 		{
-			Deown(section);
-			return Items.Remove(section);
+			Deown(value);
+			return Items.Remove(value);
 		}
 
 		public void RemoveAt(int index)
@@ -307,34 +308,31 @@ namespace MKAh.Ini
 			Remove(section);
 		}
 
-		public void Add(Section section)
+		public void Add(Section value)
 		{
-			section.Parent = this;
-			ChildAltered(section);
-			section.UniqueKeys = UniqueKeys;
-			Items.Add(section);
+			value.Parent = this;
+			ChildAltered(value);
+			value.UniqueKeys = UniqueKeys;
+			Items.Add(value);
 		}
 
-		public void Insert(int index, Section section)
+		public void Insert(int index, Section value)
 		{
-			Own(section);
-			Items.Insert(index, section);
+			Own(value);
+			Items.Insert(index, value);
 		}
 
 		/// <summary>
 		/// Get section with the specified name or null.
 		/// </summary>
-		/// <param name="name"></param>
+		/// <param name="key"></param>
 		/// <returns></returns>
-		public Section Get(string name) => TryGet(name, out var section) ? section : null;
+		public Section Get(string key) => TryGet(key, out var section) ? section : null;
 
-		public bool Contains(string name) => TryGet(name, out _);
+		public bool Contains(string key) => TryGet(key, out _);
 
-		public bool TryGet(string name, out Section value)
-			=> (value = (from val in Items
-						 where !string.IsNullOrEmpty(val.Name)
-						 where val.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase)
-						 select val).FirstOrDefault()) != null;
+		public bool TryGet(string key, out Section value)
+			=> (value = Items.FirstOrDefault(predicate: x => x.Name?.Equals(key, StringComparison.InvariantCultureIgnoreCase) ?? false)) != null;
 
 		/// <summary>
 		/// Parse .INI line other than section.
@@ -344,7 +342,7 @@ namespace MKAh.Ini
 			int CommentStart = source.IndexOfAny(CommentChars); // Index of comment beginning
 			int KeyValueSeparator = source.IndexOf(Constant.KeyValueSeparator);
 
-			Setting value = null;
+			Setting value; //= null;
 
 			if (KeyValueSeparator >= 0 && (CommentStart > KeyValueSeparator || CommentStart == -1))
 			{
@@ -360,15 +358,15 @@ namespace MKAh.Ini
 
 				int QuoteStart = source.IndexOf(Data.Constant.Quote, KeyValueSeparator);
 
-				int start = QuoteStart;
+				//int start; // = QuoteStart;
 
 				bool CommentFound = CommentStart >= 0;
-				bool QuoteFound = QuoteStart >= 0 && !source[QuoteStart - 1].Equals(Data.Constant.EscapeChar);
-				bool ArrayFound = ArrayStart >= 0;
-				bool QuoteAndArray = QuoteFound && ArrayFound;
-				bool QuoteOrArray = QuoteFound || ArrayFound;
+				//bool QuoteFound = QuoteStart >= 0 && !source[QuoteStart - 1].Equals(Data.Constant.EscapeChar);
+				//bool ArrayFound = ArrayStart >= 0;
+				//bool QuoteAndArray = QuoteFound && ArrayFound;
+				//bool QuoteOrArray = QuoteFound || ArrayFound;
 
-				int end = KeyValueSeparator;
+				int end; // = KeyValueSeparator;
 
 				if (CommentFound && CommentStart < Math.Min(QuoteStart.Replace(-1, int.MaxValue), ArrayStart.Replace(-1, int.MaxValue)))
 				{
@@ -377,7 +375,7 @@ namespace MKAh.Ini
 					end = CommentStart;
 					value.Value = source.Substring(KeyValueSeparator, CommentStart - KeyValueSeparator);
 				}
-				else if (ArrayFound && (ArrayStart < QuoteStart || QuoteStart == -1))
+				else if ((ArrayStart >= 0) && (ArrayStart < QuoteStart || QuoteStart == -1))
 				{
 					// proper array
 					// { "" }
@@ -389,7 +387,7 @@ namespace MKAh.Ini
 					//	throw new ParseException(source, KeyValueSeparator, ArrayStart - KeyValueSeparator);
 
 					var array = GetArray(source, ArrayStart, out end);
-					value.Array = value.UnescapeArray(array);
+					value.Array = Setting.UnescapeArray(array);
 
 					//Debug.WriteLine("Escaped:  "+value.EscapedValue);
 
@@ -403,12 +401,12 @@ namespace MKAh.Ini
 							throw new ParseException(source, "Malformed array", end, CommentStart - end);
 					}
 				}
-				else if (QuoteFound && !source[QuoteStart - 1].Equals(Data.Constant.EscapeChar))
+				else if ((QuoteStart >= 0 && !source[QuoteStart - 1].Equals(Data.Constant.EscapeChar)) && !source[QuoteStart - 1].Equals(Data.Constant.EscapeChar))
 				{
 					// properly quoted string
 					// "
 
-					start = QuoteStart;
+					//start = QuoteStart;
 
 					value.Value = Data.String.GetQuotedString(source, QuoteStart, out end);
 
@@ -457,7 +455,7 @@ namespace MKAh.Ini
 			Debug.Assert(source[offset].Equals('{'));
 			offset++; // skip {
 
-			var rv = new List<string>();
+			var rv = new List<string>(16);
 
 			bool expectArrayDelimiter = false;
 
@@ -515,7 +513,7 @@ namespace MKAh.Ini
 					throw new FormatException($"Array item delimiter expected at {i}, found {source[i]} instead");
 
 				if (CommentChars.Any((x) => x.Equals(source[i]))) // comment char outside of quotes
-					throw new FormatException("Unexpected comment start before array closure [" + i + "]: " + source);
+					throw new FormatException("Unexpected comment start before array closure [" + i.ToString() + "]: " + source);
 			}
 
 			throw new FormatException("Array end not found.");
@@ -581,11 +579,11 @@ namespace MKAh.Ini
 
 			//Debug.WriteLine("INI GET LINES: " + totallines);
 
-			if (totallines == 0) throw new ArgumentNullException("Empty configuration");
+			if (totallines == 0) throw new InvalidOperationException("Empty configuration");
 
 			var output = new List<string>(totallines);
 
-			string formatted = null;
+			string formatted; // = null;
 
 			int LineNo = 0;
 

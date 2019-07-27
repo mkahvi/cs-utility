@@ -73,8 +73,6 @@ namespace MKAh.Program
 		/// <param name="process">Process to check this for, current process if null.</param>
 		public static bool Exists(Process process = null)
 		{
-			bool rv = false;
-
 			if (process is null) process = Process.GetCurrentProcess();
 
 			var modules = new ProcessModule[process.Modules.Count];
@@ -82,7 +80,7 @@ namespace MKAh.Program
 
 			var query = from mod in modules where mod.FileName.Contains($"\\{process.ProcessName}.ni") select mod.FileName;
 
-			rv = query.Any();
+			bool rv = query.Any();
 
 			if (rv)
 				Debug.WriteLine("Native image: " + query.ElementAt(0));

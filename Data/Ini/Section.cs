@@ -100,11 +100,7 @@ namespace MKAh.Ini
 		public Setting Get(string key) => TryGet(key, out var value) ? value : null;
 
 		public bool TryGet(string name, out Setting value)
-			=> (value = (from val in Items
-						 where val.Type == SettingType.Generic
-						 where !string.IsNullOrEmpty(val.Name)
-						 where val.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase)
-						 select val).FirstOrDefault()) != null;
+			=> (value = Items.FirstOrDefault(x => x.Type == SettingType.Generic && x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))) != null;
 
 		public bool Contains(string key) => TryGet(key, out _);
 

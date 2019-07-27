@@ -48,10 +48,11 @@ namespace MKAh.File
 			long boundary = kib ? 1024 : 1000;
 
 			using var fs = System.IO.File.Open(fullpath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-			var oldsize = fs.Length;
 
 			if (fs.Length < (boundary * allockb))
 			{
+				var oldsize = fs.Length;
+
 				// TODO: Make sparse. Unfortunately requires P/Invoke.
 				fs.SetLength(boundary * allockb); // 1024 was dumb for HDDs but makes sense for SSDs again.
 				if (writeonebyte)

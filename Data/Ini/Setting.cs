@@ -31,7 +31,7 @@ namespace MKAh.Ini
 {
 	public class Setting : Interface.Value
 	{
-		public SettingType Type { get; } = SettingType.Generic;
+		public SettingType Type { get; }
 
 		public int Index { get; internal set; } = 0;
 
@@ -44,7 +44,7 @@ namespace MKAh.Ini
 
 		public Section Parent { get; set; } = null;
 
-		Type LastType = typeof(string);
+		Type ValueType = typeof(string);
 
 		protected override void Altered() => Parent?.ChildAltered(this);
 
@@ -116,7 +116,7 @@ namespace MKAh.Ini
 			set => SetArray(value);
 			get
 			{
-				if ((Array?.Length ?? 0) == 0) return null;
+				if ((Array?.Length ?? 0) == 0) return System.Array.Empty<int>();
 
 				int[] array = new int[Array.Length];
 
@@ -132,7 +132,7 @@ namespace MKAh.Ini
 			set => SetArray(value);
 			get
 			{
-				if ((Array?.Length ?? 0) == 0) return null;
+				if ((Array?.Length ?? 0) == 0) return System.Array.Empty<float>();
 
 				float[] array = new float[Array.Length];
 
@@ -148,7 +148,7 @@ namespace MKAh.Ini
 			set => SetArray(value);
 			get
 			{
-				if ((Array?.Length ?? 0) == 0) return null;
+				if ((Array?.Length ?? 0) == 0) return System.Array.Empty<double>();
 
 				double[] array = new double[Array.Length];
 
@@ -280,14 +280,17 @@ namespace MKAh.Ini
 			return false;
 		}
 
-		internal string[] UnescapeArray(string[] values)
+		static internal string[] UnescapeArray(string[] values)
 		{
 			string[] nv = new string[values.Length];
 
 			//Debug.WriteLine("UnescapingArray: \"" + string.Join("\", \"", values) + "\"");
 
 			for (int i = 0; i < values.Length; i++)
-				nv[i] = UnescapeValue(values[i], out string nsv, trim: true) ? nsv : values[i];
+			{
+				ref readonly var lv = ref values[i];
+				nv[i] = UnescapeValue(lv, out string nsv, trim: true) ? nsv : lv;
+			}
 
 			//Debug.WriteLine("UnescapedArray:  \"" + string.Join("\", \"", nv) + "\"");
 

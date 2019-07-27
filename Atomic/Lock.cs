@@ -67,7 +67,7 @@ namespace MKAh
 
 	public class NonBlockingLock
 	{
-		int internal_lock = Atomic.Unlocked;
+		int internal_lock;
 
 		public NonBlockingLock(bool locked = false) => internal_lock = locked ? Atomic.Locked : Atomic.Unlocked;
 
@@ -82,7 +82,7 @@ namespace MKAh
 	{
 		readonly NonBlockingLock internal_lock = null;
 
-		AutoUnlocker(NonBlockingLock nblock)
+		public AutoUnlocker(NonBlockingLock nblock)
 		{
 			if (nblock == null) throw new ArgumentNullException(nameof(nblock));
 			if (!nblock.Lock()) throw new ArgumentException("Already locked", nameof(nblock));
@@ -102,7 +102,11 @@ namespace MKAh
 			disposed = true;
 		}
 
-		public void Dispose() => Dispose(true);
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 		#endregion
 	}
 }
