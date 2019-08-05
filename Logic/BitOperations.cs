@@ -34,16 +34,16 @@ namespace MKAh.Logic
 		public static int Set(int dec, int index) => Or(dec, (1 << index));
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsSet(int dec, int index) => And(dec, (1 << index)) != 0;
+		public static bool IsSet(int value, int index) => And(value, (1 << index)) != 0;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static int Unset(int dec, int index) => And(dec, ~(1 << index));
+		public static int Unset(int value, int index) => And(value, ~(1 << index));
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static int Or(int dec1, int dec2) => dec1 | dec2;
+		public static int Or(int value1, int value2) => value1 | value2;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static int And(int dec1, int dec2) => dec1 & dec2;
+		public static int And(int value1, int value2) => value1 & value2;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Count(int i)

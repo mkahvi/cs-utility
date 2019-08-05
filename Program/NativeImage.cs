@@ -114,14 +114,16 @@ namespace MKAh.Program
 		{
 			if (process == null) process = Process.GetCurrentProcess();
 
-			Debug.WriteLine(ngenpath + $" {action.ToString().ToLowerInvariant()} \"{process.MainModule.FileName}\" /nologo");
+			var module = process.MainModule;
+
+			Debug.WriteLine(ngenpath + $" {action.ToString().ToLowerInvariant()} \"{module.FileName}\" /nologo");
 
 			var startInfo = new ProcessStartInfo()
 			{
 				CreateNoWindow = !withWindow,
 				Verb = "runas",
 				FileName = ngenpath,
-				Arguments = $"{action.ToString().ToLowerInvariant()} \"{process.MainModule.FileName}\" /nologo",
+				Arguments = $"{action.ToString().ToLowerInvariant()} \"{module.FileName}\" /nologo",
 				WindowStyle = withWindow ? ProcessWindowStyle.Normal : ProcessWindowStyle.Hidden,
 			};
 

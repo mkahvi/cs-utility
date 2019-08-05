@@ -242,14 +242,15 @@ namespace MKAh.Cache
 		void Dispose(bool disposing)
 		{
 			if (disposed) return;
+			disposed = true;
 
 			if (disposing)
 			{
 				PruneTimer?.Dispose();
 				Items?.Clear();
-			}
 
-			disposed = true;
+				//base.Dispose();
+			}
 		}
 
 		public void Dispose()

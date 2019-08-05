@@ -66,6 +66,8 @@ namespace MKAh.Wrapper.Windows
 		protected void Dispose(bool disposing)
 		{
 			if (disposed) return;
+			disposed = true;
+
 			if (disposing)
 			{
 				if (Counter != null)
@@ -80,7 +82,7 @@ namespace MKAh.Wrapper.Windows
 					Counter = null;
 				}
 
-				disposed = true;
+				//base.Dispose();
 			}
 		}
 

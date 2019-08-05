@@ -671,7 +671,7 @@ namespace MKAh.Ini
 			SaveToStream(writer, lines);
 		}
 
-		public async void SaveToStream(System.IO.StreamWriter writer, string[] lines = null)
+		public async Task SaveToStream(System.IO.StreamWriter writer, string[] lines = null)
 		{
 			if (lines is null) lines = GetLines();
 

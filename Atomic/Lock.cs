@@ -96,10 +96,14 @@ namespace MKAh
 		protected virtual void Dispose(bool disposing)
 		{
 			if (disposed) return;
+			disposed = true;
+
+			if (disposing)
+			{
+				//base.Dispose();
+			}
 
 			internal_lock?.Unlock();
-
-			disposed = true;
 		}
 
 		public void Dispose()
