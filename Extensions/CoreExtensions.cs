@@ -82,6 +82,9 @@ namespace MKAh
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static double Max(this double value, double max) => Math.Min(value, max);
 
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static TimeSpan Max(this TimeSpan value, TimeSpan max) => value > max ? max : value;
+
 		/// <summary>
 		/// Constrains minimum value.
 		/// </summary>
