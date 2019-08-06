@@ -37,6 +37,9 @@ namespace MKAh.Container
 
 		readonly T[] Ring;
 
+
+		public int Offset => Convert.ToInt32(Index % Size);
+
 		int ICollection<T>.Count { get => Size; }
 
 		bool ICollection<T>.IsReadOnly { get => false; }
