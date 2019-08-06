@@ -86,6 +86,7 @@ namespace MKAh.Wrapper.Windows
 			}
 		}
 
+		/// <exception cref="InvalidOperationException">Counter died.</exception>
 		public float Value
 		{
 			get
