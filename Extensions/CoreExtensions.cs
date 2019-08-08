@@ -85,6 +85,18 @@ namespace MKAh
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static TimeSpan Max(this TimeSpan value, TimeSpan max) => value > max ? max : value;
 
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static bool Within(this int value, int low, int high) => value >= low && value <= high;
+
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static bool Within(this long value, long low, long high) => value >= low && value <= high;
+
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static bool Within(this float value, float low, float high) => value >= low && value <= high;
+
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static bool Within(this double value, double low, double high) => value >= low && value <= high;
+
 		/// <summary>
 		/// Constrains minimum value.
 		/// </summary>
