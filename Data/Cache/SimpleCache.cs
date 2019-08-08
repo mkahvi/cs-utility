@@ -172,7 +172,7 @@ namespace MKAh.Cache
 		/// <param name="returntestkey">Returnkey.</param>
 		public bool Add(KeyT accesskey, ValueT item)
 		{
-			Misses++;
+			//Misses++; // already counted for failed Get presumably
 
 			if (Items.ContainsKey(accesskey))
 			{
