@@ -33,14 +33,14 @@ namespace MKAh.Cache
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <typeparam name="KT">Access key.</typeparam>
-	/// <typeparam name="VT">Value.</typeparam>
-	public class SimpleCache<KT, VT> : IDisposable where VT : class
+	/// <typeparam name="KeyT">Access key.</typeparam>
+	/// <typeparam name="ValueT">Value.</typeparam>
+	public class SimpleCache<KeyT, ValueT> : IDisposable where ValueT : class
 	{
 		readonly EvictStrategy CacheEvictStrategy;
 		readonly StoreStrategy CacheStoreStrategy;
 
-		readonly ConcurrentDictionary<KT, CacheItem<KT, VT>> Items = new ConcurrentDictionary<KT, CacheItem<KT, VT>>();
+		readonly ConcurrentDictionary<KeyT, CacheItem<KeyT, ValueT>> Items = new ConcurrentDictionary<KeyT, CacheItem<KeyT, ValueT>>();
 
 		public ulong Count => Convert.ToUInt64(Items.Count);
 		public ulong Hits { get; private set; } = 0;
@@ -96,7 +96,7 @@ namespace MKAh.Cache
 
 				var list = Items.Values.ToList(); // would be nice to cache this list
 
-				list.Sort((CacheItem<KT, VT> x, CacheItem<KT, VT> y) =>
+				list.Sort((CacheItem<KeyT, ValueT> x, CacheItem<KeyT, ValueT> y) =>
 				{
 					if (CacheEvictStrategy == EvictStrategy.LeastRecent)
 					{
@@ -126,8 +126,8 @@ namespace MKAh.Cache
 					list.Remove(bu);
 				}
 
-				var deleteItem = new Action<KT>(
-					(KT key) =>
+				var deleteItem = new Action<KeyT>(
+					(KeyT key) =>
 					{
 						//Debug.WriteLine($"MKAh.SimpleCache removing {bi:N1} min old item.");
 						if (Items.TryRemove(key, out var item))
@@ -170,7 +170,7 @@ namespace MKAh.Cache
 		/// <param name="accesskey">Accesskey.</param>
 		/// <param name="item">Item.</param>
 		/// <param name="returntestkey">Returnkey.</param>
-		public bool Add(KT accesskey, VT item)
+		public bool Add(KeyT accesskey, ValueT item)
 		{
 			Misses++;
 
@@ -182,8 +182,8 @@ namespace MKAh.Cache
 				Items.TryRemove(accesskey, out _); // .Replace
 			}
 
-			var ci = new CacheItem<KT, VT>(accesskey, item);
-			CacheItem<KT, VT> t = ci;
+			var ci = new CacheItem<KeyT, ValueT>(accesskey, item);
+			CacheItem<KeyT, ValueT> t = ci;
 			Items.TryAdd(accesskey, t);
 
 			return true;
@@ -196,7 +196,7 @@ namespace MKAh.Cache
 		/// <param name="key">Key.</param>
 		/// <param name="item">Cached item.</param>
 		/// <param name="testvalue">RT is tested for matching. Cache item is dropped if they don't match. Ignored if null.</param>
-		public bool Get(KT key, out VT item)
+		public bool Get(KeyT key, out ValueT item)
 		{
 			try
 			{
@@ -234,7 +234,9 @@ namespace MKAh.Cache
 		/// </summary>
 		public void Empty() => Items.Clear();
 
-		public void Drop(KT key) => Items.TryRemove(key, out _);
+		public void Clear() => Empty();
+
+		public void Drop(KeyT key) => Items.TryRemove(key, out _);
 
 		#region IDisposable Support
 		bool disposed = false; // To detect redundant calls
