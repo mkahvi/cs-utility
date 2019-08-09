@@ -129,7 +129,7 @@ namespace MKAh.Wrapper.Windows
 		{
 			~Finalizer()
 			{
-				Debug.WriteLine("PerformanceCounterManager static finalization");
+				Debug.WriteLine("PerformanceCounterManager static finalization - clearing " + Sensors.Count.ToString() + " sensors.");
 				Sensors.Clear();
 				Sensors = null;
 			}
