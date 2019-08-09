@@ -94,11 +94,11 @@ namespace MKAh.Container
 
 		public void Clear() => throw new NotImplementedException("");
 
-		public T Get(int offset) => Ring[Index + offset % Size];
+		public T Get(int offset) => Ring[(Index + Size + offset) % Size];
 
 		public T[] GetRange(int offset, int length)
 		{
-			uint lindex = Index + Convert.ToUInt32(Ring.Length + offset);
+			uint lindex = Index + Convert.ToUInt32(Size + offset);
 
 			if (length < 1 || length > Size) throw new ArgumentException(nameof(length));
 
