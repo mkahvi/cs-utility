@@ -33,16 +33,16 @@ namespace MKAh.Container
 	public class CircularBuffer<T> : IEnumerable<T>, ICollection<T>
 	{
 		uint Index = 0;
-		readonly int Size;
+
+		public int Size { get => Ring.Length; }
+
+		public int Count { get => Size; }
 
 		readonly T[] Ring;
 
-
 		public int Offset => Convert.ToInt32(Index % Size);
 
-		int ICollection<T>.Count { get => Size; }
-
-		bool ICollection<T>.IsReadOnly { get => false; }
+		public bool IsReadOnly { get => false; }
 
 		public T[] Array() => Ring;
 
@@ -50,7 +50,6 @@ namespace MKAh.Container
 		{
 			if (size < 2) throw new ArgumentException(nameof(size));
 
-			Size = size;
 			Ring = new T[Size];
 		}
 
@@ -58,20 +57,13 @@ namespace MKAh.Container
 		{
 			if (size < 2) throw new ArgumentException(nameof(size));
 
-			Size = size;
 			Ring = new T[Size];
 
 			foreach (var value in old)
-				Push(value);
+				Add(value);
 		}
 
-		public void Push(T value)
-		{
-			Ring[Index++ % Size] = value;
-			if (Index < 0) Index = 0; // to avoid overflow
-		}
-
-		public T Tail() => Ring[Index];
+		public T Current => Ring[Index];
 
 		/// <summary>
 		/// Please use unsigned int.
@@ -98,11 +90,27 @@ namespace MKAh.Container
 
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-		void ICollection<T>.Add(T item) => Push(item);
+		public void Add(T value) => Ring[Index++ % Size] = value;
 
-		void ICollection<T>.Clear() => throw new NotImplementedException("");
+		public void Clear() => throw new NotImplementedException("");
 
-		bool ICollection<T>.Contains(T item)
+		public T Get(int offset) => Ring[Index + offset];
+
+		public T[] GetRange(int offset, int length)
+		{
+			uint lindex = Index + Convert.ToUInt32(Ring.Length + offset);
+
+			if (length < 1 || length > Size) throw new ArgumentException(nameof(length));
+
+			var rv = new T[length];
+
+			for (int i = 0; i < length; i++)
+				rv[i] = Ring[lindex++ % Size];
+
+			return rv;
+		}
+
+		public bool Contains(T item)
 		{
 			foreach (var value in this)
 			{
@@ -113,7 +121,7 @@ namespace MKAh.Container
 			return false;
 		}
 
-		void ICollection<T>.CopyTo(T[] array, int arrayIndex)
+		public void CopyTo(T[] array, int arrayIndex)
 		{
 			uint offset = Index;
 			int maxCopy = Math.Min(Size, array.Length - arrayIndex);
@@ -122,6 +130,6 @@ namespace MKAh.Container
 				array[arrayIndex++] = this[offset++];
 		}
 
-		bool ICollection<T>.Remove(T item) => throw new NotImplementedException("remove not supported for circularbuffer");
+		public bool Remove(T item) => throw new NotImplementedException("remove not supported for circularbuffer");
 	}
 }
