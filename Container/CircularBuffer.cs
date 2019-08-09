@@ -50,14 +50,14 @@ namespace MKAh.Container
 		{
 			if (size < 2) throw new ArgumentException(nameof(size));
 
-			Ring = new T[Size];
+			Ring = new T[size];
 		}
 
 		public CircularBuffer(CircularBuffer<T> old, int size)
 		{
 			if (size < 2) throw new ArgumentException(nameof(size));
 
-			Ring = new T[Size];
+			Ring = new T[size];
 
 			foreach (var value in old)
 				Add(value);
