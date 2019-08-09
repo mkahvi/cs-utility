@@ -94,7 +94,7 @@ namespace MKAh.Container
 
 		public void Clear() => throw new NotImplementedException("");
 
-		public T Get(int offset) => Ring[Index + offset];
+		public T Get(int offset) => Ring[Index + offset % Size];
 
 		public T[] GetRange(int offset, int length)
 		{
