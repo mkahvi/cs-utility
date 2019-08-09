@@ -248,8 +248,8 @@ namespace MKAh.Cache
 
 			if (disposing)
 			{
-				PruneTimer?.Dispose();
-				Items?.Clear();
+				PruneTimer.Dispose();
+				Items.Clear();
 
 				//base.Dispose();
 			}

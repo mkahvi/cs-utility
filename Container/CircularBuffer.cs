@@ -100,7 +100,7 @@ namespace MKAh.Container
 		{
 			uint lindex = Index + Convert.ToUInt32(Ring.Length + offset);
 
-			if (length < 1 || length > Size) throw new ArgumentException(nameof(length));
+			if (length < 1 || length > Size) throw new ArgumentException(nameof(length));
 
 			var rv = new T[length];
 

@@ -58,7 +58,7 @@ namespace MKAh.Ini
 				return $"{Name} = {EscapedValue} # {Comment}";
 		}
 
-		string _value = null;
+		string? _value = null;
 
 		public string Value
 		{
@@ -159,13 +159,13 @@ namespace MKAh.Ini
 			}
 		}
 
-		Lazy<string> escapedValueCache = null;
+		Lazy<string> escapedValueCache;
 
 		void ResetEscapedCache() => escapedValueCache = new Lazy<string>(CreateEscapedCache, false);
 
 		protected string EscapedValue => escapedValueCache.Value;
 
-		string _comment = null;
+		string _comment = string.Empty;
 
 		public string Comment
 		{
@@ -181,7 +181,7 @@ namespace MKAh.Ini
 
 		public bool IsArray => (Array?.Length ?? 0) > 0;
 
-		string[] _array = null;
+		string[]? _array = null;
 
 		public string[] Array
 		{

@@ -80,7 +80,7 @@ namespace MKAh
 
 	public class AutoUnlocker : IDisposable
 	{
-		readonly NonBlockingLock internal_lock = null;
+		readonly NonBlockingLock internal_lock;
 
 		public AutoUnlocker(NonBlockingLock nblock)
 		{
