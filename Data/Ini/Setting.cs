@@ -35,14 +35,14 @@ namespace MKAh.Ini
 
 		public int Index { get; internal set; } = 0;
 
-		public Setting(SettingType type = SettingType.Generic, Section parent = null)
+		public Setting(SettingType type = SettingType.Generic, Section? parent = null)
 		{
 			ResetEscapedCache();
 			Type = type;
 			Parent = parent;
 		}
 
-		public Section Parent { get; set; } = null;
+		public Section? Parent { get; set; } = null;
 
 		Type ValueType = typeof(string);
 

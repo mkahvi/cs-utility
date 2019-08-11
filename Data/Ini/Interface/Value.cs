@@ -34,7 +34,7 @@ namespace MKAh.Ini.Interface
 
 		protected abstract void Altered();
 
-		string _name = string.Empty;
+		string? _name = string.Empty;
 
 		public string Name
 		{

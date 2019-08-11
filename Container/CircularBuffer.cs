@@ -114,7 +114,7 @@ namespace MKAh.Container
 		{
 			foreach (var value in this)
 			{
-				if (value.Equals(item))
+				if (value?.Equals(item) ?? false)
 					return true;
 			}
 

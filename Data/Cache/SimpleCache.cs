@@ -46,7 +46,7 @@ namespace MKAh.Cache
 		public ulong Hits { get; private set; } = 0;
 		public ulong Misses { get; private set; } = 0;
 
-		readonly System.Timers.Timer PruneTimer = null;
+		readonly System.Timers.Timer PruneTimer;
 
 		uint Overflow, MaxCache, MinCache;
 		int MaxAge = 60, MinAge = 5;
@@ -69,10 +69,10 @@ namespace MKAh.Cache
 			MinCache = minItems;
 			Overflow = Math.Min(Math.Max(MaxCache / 2, 2), 50);
 
+			PruneTimer = new System.Timers.Timer(10_000);
 			if (interval.HasValue)
 			{
-				if (interval.Value.TotalSeconds < 10) interval = new TimeSpan(0, 0, 10);
-				PruneTimer = new System.Timers.Timer(interval.Value.TotalMilliseconds);
+				PruneTimer.Interval = interval.Value.TotalMilliseconds;
 				PruneTimer.Elapsed += Prune;
 				PruneTimer.Start();
 			}

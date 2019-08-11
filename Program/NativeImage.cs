@@ -51,7 +51,7 @@ namespace MKAh.Program
 		/// <summary>
 		/// Update current process' image.
 		/// </summary>
-		public static Process UpdateCurrent(bool withWindow = false)
+		public static Process? UpdateCurrent(bool withWindow = false)
 		{
 			var prc = Process.GetCurrentProcess();
 			if (Exists(prc))
@@ -59,7 +59,7 @@ namespace MKAh.Program
 			return null;
 		}
 		
-		public static Process RemoveCurrent(bool withWindow = false)
+		public static Process? RemoveCurrent(bool withWindow = false)
 		{
 			var prc = Process.GetCurrentProcess();
 			if (Exists(prc))
@@ -71,7 +71,7 @@ namespace MKAh.Program
 		/// Check if the native image exists.
 		/// </summary>
 		/// <param name="process">Process to check this for, current process if null.</param>
-		public static bool Exists(Process process = null)
+		public static bool Exists(Process? process = null)
 		{
 			if (process is null) process = Process.GetCurrentProcess();
 

@@ -32,11 +32,11 @@ namespace MKAh.Wrapper.Windows
 {
 	public class PerformanceCounter : IDisposable
 	{
-		System.Diagnostics.PerformanceCounter Counter { get; set; } = null;
+		System.Diagnostics.PerformanceCounter Counter { get; }
 
 		//readonly string CategoryName, CounterName, InstanceName;
 
-		public PerformanceCounter(string category, string counter, string instance = null, bool scrapfirst = true)
+		public PerformanceCounter(string category, string counter, string instance = "", bool scrapfirst = true)
 		{
 			var CategoryName = category;
 			var CounterName = counter;
@@ -79,7 +79,6 @@ namespace MKAh.Wrapper.Windows
 						Manager.Sensors?.Remove(this);
 					}
 					catch { }
-					Counter = null;
 				}
 
 				//base.Dispose();

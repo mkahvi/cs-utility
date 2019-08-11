@@ -262,7 +262,10 @@ namespace MKAh.Ini
 			get
 			{
 				if (!TryGet(name, out Section section))
-					Add(section = new Section(name, parent: this));
+				{
+					section = new Section(name, parent: this);
+					Add(section);
+				}
 
 				return section;
 			}
@@ -671,9 +674,10 @@ namespace MKAh.Ini
 			SaveToStream(writer, lines);
 		}
 
-		public async Task SaveToStream(System.IO.StreamWriter writer, string[] lines = null)
+		public async Task SaveToStream(System.IO.StreamWriter writer, string[] lines = default)
 		{
-			if (lines is null) lines = GetLines();
+
+			if (lines.Length == 0) lines = GetLines();
 
 			foreach (var line in lines)
 				await writer.WriteAsync(line).ConfigureAwait(false);

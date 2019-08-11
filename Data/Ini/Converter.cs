@@ -43,7 +43,7 @@ namespace MKAh.Ini
 			return output;
 		}
 
-		public static string Convert(T value)
+		public static string? Convert(T value)
 			=> (value is IFormattable fvalue) ? fvalue.ToString(null, System.Globalization.CultureInfo.InvariantCulture) : value?.ToString();
 	}
 }
