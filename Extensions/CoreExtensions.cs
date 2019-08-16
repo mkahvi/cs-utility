@@ -148,9 +148,10 @@ namespace MKAh
 			{
 				ProcessPriorityClass.Idle => 0,
 				ProcessPriorityClass.BelowNormal => 1,
+				//ProcessPriorityClass.Normal => 2,
 				ProcessPriorityClass.AboveNormal => 3,
 				ProcessPriorityClass.High => 4,
-				//ProcessPriorityClass.Normal => 2,
+				//ProcessPriorityClass.RealTime => 5,
 				_ => 2,
 			};
 	}

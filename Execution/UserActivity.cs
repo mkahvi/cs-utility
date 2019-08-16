@@ -78,7 +78,7 @@ namespace MKAh
 		}
 	}
 
-	static partial class NativeMethods
+	public static partial class NativeMethods
 	{
 		/// <summary>
 		/// Official documentation lies about dwTime being ticks. It's actually milliseconds

@@ -29,10 +29,10 @@ using System.Runtime.InteropServices;
 
 namespace MKAh.File
 {
-	static partial class NativeMethods
+	public static partial class NativeMethods
 	{
 		[DllImport("kernel32.dll", CharSet = CharSet.Unicode)] // SetLastError = true
-		public static extern bool DeviceIoControl(
+		internal static extern bool DeviceIoControl(
 			Microsoft.Win32.SafeHandles.SafeFileHandle hDevice,
 			int dwIoControlCode,
 			IntPtr InBuffer,

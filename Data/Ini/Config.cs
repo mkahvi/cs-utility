@@ -676,7 +676,6 @@ namespace MKAh.Ini
 
 		public async Task SaveToStream(System.IO.StreamWriter writer, string[] lines = default)
 		{
-
 			if (lines.Length == 0) lines = GetLines();
 
 			foreach (var line in lines)
