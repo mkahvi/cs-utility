@@ -19,5 +19,14 @@ namespace Logic
 
 			return result;
 		}
+
+		[Test]
+		[TestOf(nameof(MKAh.Logic.Bit.Unfill))]
+		[TestCase(0b1110, 0b0010, 1, ExpectedResult = 0b1010)]
+		[TestCase(0b1110, 0b0010, 2, ExpectedResult = 0b0010)]
+		public int Unfill(int source, int allowed, int max)
+		{
+			return MKAh.Logic.Bit.Unfill(source, allowed, max);
+		}
 	}
 }
