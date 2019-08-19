@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace MKAh.Logic
@@ -81,17 +82,16 @@ namespace MKAh.Logic
 			return value;
 		}
 
-		public static int Unfill(int value, int allowedBits, int maxBits)
+		public static int Unfill(int value, int allowedBits, int removemax, int maxoffset = sizeof(int) * 8)
 		{
-			int unfilled = 0;
+			Debug.Assert(maxoffset <= sizeof(int) * 8, "Overflow");
 
-			for (int i = 0; i < 32 && unfilled <= maxBits; i++)
+			for (int i = 0; i < maxoffset && removemax > 0; i++)
 			{
 				if (!IsSet(allowedBits, i) && IsSet(value, i))
 				{
 					value = Unset(value, i);
-					//bits++;
-					unfilled++;
+					removemax--;
 				}
 			}
 
