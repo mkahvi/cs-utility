@@ -218,8 +218,8 @@ namespace MKAh.Ini
 
 				return $"{Constant.ArrayStart} " + string.Join(", ", cache) + $" {Constant.ArrayEnd}";
 			}
-			else if (!string.IsNullOrEmpty(Value))
-				return EscapeValue(Value, out string nv) ? nv : Value;
+			else if (!string.IsNullOrEmpty(String))
+				return EscapeValue(String, out string nv) ? nv : String;
 			else
 				return string.Empty;
 		}

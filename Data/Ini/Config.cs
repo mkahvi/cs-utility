@@ -411,7 +411,7 @@ namespace MKAh.Ini
 
 					//start = QuoteStart;
 
-					value.Value = Data.String.GetQuotedString(source, QuoteStart, out end);
+					value.String = Data.String.GetQuotedString(source, QuoteStart, out end);
 
 					// TODO: check for garbage before and after quote delimiters
 				}
@@ -420,7 +420,7 @@ namespace MKAh.Ini
 					// no comment, no quotes
 
 					end = source.Length - 1;
-					value.Value = source.Substring(KeyValueSeparator);
+					value.String = source.Substring(KeyValueSeparator);
 				}
 
 				//Debug.WriteLine($"STRING SEARCH [{start}-{end}] = \"{source}\" -> \"{rv}\"");
@@ -429,7 +429,7 @@ namespace MKAh.Ini
 
 				if (CommentStart >= 0) value.Comment = source.Substring(CommentStart + 1).Trim();
 
-				if (!PreserveWhitespace && !string.IsNullOrEmpty(value.Value)) value.Value = value.Value.Trim();
+				if (!PreserveWhitespace && !string.IsNullOrEmpty(value.String)) value.String = value.String.Trim();
 			}
 			else // no key=value
 			{
@@ -440,8 +440,8 @@ namespace MKAh.Ini
 				value = new Setting { Comment = source.Substring(CommentStart + 1).Trim() };
 			}
 
-			if (!string.IsNullOrEmpty(value.Value) && Setting.UnescapeValue(value.Value, out string nv))
-				value.Value = nv;
+			if (!string.IsNullOrEmpty(value.String) && Setting.UnescapeValue(value.String, out string nv))
+				value.String = nv;
 
 			return value;
 		}
