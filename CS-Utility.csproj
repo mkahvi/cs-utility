@@ -5,6 +5,7 @@
     <ProjectGuid>{E850FF8A-72F4-498C-B3DD-BF0802E18F1B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <NoStandardLibraries>false</NoStandardLibraries>
+	<Nullable>enable</Nullable>
     <AssemblyName>MKAh-Utility</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
