@@ -38,7 +38,7 @@ namespace MKAh
 		public static TimeSpan IdleTime()
 		{
 			uint ums = LastActive();
-			uint ems = Native.GetTickCount();
+			uint ems = Native.GetTickCount(); // must be 32 bit version to match lastactive
 
 			long fms = CorrectIdleTime(ums, ems);
 
