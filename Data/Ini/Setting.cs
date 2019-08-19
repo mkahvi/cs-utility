@@ -179,7 +179,7 @@ namespace MKAh.Ini
 
 		public bool CommentOnly => string.IsNullOrEmpty(Name);
 
-		public bool IsArray => (Array?.Length ?? 0) > 0;
+		public bool IsArray => !(Array is null);
 
 		string[]? _array = null;
 
