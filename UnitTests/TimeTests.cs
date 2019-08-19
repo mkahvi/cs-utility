@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using MKAh;
 using NUnit;
 using NUnit.Framework;
@@ -8,18 +9,21 @@ namespace Timing
 	[TestFixture]
 	public class Time
 	{
+		[DllImport("kernel32.dll")]
+		internal static extern uint GetTickCount();
+
 		[Test]
-		[TestOf(nameof(MKAh.Native.GetTickCount))]
+		[TestOf(nameof(GetTickCount))]
 		[Retry(3)]
 		public void GetTickCountEquality()
 		{
 			uint eticks = (uint)Environment.TickCount;
-			uint pticks = MKAh.Native.GetTickCount();
+			uint pticks = GetTickCount();
 
-			Console.WriteLine("C# Env:   " + eticks);
-			Console.WriteLine("P/Invoke: " + pticks);
+			Console.WriteLine("C# Env:   " + eticks.ToString());
+			Console.WriteLine("P/Invoke: " + pticks.ToString());
 
-			Assert.AreEqual(eticks/1000, pticks/1000);
+			Assert.AreEqual(eticks/1000d, pticks/1000d, 5d);
 		}
 
 		[Test]
@@ -35,15 +39,16 @@ namespace Timing
 		[Retry(3)]
 		public void GetTickCountWrapAround()
 		{
-			uint diff = 5_000;
-			uint lowTick = diff;
-			uint highTick = uint.MaxValue - diff;
+			const uint diff = 5_000;
+			const uint lowTick = diff;
+			const uint highTick = uint.MaxValue - diff;
+			const long actualdiff = diff * 2L; // (uint.max - diff) to (0 + diff);
 
 			long result = MKAh.User.CorrectIdleTime(highTick, lowTick);
 
 			Console.WriteLine($"GetTickCount: {highTick} -> {lowTick} = {result}");
 
-			Assert.AreEqual(diff*2L, result, "49 day wrap around failpoint");
+			Assert.AreEqual(actualdiff, result, "49 day wrap around failpoint");
 		}
 	}
 }
