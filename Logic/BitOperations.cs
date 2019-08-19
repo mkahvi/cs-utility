@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using System.Runtime.CompilerServices;
 
 namespace MKAh.Logic
@@ -95,6 +96,21 @@ namespace MKAh.Logic
 			}
 
 			return value;
+		}
+
+		public static int Move(int source, int allowedBits)
+		{
+			int movable = source & ~allowedBits; // bits to move
+			int movecount = Count(movable); // bits still needing to move
+			int available = allowedBits & ~source; // available bit positions
+
+			source = And(source, allowedBits); // already in correct positions
+
+			System.Diagnostics.Debug.WriteLine("Bit.Move - source: " + Convert.ToString(source, 2) + " - allowed: " + Convert.ToString(allowedBits, 2) + " - moving: " + movecount.ToString());
+
+			source = Fill(source, available, movecount);
+
+			return source;
 		}
 	}
 }
