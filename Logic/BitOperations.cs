@@ -59,21 +59,21 @@ namespace MKAh.Logic
 		/// </summary>
 		/// <param name="value">Value to adjust.</param>
 		/// <param name="allowedbits">Mask of allowed bit positions.</param>
-		/// <param name="maxbits">Maximum number of toggled bits.</param>
+		/// <param name="maxbits">Maximum number of enabled bits.</param>
 		// TODO: More approaches to bit filling than just linear.
 		public static int Fill(int value, int allowedbits, int maxbits)
 		{
-			var bits = Count(value);
+			//var bits = Count(value);
 
 			int filled = 0;
 
-			for (int i = 0; i < 32; i++)
+			for (int i = 0; i < 32 && filled <= maxbits; i++)
 			{
 				if (IsSet(allowedbits, i) && !IsSet(value, i))
 				{
 					value = Set(value, i);
-					bits++;
-					if (++filled >= maxbits) break;
+					//bits++;
+					filled++;
 				}
 			}
 
