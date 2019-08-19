@@ -79,5 +79,22 @@ namespace MKAh.Logic
 
 			return value;
 		}
+
+		public static int Unfill(int value, int allowedBits, int maxBits)
+		{
+			int unfilled = 0;
+
+			for (int i = 0; i < 32 && unfilled <= maxBits; i++)
+			{
+				if (!IsSet(allowedBits, i) && IsSet(value, i))
+				{
+					value = Unset(value, i);
+					//bits++;
+					unfilled++;
+				}
+			}
+
+			return value;
+		}
 	}
 }
