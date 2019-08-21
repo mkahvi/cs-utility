@@ -26,6 +26,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace MKAh.Ini
 {
@@ -87,11 +88,16 @@ namespace MKAh.Ini
 			get => bool.Parse(Value);
 		}
 
+		public bool? TryBool => bool.TryParse(Value, out bool result) ? (bool?)result : null;
+
 		public int Int
 		{
 			set => Set(value);
 			get => int.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands);
 		}
+
+		// is null valid formatprovider?
+		public int? TryInt => int.TryParse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out var result) ? (int?)result : null;
 
 		public long Long
 		{
@@ -99,17 +105,23 @@ namespace MKAh.Ini
 			get => long.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands);
 		}
 
+		public long? TryLong => long.TryParse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out var result) ? (long?)result : null;
+
 		public float Float
 		{
 			set => Set(value);
 			get => float.Parse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
 		}
 
+		public float? TryFloat => float.TryParse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out var result) ? (float?)result : null;
+
 		public double Double
 		{
 			set => Set(value);
 			get => double.Parse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
 		}
+
+		public double? TryDouble => double.TryParse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out var result) ? (double?)result : null;
 
 		public int[] IntArray
 		{
