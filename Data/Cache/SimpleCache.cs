@@ -40,34 +40,36 @@ namespace MKAh.Cache
 		readonly EvictStrategy CacheEvictStrategy;
 		readonly StoreStrategy CacheStoreStrategy;
 
-		readonly ConcurrentDictionary<KeyT, CacheItem<KeyT, ValueT>> Items = new ConcurrentDictionary<KeyT, CacheItem<KeyT, ValueT>>();
+		readonly ConcurrentDictionary<KeyT, CacheItem<KeyT, ValueT>> Items;
 
-		public ulong Count => Convert.ToUInt64(Items.Count);
+		public int Count => Items.Count;
 		public ulong Hits { get; private set; } = 0;
 		public ulong Misses { get; private set; } = 0;
 
 		readonly System.Timers.Timer PruneTimer;
 
-		uint Overflow, MaxCache, MinCache;
+		int Overflow, AbsoluteCapacity, MinCache;
 		int MaxAge = 60, MinAge = 5;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="maxItems">Attempt to have no more than this many items.</param>
-		/// <param name="minItems">Do not prune if this many or less items.</param>
+		/// <param name="limit">Attempt to have no more than this many items.</param>
+		/// <param name="retention">Do not prune if this many or less items.</param>
 		/// <param name="interval">Automatic pruning interval.</param>
 		/// <param name="store"></param>
 		/// <param name="evict"></param>
-		public SimpleCache(uint maxItems = 100, uint minItems = 10, TimeSpan? interval = null,
+		public SimpleCache(int limit = 100, int retention = 10, TimeSpan? interval = null,
 					 StoreStrategy store = StoreStrategy.ReplaceNoMatch, EvictStrategy evict = EvictStrategy.LeastRecent)
 		{
 			CacheStoreStrategy = store;
 			CacheEvictStrategy = evict;
 
-			MaxCache = maxItems;
-			MinCache = minItems;
-			Overflow = Math.Min(Math.Max(MaxCache / 2, 2), 50);
+			AbsoluteCapacity = limit;
+			MinCache = retention;
+			Overflow = Math.Min(Math.Max(AbsoluteCapacity / 2, 2), 50);
+
+			Items = new ConcurrentDictionary<KeyT, CacheItem<KeyT, ValueT>>(Environment.ProcessorCount, MinCache);
 
 			PruneTimer = new System.Timers.Timer(10_000);
 			if (interval.HasValue)
@@ -92,7 +94,7 @@ namespace MKAh.Cache
 			{
 				if (Items.Count <= MinCache) return; // just don't bother
 
-				if (Items.Count <= MaxCache && CacheEvictStrategy == EvictStrategy.LeastUsed) return;
+				if (Items.Count <= AbsoluteCapacity && CacheEvictStrategy == EvictStrategy.LeastUsed) return;
 
 				var list = Items.Values.ToList(); // would be nice to cache this list
 
@@ -118,7 +120,7 @@ namespace MKAh.Cache
 					return 0;
 				});
 
-				while (Items.Count > MaxCache)
+				while (Items.Count > AbsoluteCapacity)
 				{
 					var bu = list[0];
 					var key = bu.AccessKey;
@@ -174,19 +176,30 @@ namespace MKAh.Cache
 		{
 			//Misses++; // already counted for failed Get presumably
 
-			if (Items.ContainsKey(accesskey))
+			if (Items.TryGetValue(accesskey, out var cci))
 			{
-				if (CacheStoreStrategy == StoreStrategy.Fail)
-					return false;
+				switch (CacheStoreStrategy)
+				{
+					case StoreStrategy.ReplaceNoMatch:
+						if (cci.Item != item)
+							goto replace;
+						return false;
+					case StoreStrategy.ReplaceAlways:
+						replace:
+						cci.Replace(item);
+						break;
+					case StoreStrategy.Fail:
+						return false;
+				}
 
-				Items.TryRemove(accesskey, out _); // .Replace
+				return true;
 			}
-
-			var ci = new CacheItem<KeyT, ValueT>(accesskey, item);
-			CacheItem<KeyT, ValueT> t = ci;
-			Items.TryAdd(accesskey, t);
-
-			return true;
+			else
+			{
+				if (!Items.TryAdd(accesskey, new CacheItem<KeyT, ValueT>(accesskey, item)))
+					return false; // shouldn't happen, but...
+				return true;
+			}
 		}
 
 		/// <summary>
@@ -216,7 +229,7 @@ namespace MKAh.Cache
 			}
 
 			// this is bad design
-			if (Count > MaxCache + Overflow)
+			if (Count > AbsoluteCapacity + Overflow)
 			{
 				// TODO: make restart timer or something?
 				/*

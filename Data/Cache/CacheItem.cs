@@ -28,19 +28,27 @@ using System;
 
 namespace MKAh.Cache
 {
-	struct CacheItem<KT, VT> where VT : class
+	class CacheItem<KT, VT> where VT : class
 	{
-		public readonly KT AccessKey;
-		public VT Item;
-		public DateTimeOffset Access;
-		public long Desirability;
+		public KT AccessKey { get; }
+
+		public VT Item { get; set; }
+
+		public DateTimeOffset Access { get; set; } = DateTimeOffset.UtcNow;
+
+		public long Desirability { get; set; } = 1;
 
 		public CacheItem(KT key, VT item)
 		{
 			AccessKey = key;
 			Item = item;
+		}
+
+		public void Replace(VT item)
+		{
 			Access = DateTimeOffset.UtcNow;
 			Desirability = 1;
+			Item = item;
 		}
 	}
 }
