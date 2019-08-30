@@ -42,14 +42,15 @@ namespace MKAh.Ini
 		}
 
 		public Config? Parent { get; set; } = null;
-		internal void ChildAltered(Setting value) => Parent?.ChildAltered(this);
 
-		protected override void Altered() => ChildAltered(null);
+		internal void ChildAltered(Setting value) => Parent?.ChildAltered(this, value);
+
+		protected override void Altered(Interface.Value child) => ChildAltered(child as Setting);
 
 		public List<Setting> Items { get; } = new List<Setting>();
 		public int ItemCount => Items.Count;
 
-		HashSet<string> hUniqueKeys = null;
+		HashSet<string>? hUniqueKeys = null;
 
 		public int Index { get; internal set; } = 0;
 

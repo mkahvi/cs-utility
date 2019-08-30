@@ -47,7 +47,7 @@ namespace MKAh.Ini
 
 		Type ValueType = typeof(string);
 
-		protected override void Altered() => Parent?.ChildAltered(this);
+		protected override void Altered(Interface.Value value) => Parent?.ChildAltered(this);
 
 		public override string ToString()
 		{
@@ -69,7 +69,7 @@ namespace MKAh.Ini
 				ResetEscapedCache();
 				_array = null;
 				_value = value;
-				Altered();
+				Altered(this);
 			}
 		}
 
@@ -185,7 +185,8 @@ namespace MKAh.Ini
 			set
 			{
 				_comment = value?.Replace('\n', ' '); // HACK: Multiline comments are not handled
-				Altered();
+
+				Altered(this);
 			}
 		}
 
@@ -208,7 +209,8 @@ namespace MKAh.Ini
 				_array = (string[])value?.Clone(); // is this enough?
 
 				//Debug.WriteLine("BaseArray = " + string.Join(", ", value));
-				Altered();
+
+				Altered(this);
 			}
 		}
 
@@ -265,7 +267,7 @@ namespace MKAh.Ini
 		{
 			if (string.IsNullOrEmpty(value) || value.Length == 0)
 			{
-				nvalue = null;
+				nvalue = string.Empty;
 				return false;
 			}
 
@@ -288,7 +290,7 @@ namespace MKAh.Ini
 				return true;
 			}
 
-			nvalue = null;
+			nvalue = string.Empty;
 			return false;
 		}
 

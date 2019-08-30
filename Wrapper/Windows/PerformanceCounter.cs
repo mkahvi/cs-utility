@@ -36,7 +36,7 @@ namespace MKAh.Wrapper.Windows
 
 		//readonly string CategoryName, CounterName, InstanceName;
 
-		public PerformanceCounter(string category, string counter, string instance = "", bool scrapfirst = true)
+		public PerformanceCounter(string category, string counter, string? instance = "", bool scrapfirst = true)
 		{
 			var CategoryName = category;
 			var CounterName = counter;
@@ -76,9 +76,9 @@ namespace MKAh.Wrapper.Windows
 					Counter.Dispose();
 					try
 					{
-						Manager.Sensors?.Remove(this);
+						Manager.Sensors.Remove(this);
 					}
-					catch { }
+					catch { /* NOP */ }
 				}
 
 				//base.Dispose();
@@ -86,25 +86,7 @@ namespace MKAh.Wrapper.Windows
 		}
 
 		/// <exception cref="InvalidOperationException">Counter died.</exception>
-		public float Value
-		{
-			get
-			{
-				try
-				{
-					return Counter.NextValue();
-				}
-				catch (System.InvalidOperationException)
-				{
-					Manager.Sensors?.Remove(this);
-					Counter.Dispose();
-					// TODO: Driver/Adapter vanished and other problems, try to re-acquire it.
-					// OR: The counter may require admin rights
-					Debug.WriteLine("DEBUG :: PFC(" + Counter.CategoryName + "//" + Counter.CounterName + "//" + Counter.InstanceName + ") vanished.");
-					throw;
-				}
-			}
-		}
+		public float Value => Counter.NextValue();
 
 		public long Raw => Counter.RawValue;
 
@@ -130,7 +112,6 @@ namespace MKAh.Wrapper.Windows
 			{
 				Debug.WriteLine("PerformanceCounterManager static finalization - clearing " + Sensors.Count.ToString() + " sensors.");
 				Sensors.Clear();
-				Sensors = null;
 			}
 		}
 	}

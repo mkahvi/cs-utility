@@ -122,7 +122,7 @@ namespace MKAh.Ini
 		/// <returns>Number of changes that had been made.</returns>
 		public int ResetChangeCount() => System.Threading.Interlocked.Exchange(ref _changes, 0);
 
-		internal void ChildAltered(Section section) => System.Threading.Interlocked.Increment(ref _changes);
+		internal void ChildAltered(Section section, Setting? setting) => System.Threading.Interlocked.Increment(ref _changes);
 
 		public Config()
 		{
@@ -241,13 +241,15 @@ namespace MKAh.Ini
 		void Own(Section section)
 		{
 			section.Parent = this;
-			ChildAltered(section);
+
+			ChildAltered(section, null);
 		}
 
 		void Deown(Section section)
 		{
 			section.Parent = null;
-			ChildAltered(section);
+
+			ChildAltered(section, null);
 		}
 
 		#region Indexer
@@ -314,7 +316,9 @@ namespace MKAh.Ini
 		public void Add(Section value)
 		{
 			value.Parent = this;
-			ChildAltered(value);
+
+			ChildAltered(value, null);
+
 			value.UniqueKeys = UniqueKeys;
 			Items.Add(value);
 		}
@@ -671,7 +675,7 @@ namespace MKAh.Ini
 			using var writer = new System.IO.StreamWriter(file, encoding, 1024 * 1024 * 64);
 
 			file.SetLength(0); // dumb, but StreamWriter is unhelpful
-			SaveToStream(writer, lines);
+			SaveToStream(writer, lines).ConfigureAwait(false);
 		}
 
 		public async Task SaveToStream(System.IO.StreamWriter writer, string[] lines = default)

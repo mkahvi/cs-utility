@@ -37,7 +37,7 @@ namespace MKAh
 			{
 				action();
 			}
-			catch { }
+			catch { /* NOP */ }
 		}
 	}
 }
