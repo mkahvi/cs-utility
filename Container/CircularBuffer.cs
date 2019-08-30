@@ -30,7 +30,7 @@ using System.Collections.Generic;
 
 namespace MKAh.Container
 {
-	public class CircularBuffer<T> : IEnumerable<T>, ICollection<T>
+	public class CircularBuffer<T> : ICollection<T>
 	{
 		uint Index = 0;
 

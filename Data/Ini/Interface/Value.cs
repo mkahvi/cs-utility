@@ -32,7 +32,7 @@ namespace MKAh.Ini.Interface
 	{
 		public int Line { get; internal set; } = -1;
 
-		protected abstract void Altered();
+		protected abstract void Altered(Interface.Value child);
 
 		string? _name = string.Empty;
 
@@ -44,7 +44,8 @@ namespace MKAh.Ini.Interface
 				if (value?.IndexOfAny(Config.ReservedCharacters) >= 0)
 					throw new ArgumentException("Name contains invalid characters.");
 				_name = value;
-				Altered();
+
+				Altered(this);
 			}
 		}
 	}

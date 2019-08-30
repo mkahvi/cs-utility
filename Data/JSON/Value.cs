@@ -56,7 +56,7 @@ namespace MKAh.Data
 			{
 				get
 				{
-					KeyValue value = null;
+					KeyValue value;
 					if (!Values.TryGetValue(key, out value))
 						Values.Add(key, value = new KeyValue() { Name = key });
 
@@ -76,7 +76,7 @@ namespace MKAh.Data
 			public IEnumerator<KeyValue> GetEnumerator() => Values.Values.GetEnumerator();
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-			Dictionary<string, KeyValue> Values = new Dictionary<string, KeyValue>();
+			readonly Dictionary<string, KeyValue> Values = new Dictionary<string, KeyValue>();
 		}
 	}
 }

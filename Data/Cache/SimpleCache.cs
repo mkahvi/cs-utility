@@ -238,7 +238,7 @@ namespace MKAh.Cache
 			}
 
 			Misses++;
-			item = null;
+			item = default;
 			return false;
 		}
 
