@@ -259,7 +259,7 @@ namespace MKAh.Ini
 				return true;
 			}
 
-			nvalue = null;
+			nvalue = string.Empty;
 			return false;
 		}
 
