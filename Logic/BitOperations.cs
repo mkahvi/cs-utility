@@ -106,7 +106,7 @@ namespace MKAh.Logic
 
 			source = And(source, allowedBits); // already in correct positions
 
-			System.Diagnostics.Debug.WriteLine("Bit.Move - source: " + Convert.ToString(source, 2) + " - allowed: " + Convert.ToString(allowedBits, 2) + " - moving: " + movecount.ToString());
+			//System.Diagnostics.Debug.WriteLine("Bit.Move - source: " + Convert.ToString(source, 2) + " - allowed: " + Convert.ToString(allowedBits, 2) + " - moving: " + movecount.ToString());
 
 			source = Fill(source, available, movecount);
 
