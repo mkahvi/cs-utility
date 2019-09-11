@@ -59,7 +59,7 @@ namespace MKAh.Ini
 				return $"{Name} = {EscapedValue} # {Comment}";
 		}
 
-		string? _value = null;
+		string _value = string.Empty;
 
 		public string Value
 		{
@@ -192,21 +192,21 @@ namespace MKAh.Ini
 
 		public bool CommentOnly => string.IsNullOrEmpty(Name);
 
-		public bool IsArray => !(Array is null);
+		public bool IsArray => Array.Length > 0;
 
-		string[]? _array = null;
+		string[] _array = System.Array.Empty<string>();
 
 		public string[] Array
 		{
 			get => _array;
 			set
 			{
-				_array = null;
-				_value = null;
+				_array = System.Array.Empty<string>();
+				_value = string.Empty;
 
 				ResetEscapedCache();
 
-				_array = (string[])value?.Clone(); // is this enough?
+				_array = value?.Clone() as string[]; // is this enough?
 
 				//Debug.WriteLine("BaseArray = " + string.Join(", ", value));
 
