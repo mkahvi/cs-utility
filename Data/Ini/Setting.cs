@@ -46,6 +46,8 @@ namespace MKAh.Ini
 		public Section? Parent { get; set; } = null;
 
 		Type ValueType = typeof(string);
+		object ValueObject = null;
+
 
 		protected override void Altered(Interface.Value value) => Parent?.ChildAltered(this);
 
@@ -69,23 +71,49 @@ namespace MKAh.Ini
 				ResetEscapedCache();
 				_array = null;
 				_value = value;
+				UpdateInternalObject(value);
 				Altered(this);
 			}
 		}
 
-		public bool IsEmpty => string.IsNullOrEmpty(Name);
+		public bool IsEmpty => string.IsNullOrEmpty(Value);
+
+		void UpdateInternalObject<T>(T value)
+		{
+			ValueObject = value;
+			ValueType = value.GetType();
+		}
 
 		// alias for Value
 		public string String
 		{
 			get => Value;
-			set => Value = value;
+			set
+			{
+				Value = value;
+				UpdateInternalObject(value);
+			}
 		}
 
 		public bool Bool
 		{
-			set => Set(value);
 			get => bool.Parse(Value);
+			set
+			{
+				Set(value);
+			}
+		}
+
+		public bool UpdateBool(bool value)
+		{
+			if (ValueObject is bool fval && fval != value)
+			{
+				Set(value);
+				UpdateInternalObject(value);
+				return true;
+			}
+
+			return false;
 		}
 
 		public bool? TryBool => bool.TryParse(Value, out bool result) ? (bool?)result : null;
@@ -94,6 +122,18 @@ namespace MKAh.Ini
 		{
 			set => Set(value);
 			get => int.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands);
+		}
+
+		public bool UpdateInt(int value)
+		{
+			if (ValueObject is int fval && fval != value)
+			{
+				Set(value);
+				UpdateInternalObject(value);
+				return true;
+			}
+
+			return false;
 		}
 
 		// is null valid formatprovider?
@@ -105,6 +145,18 @@ namespace MKAh.Ini
 			get => long.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands);
 		}
 
+		public bool UpdateLong(long value)
+		{
+			if (ValueObject is long fval && fval != value)
+			{
+				Set(value);
+				UpdateInternalObject(value);
+				return true;
+			}
+
+			return false;
+		}
+
 		public long? TryLong => long.TryParse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out var result) ? (long?)result : null;
 
 		public float Float
@@ -113,12 +165,36 @@ namespace MKAh.Ini
 			get => float.Parse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
 		}
 
+		public bool UpdateFloat(float value)
+		{
+			if (ValueObject is float fval && fval != value)
+			{
+				Set(value);
+				UpdateInternalObject(value);
+				return true;
+			}
+
+			return false;
+		}
+
 		public float? TryFloat => float.TryParse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out var result) ? (float?)result : null;
 
 		public double Double
 		{
 			set => Set(value);
 			get => double.Parse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
+		}
+
+		public bool UpdateDouble(double value)
+		{
+			if (ValueObject is double fval && fval != value)
+			{
+				Set(value);
+				UpdateInternalObject(value);
+				return true;
+			}
+
+			return false;
 		}
 
 		public double? TryDouble => double.TryParse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out var result) ? (double?)result : null;
