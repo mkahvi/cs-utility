@@ -98,22 +98,20 @@ namespace MKAh.Program
 		/// Calls Ngen to generate native image. Returns Process for the
 		/// </summary>
 		/// <returns>Process for Ngen</returns>
-		public static Process Create(Process? process = null, bool withWindow = false) => Ngen(NgenAction.Install, process, withWindow);
+		public static Process Create(Process process, bool withWindow = false) => Ngen(NgenAction.Install, process, withWindow);
 
 		/// <summary>
 		/// Uninstall native image.
 		/// </summary>
-		public static Process Remove(Process? process = null, bool withWindow = false) => Ngen(NgenAction.Uninstall, process, withWindow);
+		public static Process Remove(Process process, bool withWindow = false) => Ngen(NgenAction.Uninstall, process, withWindow);
 
 		/// <summary>
 		/// Update existing native image.
 		/// </summary>
-		public static Process Update(Process? process = null, bool withWindow = false) => Ngen(NgenAction.Update, process, withWindow);
+		public static Process Update(Process process, bool withWindow = false) => Ngen(NgenAction.Update, process, withWindow);
 
-		static Process Ngen(NgenAction action, Process? process = null, bool withWindow = false)
+		static Process Ngen(NgenAction action, Process process, bool withWindow = false)
 		{
-			if (process == null) process = Process.GetCurrentProcess();
-
 			var module = process.MainModule;
 
 			Debug.WriteLine(ngenpath + $" {action.ToString().ToLowerInvariant()} \"{module.FileName}\" /nologo");
