@@ -220,14 +220,14 @@ namespace MKAh.Ini
 				catch (ParseException ex)
 				{
 					ex.Line = lineNumber;
-					Debug.WriteLine("Malformed line:" + lineNumber.ToString() + " - " + ex.Message);
+					DebugMsg(ex.Message, lineNumber, DebugType.MalformedLine);
 					throw;
 				}
 				catch (FormatException ex)
 				{
 					if (!Strict) return;
 					// TODO: throw better error
-					Debug.WriteLine("Malformed line:" + lineNumber.ToString() + " - " + ex.Message);
+					DebugMsg(ex.Message, lineNumber, DebugType.MalformedLine);
 					throw;
 				}
 				catch (Exception ex)
@@ -236,6 +236,23 @@ namespace MKAh.Ini
 					throw;
 				}
 			}
+		}
+
+		[Conditional("DEBUG")]
+		void DebugMsg(string message, int line, DebugType type)
+		{
+			switch (type)
+			{
+				case DebugType.MalformedLine:
+				default:
+					Debug.WriteLine("Malformed line:" + line.ToString() + " - " + message);
+					break;
+			}
+		}
+
+		enum DebugType
+		{
+			MalformedLine
 		}
 
 		void Own(Section section)
