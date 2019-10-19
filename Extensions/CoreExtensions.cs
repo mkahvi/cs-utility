@@ -45,79 +45,137 @@ namespace MKAh
 
 		// Core Type extension
 		/// <summary>
-		/// int.Constrain(minimum, maximum)
+		/// Limits the number within stated inclusive minimum and maximum values.
+		/// 
+		/// <code>int.Constrain(minimum, maximum)</code>
 		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static int Constrain(this int value, int InclusiveMinimum, int InclusiveMaximum)
 			=> Math.Min(Math.Max(value, InclusiveMinimum), InclusiveMaximum);
 
+		/// <summary>
+		/// Limits the number within stated inclusive minimum and maximum values.
+		/// 
+		/// <code>long.Constrain(minimum, maximum)</code>
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static long Constrain(this long value, long InclusiveMinimum, long InclusiveMaximum)
 			=> Math.Min(Math.Max(value, InclusiveMinimum), InclusiveMaximum);
 
+		/// <summary>
+		/// Limits the number within stated inclusive minimum and maximum values.
+		/// 
+		/// <code>float.Constrain(minimum, maximum)</code>
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static float Constrain(this float value, float InclusiveMinimum, float InclusiveMaximum)
 			=> Math.Min(Math.Max(value, InclusiveMinimum), InclusiveMaximum);
 
+		/// <summary>
+		/// Limits the number within stated inclusive minimum and maximum values.
+		/// 
+		/// <code>double.Constrain(minimum, maximum)</code>
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static double Constrain(this double value, double InclusiveMinimum, double InclusiveMaximum)
 			=> Math.Min(Math.Max(value, InclusiveMinimum), InclusiveMaximum);
 
+		/// <summary>
+		/// Limits the number within stated inclusive minimum and maximum values.
+		/// 
+		/// <code>decimal.Constrain(minimum, maximum)</code>
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static decimal Constrain(this decimal value, decimal InclusiveMinimum, decimal InclusiveMaximum)
 			=> Math.Min(Math.Max(value, InclusiveMinimum), InclusiveMaximum);
 
 		/// <summary>
-		/// Constrains maximum value.
+		/// Constrains inclusive maximum value.
 		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static int Max(this int value, int max) => Math.Min(value, max);
 
+		/// <summary>
+		/// Constrains inclusive maximum value.
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static long Max(this long value, long max) => Math.Min(value, max);
 
+		/// <summary>
+		/// Constrains inclusive maximum value.
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static float Max(this float value, float max) => Math.Min(value, max);
 
+		/// <summary>
+		/// Constrains inclusive maximum value.
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static double Max(this double value, double max) => Math.Min(value, max);
 
+		/// <summary>
+		/// Constrains inclusive maximum value.
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static TimeSpan Max(this TimeSpan value, TimeSpan max) => value > max ? max : value;
 
+		/// <summary>
+		/// Returns true if value within the inclusive minimum and maximum values.
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static bool Within(this int value, int low, int high) => value >= low && value <= high;
 
+		/// <summary>
+		/// Returns true if value within the inclusive minimum and maximum values.
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static bool Within(this long value, long low, long high) => value >= low && value <= high;
 
+		/// <summary>
+		/// Returns true if value within the inclusive minimum and maximum values.
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static bool Within(this float value, float low, float high) => value >= low && value <= high;
 
+		/// <summary>
+		/// Returns true if value within the inclusive minimum and maximum values.
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static bool Within(this double value, double low, double high) => value >= low && value <= high;
 
 		/// <summary>
-		/// Constrains minimum value.
+		/// Constrains value to have inclusive minimum.
 		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static int Min(this int value, int min) => Math.Max(value, min);
 
+		/// <summary>
+		/// Constrains value to have inclusive minimum.
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static long Min(this long value, long min) => Math.Max(value, min);
 
+		/// <summary>
+		/// Constrains value to have inclusive minimum.
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static float Min(this float value, float min) => Math.Max(value, min);
 
+		/// <summary>
+		/// Constrains value to have inclusive minimum.
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static double Min(this double value, double min) => Math.Max(value, min);
 
 		/// <summary>
-		/// Replace value with another
+		/// Replace value with another if it matches, otherwise return as is.
 		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static int Replace(this int value, int from, int to) => value == from ? to : value;
 
+		/// <summary>
+		/// Replace value with another if it matches, otherwise return as is.
+		/// </summary>
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static long Replace(this long value, long from, long to) => value == from ? to : value;
 
