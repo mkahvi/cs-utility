@@ -179,24 +179,15 @@ namespace MKAh
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static long Replace(this long value, long from, long to) => value == from ? to : value;
 
-		// IP Address
-		public static IPAddress GetAddress(this NetworkInterface iface)
-		{
-			Debug.Assert(iface != null);
+		/// <summary>
+		/// Get first IP address.
+		/// </summary>
+		public static IPAddress GetAddress(this NetworkInterface iface) => GetAddresses(iface)[0] ?? IPAddress.None;
 
-			return GetAddresses(iface)[0] ?? IPAddress.None;
-		}
-
-		public static IPAddress[] GetAddresses(this NetworkInterface iface)
-		{
-			Debug.Assert(iface != null);
-
-			if (iface.NetworkInterfaceType == NetworkInterfaceType.Loopback || iface.NetworkInterfaceType == NetworkInterfaceType.Tunnel)
-				return Array.Empty<IPAddress>();
-
-			return (from ip in iface.GetIPProperties().UnicastAddresses
-					select ip.Address).ToArray();
-		}
+		/// <summary>
+		/// Get all IP addresses as array.
+		/// </summary>
+		public static IPAddress[] GetAddresses(this NetworkInterface iface) => (from ip in iface.GetIPProperties().UnicastAddresses select ip.Address).ToArray();
 	}
 
 	static public class PriorityClassExtensions
