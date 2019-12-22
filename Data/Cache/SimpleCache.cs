@@ -33,14 +33,14 @@ namespace MKAh.Cache
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <typeparam name="KeyT">Access key.</typeparam>
-	/// <typeparam name="ValueT">Value.</typeparam>
-	public class SimpleCache<KeyT, ValueT> : IDisposable where ValueT : class
+	/// <typeparam name="TKey">Access key.</typeparam>
+	/// <typeparam name="TValue">Value.</typeparam>
+	public class SimpleCache<TKey, TValue> : IDisposable where TValue : class where TKey : IComparable
 	{
 		readonly EvictStrategy CacheEvictStrategy;
 		readonly StoreStrategy CacheStoreStrategy;
 
-		readonly ConcurrentDictionary<KeyT, CacheItem<KeyT, ValueT>> Items;
+		readonly ConcurrentDictionary<TKey, CacheItem<TKey, TValue>> Items;
 
 		public int Count => Items.Count;
 		public ulong Hits { get; private set; } = 0;
@@ -69,7 +69,7 @@ namespace MKAh.Cache
 			MinCache = retention;
 			Overflow = Math.Min(Math.Max(AbsoluteCapacity / 2, 2), 50);
 
-			Items = new ConcurrentDictionary<KeyT, CacheItem<KeyT, ValueT>>(Environment.ProcessorCount, MinCache);
+			Items = new ConcurrentDictionary<TKey, CacheItem<TKey, TValue>>(Environment.ProcessorCount, MinCache);
 
 			PruneTimer = new System.Timers.Timer(10_000);
 			if (interval.HasValue)
@@ -98,7 +98,7 @@ namespace MKAh.Cache
 
 				var list = Items.Values.ToList(); // would be nice to cache this list
 
-				list.Sort((CacheItem<KeyT, ValueT> x, CacheItem<KeyT, ValueT> y) =>
+				list.Sort((CacheItem<TKey, TValue> x, CacheItem<TKey, TValue> y) =>
 				{
 					if (CacheEvictStrategy == EvictStrategy.LeastRecent)
 					{
@@ -128,8 +128,8 @@ namespace MKAh.Cache
 					list.Remove(bu);
 				}
 
-				var deleteItem = new Action<KeyT>(
-					(KeyT key) =>
+				var deleteItem = new Action<TKey>(
+					(TKey key) =>
 					{
 						//Debug.WriteLine($"MKAh.SimpleCache removing {bi:N1} min old item.");
 						if (Items.TryRemove(key, out var item))
@@ -172,7 +172,7 @@ namespace MKAh.Cache
 		/// <param name="accesskey">Accesskey.</param>
 		/// <param name="item">Item.</param>
 		/// <param name="returntestkey">Returnkey.</param>
-		public bool Add(KeyT accesskey, ValueT item)
+		public bool Add(TKey accesskey, TValue item)
 		{
 			//Misses++; // already counted for failed Get presumably
 
@@ -196,7 +196,7 @@ namespace MKAh.Cache
 			}
 			else
 			{
-				if (!Items.TryAdd(accesskey, new CacheItem<KeyT, ValueT>(accesskey, item)))
+				if (!Items.TryAdd(accesskey, new CacheItem<TKey, TValue>(accesskey, item)))
 					return false; // shouldn't happen, but...
 				return true;
 			}
@@ -209,7 +209,7 @@ namespace MKAh.Cache
 		/// <param name="key">Key.</param>
 		/// <param name="item">Cached item.</param>
 		/// <param name="testvalue">RT is tested for matching. Cache item is dropped if they don't match. Ignored if null.</param>
-		public bool Get(KeyT key, out ValueT item)
+		public bool Get(TKey key, out TValue item)
 		{
 			try
 			{
@@ -249,7 +249,7 @@ namespace MKAh.Cache
 
 		public void Clear() => Empty();
 
-		public void Drop(KeyT key) => Items.TryRemove(key, out _);
+		public void Drop(TKey key) => Items.TryRemove(key, out _);
 
 		#region IDisposable Support
 		bool disposed = false; // To detect redundant calls

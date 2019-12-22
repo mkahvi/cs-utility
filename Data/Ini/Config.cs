@@ -73,20 +73,20 @@ namespace MKAh.Ini
 		/// <summary>
 		/// Add empty line above each section.
 		/// </summary>
-		public bool PadSections = true;
+		public bool PadSections { get; set; } = true;
 
-		public bool PreserveWhitespace = false;
+		public bool PreserveWhitespace { get; set; }  = false;
 
-		public bool AllowNamelessSections = false;
+		public bool AllowNamelessSections { get; set; } = false;
 
-		public bool UniqueSections = false;
+		public bool UniqueSections { get; set; } = false;
 		public bool UniqueKeys { get; } = false; // setting this to true not supported yet
 
-		public bool AlwaysQuoteStrings = false;
-		public bool RequireStringQuotes = false;
+		public bool AlwaysQuoteStrings { get; set; } = false;
+		public bool RequireStringQuotes { get; set; } = false;
 
-		public char CommentChar = Constant.StandardComment;
-		public char[] CommentChars = { Constant.StandardComment, Constant.AlternateComment };
+		public char CommentChar { get; set; } = Constant.StandardComment;
+		public char[] CommentChars { get; set; } = { Constant.StandardComment, Constant.AlternateComment };
 
 		public List<Section> Items { get; } = new List<Section>();
 		public int ItemCount => Items.Count;
@@ -239,7 +239,7 @@ namespace MKAh.Ini
 		}
 
 		[Conditional("DEBUG")]
-		void DebugMsg(string message, int line, DebugType type)
+		static void DebugMsg(string message, int line, DebugType type)
 		{
 			switch (type)
 			{
