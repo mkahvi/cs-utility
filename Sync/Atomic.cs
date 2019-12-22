@@ -1,5 +1,5 @@
 ﻿//
-// MKAh.Atomic.Lock.cs
+// MKAh.Synchronize.Atomic.cs
 //
 // Author:
 //       M.A. (https://github.com/mkahvi)
@@ -28,15 +28,31 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace MKAh
+namespace MKAh.Synchronize
 {
 	/// <summary>
 	/// Simplified wrappers for System.Threading.Interlocked stuff.
 	/// </summary>
-	public static partial class Atomic
+	public class Atomic
 	{
-		public const int Locked = 1;
-		public const int Unlocked = 0;
+		public static int Locked => 1;
+
+		public static int Unlocked => 0;
+
+		int internal_lock = Unlocked;
+
+		public Atomic()
+		{
+
+		}
+
+		public bool TryLock() => Lock(ref internal_lock);
+
+		public bool IsLocked => internal_lock == Locked;
+
+		public void Unlock() => Unlock(ref internal_lock);
+
+		public IScopedUnlock ScopedUnlock() => new AtomicUnlock(this);
 
 		/// <summary>
 		/// Lock the specified lockvalue.
@@ -63,54 +79,5 @@ namespace MKAh
 			Debug.Assert(lockvalue != Unlocked);
 			lockvalue = Unlocked;
 		}
-	}
-
-	public class NonBlockingLock
-	{
-		int internal_lock;
-
-		public NonBlockingLock(bool locked = false) => internal_lock = locked ? Atomic.Locked : Atomic.Unlocked;
-
-		public bool Locked => internal_lock == Atomic.Locked;
-
-		public bool Lock() => Atomic.Lock(ref internal_lock);
-
-		public void Unlock() => Atomic.Unlock(ref internal_lock);
-	}
-
-	public class AutoUnlocker : IDisposable
-	{
-		readonly NonBlockingLock internal_lock;
-
-		public AutoUnlocker(NonBlockingLock nblock)
-		{
-			if (nblock == null) throw new ArgumentNullException(nameof(nblock));
-			if (!nblock.Lock()) throw new ArgumentException("Already locked", nameof(nblock));
-
-			internal_lock = nblock;
-		}
-
-		#region IDisposable Support
-		bool disposed = false; // To detect redundant calls
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposed) return;
-			disposed = true;
-
-			if (disposing)
-			{
-				//base.Dispose();
-			}
-
-			internal_lock?.Unlock();
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-		#endregion
 	}
 }
