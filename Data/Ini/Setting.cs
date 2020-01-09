@@ -290,11 +290,10 @@ namespace MKAh.Ini
 			}
 		}
 
-
-		public void Reset()
+		internal void Reset()
 		{
-			Array = System.Array.Empty<string>();
-			Value = string.Empty;
+			_array = System.Array.Empty<string>();
+			_value = string.Empty;
 		}
 
 		// alias for Array
