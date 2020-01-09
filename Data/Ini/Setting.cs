@@ -69,7 +69,7 @@ namespace MKAh.Ini
 			set
 			{
 				ResetEscapedCache();
-				_array = null;
+				Reset();
 				_value = value;
 				UpdateInternalObject(value);
 				Altered(this);
@@ -277,17 +277,24 @@ namespace MKAh.Ini
 			get => _array;
 			set
 			{
-				_array = System.Array.Empty<string>();
-				_value = string.Empty;
+				if (value is null) throw new ArgumentNullException(nameof(value));
 
 				ResetEscapedCache();
+				Reset();
 
-				_array = value?.Clone() as string[]; // is this enough?
+				_array = value.Clone() as string[]; // is this enough?
 
 				//Debug.WriteLine("BaseArray = " + string.Join(", ", value));
 
 				Altered(this);
 			}
+		}
+
+
+		public void Reset()
+		{
+			Array = System.Array.Empty<string>();
+			Value = string.Empty;
 		}
 
 		// alias for Array

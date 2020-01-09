@@ -157,7 +157,7 @@ namespace MKAh.Ini
 
 		public Setting GetOrSet<T>(string setting, T[] fallback)
 		{
-			if (!(TryGet(setting, out var rv) && rv.Array != null))
+			if (!(TryGet(setting, out var rv) && rv.IsArray))
 			{
 				if (rv is null) rv = new Setting() { Name = setting, Parent = this };
 
