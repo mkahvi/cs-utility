@@ -72,7 +72,6 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Atomic\Lock.cs" />
     <Compile Include="Data\Cache\CacheEventArgs.cs" />
     <Compile Include="Data\Cache\CacheItem.cs" />
     <Compile Include="Data\Cache\EvictStrategy.cs" />
@@ -103,6 +102,13 @@
     <Compile Include="Native\Basic.cs" />
     <Compile Include="Program\NativeImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sync\Atomic.cs" />
+    <Compile Include="Sync\AtomicUnlock.cs" />
+    <Compile Include="Sync\GenericLock.cs" />
+    <Compile Include="Sync\ILock.cs" />
+    <Compile Include="Sync\IScopedUnlock.cs" />
+    <Compile Include="Sync\ScopedUnlock.cs" />
+    <Compile Include="Sync\ThreadLock.cs" />
     <Compile Include="Types\Trinary.cs" />
     <Compile Include="Wrapper\Windows\PerformanceCounter.cs" />
   </ItemGroup>
