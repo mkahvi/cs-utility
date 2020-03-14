@@ -66,6 +66,12 @@ namespace MKAh
 			&& ((System.Environment.OSVersion.Version.Major > 6)
 			|| (System.Environment.OSVersion.Version.Major == 6 && System.Environment.OSVersion.Version.Minor == 2));
 
+		public static bool IsWin10OrBetter
+			=> Environment.OSVersion.Platform == PlatformID.Win32NT
+			&& System.Environment.OSVersion.Version.Major >= 10;
+
+		public static decimal OSVersion => System.Environment.OSVersion.Version.Major + Convert.ToDecimal(System.Environment.OSVersion.VersionString) / 10m;
+
 		/// <summary>
 		/// Current code is executing on the main thread.
 		/// </summary>
