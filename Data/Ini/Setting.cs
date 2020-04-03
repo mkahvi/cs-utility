@@ -137,7 +137,7 @@ namespace MKAh.Ini
 		}
 
 		// is null valid formatprovider?
-		public int? TryInt => int.TryParse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out var result) ? (int?)result : null;
+		public int? TryInt => int.TryParse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result) ? (int?)result : null;
 
 		public long Long
 		{
@@ -157,12 +157,12 @@ namespace MKAh.Ini
 			return false;
 		}
 
-		public long? TryLong => long.TryParse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out var result) ? (long?)result : null;
+		public long? TryLong => long.TryParse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result) ? (long?)result : null;
 
 		public float Float
 		{
 			set => Set(value);
-			get => float.Parse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
+			get => float.Parse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
 		}
 
 		public bool UpdateFloat(float value)
@@ -177,12 +177,12 @@ namespace MKAh.Ini
 			return false;
 		}
 
-		public float? TryFloat => float.TryParse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out var result) ? (float?)result : null;
+		public float? TryFloat => float.TryParse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result) ? (float?)result : null;
 
 		public double Double
 		{
 			set => Set(value);
-			get => double.Parse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
+			get => double.Parse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
 		}
 
 		public bool UpdateDouble(double value)
@@ -197,7 +197,7 @@ namespace MKAh.Ini
 			return false;
 		}
 
-		public double? TryDouble => double.TryParse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out var result) ? (double?)result : null;
+		public double? TryDouble => double.TryParse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result) ? (double?)result : null;
 
 		public int[] IntArray
 		{
@@ -209,7 +209,7 @@ namespace MKAh.Ini
 				int[] array = new int[Array.Length];
 
 				for (int i = 0; i < Array.Length; i++)
-					array[i] = int.Parse(Array[i].Trim(), System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands);
+					array[i] = int.Parse(Array[i].Trim(), System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
 
 				return array;
 			}
@@ -225,7 +225,7 @@ namespace MKAh.Ini
 				float[] array = new float[Array.Length];
 
 				for (int i = 0; i < Array.Length; i++)
-					array[i] = float.Parse(Array[i].Trim(), System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
+					array[i] = float.Parse(Array[i].Trim(), System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
 
 				return array;
 			}
@@ -241,7 +241,7 @@ namespace MKAh.Ini
 				double[] array = new double[Array.Length];
 
 				for (int i = 0; i < Array.Length; i++)
-					array[i] = double.Parse(Array[i].Trim(), System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands);
+					array[i] = double.Parse(Array[i].Trim(), System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
 
 				return array;
 			}
