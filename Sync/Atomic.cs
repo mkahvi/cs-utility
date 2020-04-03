@@ -65,7 +65,7 @@ namespace MKAh.Synchronize
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool Lock(ref int lockvalue)
 		{
-			Debug.Assert(lockvalue == Locked || lockvalue == Unlocked);
+			Debug.Assert(lockvalue == Locked || lockvalue == Unlocked, "Internal lock value corrupt: " + lockvalue);
 			return System.Threading.Interlocked.CompareExchange(ref lockvalue, Locked, Unlocked) == Unlocked;
 		}
 
@@ -76,8 +76,8 @@ namespace MKAh.Synchronize
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Unlock(ref int lockvalue)
 		{
-			Debug.Assert(lockvalue != Unlocked);
-			lockvalue = Unlocked;
+			Debug.Assert(lockvalue == Locked, "Internal lock not locked but unlock was called: " + lockvalue.ToString());
+			System.Threading.Interlocked.Exchange(ref lockvalue, Unlocked);
 		}
 	}
 }
