@@ -35,9 +35,9 @@ namespace MKAh.Synchronize
 	/// </summary>
 	public class Atomic
 	{
-		public static int Locked => 1;
+		public const int Locked = 1;
 
-		public static int Unlocked => 0;
+		public const int Unlocked = 0;
 
 		int internal_lock = Unlocked;
 
@@ -65,7 +65,7 @@ namespace MKAh.Synchronize
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool Lock(ref int lockvalue)
 		{
-			Debug.Assert(lockvalue == Locked || lockvalue == Unlocked, "Internal lock value corrupt: " + lockvalue);
+			Debug.Assert(lockvalue == Locked || lockvalue == Unlocked, "Internal lock value corrupt: " + lockvalue.ToString());
 			return System.Threading.Interlocked.CompareExchange(ref lockvalue, Locked, Unlocked) == Unlocked;
 		}
 
