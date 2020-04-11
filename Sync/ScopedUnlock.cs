@@ -37,7 +37,7 @@ namespace MKAh.Synchronize
 		#region IDisposable Support
 		bool disposed = false; // To detect redundant calls
 
-		void Dispose(bool disposing)
+		protected virtual void Dispose(bool disposing)
 		{
 			if (disposed) return;
 			disposed = true;
