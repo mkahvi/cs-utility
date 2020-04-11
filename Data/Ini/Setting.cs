@@ -121,7 +121,7 @@ namespace MKAh.Ini
 		public int Int
 		{
 			set => Set(value);
-			get => int.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands);
+			get => int.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
 		}
 
 		public bool UpdateInt(int value)
@@ -142,7 +142,7 @@ namespace MKAh.Ini
 		public long Long
 		{
 			set => Set(value);
-			get => long.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands);
+			get => long.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
 		}
 
 		public bool UpdateLong(long value)

@@ -76,7 +76,7 @@ namespace MKAh.Synchronize
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Unlock(ref int lockvalue)
 		{
-			Debug.Assert(lockvalue == Locked, "Internal lock not locked but unlock was called: " + lockvalue.ToString());
+			Debug.Assert(lockvalue == Locked, "Internal lock not locked but unlock was called: " + lockvalue.ToString(System.Globalization.CultureInfo.InvariantCulture));
 			System.Threading.Interlocked.Exchange(ref lockvalue, Unlocked);
 		}
 	}
