@@ -53,7 +53,7 @@ namespace MKAh
 			long fms = currentTickCount;
 			if (lastActiveTick > currentTickCount) fms = (uint.MaxValue - lastActiveTick) + currentTickCount; // overflow
 			else fms -= lastActiveTick;
-			Debug.WriteLine($"IdleTime\n- Idle:  {lastActiveTick}\n- Env:   {currentTickCount}\n-   {(lastActiveTick > currentTickCount ? "Over+" + (uint.MaxValue - currentTickCount).ToString() : "Std")}\n- Final: {fms}");
+			//Debug.WriteLine($"IdleTime\n- Idle:  {lastActiveTick}\n- Env:   {currentTickCount}\n-   {(lastActiveTick > currentTickCount ? "Over+" + (uint.MaxValue - currentTickCount).ToString() : "Std")}\n- Final: {fms}");
 
 			return fms;
 		}
