@@ -86,7 +86,7 @@ namespace MKAh.Cache
 		/// <summary>
 		/// Prune cache.
 		/// </summary>
-		void Prune(object _discard, System.Timers.ElapsedEventArgs _ea)
+		void Prune(object _discard, System.Timers.ElapsedEventArgs _2)
 		{
 			if (disposed) return; // dumbness with timers
 			if (!Atomic.Lock(ref prune_in_progress)) return; // only one instance.
