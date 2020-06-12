@@ -58,8 +58,12 @@ namespace MKAh.Types
 		public static implicit operator Trinary(bool value)
 			=> new Trinary { Value = value ? State.True : State.False };
 
+		public static Trinary FromBoolean(bool value) => new Trinary { Value = value ? State.True : State.False };
+
 		public static implicit operator Trinary(int value)
 			=> new Trinary { Value = (State)value };
+
+		public static Trinary FromInt32(int value) => new Trinary { Value = (State)value };
 
 		public static bool operator ==(Trinary left, Trinary right) => left.Equals(right);
 
@@ -72,7 +76,11 @@ namespace MKAh.Types
 
 		public static implicit operator bool(Trinary trinary) => trinary.IsTrue;
 
+		public bool ToBoolean() => IsTrue;
+
 		public static implicit operator int(Trinary trinary) => (int)trinary.Value;
+
+		public int ToInt32() => (int)Value;
 
 		public bool Equals(Trinary other) => Value == other.Value;
 
