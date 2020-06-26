@@ -406,5 +406,27 @@ namespace IniFile
 
 			Assert.AreEqual(5, config.Get("Test").Get("Taint").Int);
 		}
+
+		[Test]
+		public void TypeReading()
+		{
+			string testsite = "value = True # boolean\nvint = 15 # integer\nvflo = 5.5 # float";
+			string full = "[Test]\n" + testsite + "\n\n";
+
+			var config = new Ini.Config();
+			config.Load(full.Split(new[] { '\n' }, StringSplitOptions.None));
+
+			var b = config.Get("Test").Get("value");
+			Assert.AreEqual(true, b.TryBool.Value);
+			Assert.AreEqual(true, b.Bool);
+
+			var i = config.Get("Test").Get("vint");
+			Assert.AreEqual(15, i.Int);
+
+			var f = config.Get("Test").Get("vflo");
+			Assert.AreEqual(5.5f, f.Float, float.Epsilon);
+
+			//var o = f.InternalObject;
+		}
 	}
 }

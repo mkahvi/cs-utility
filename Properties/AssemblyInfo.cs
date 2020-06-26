@@ -30,3 +30,5 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 [assembly: AssemblyVersion("0.1.*")]
+
+[assembly: InternalsVisibleTo("UtilityUnitTests")]
