@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -79,6 +80,12 @@ namespace MKAh.Ini
 		void UpdateInternalObject<T>(T value)
 		{
 			ValueObject = value;
+		}
+
+		void UpdateInternalObject<T>(IList<T> value)
+		{
+			Object = value;
+			Array = Converter<T>.Convert(value);
 		}
 
 		// alias for Value
@@ -348,6 +355,8 @@ namespace MKAh.Ini
 		public void Set(double value) => Value = Converter<double>.Convert(value);
 		public void SetArray(decimal[] values) => Array = Converter<decimal>.Convert(values);
 		public void Set(decimal value) => Value = Converter<decimal>.Convert(value);
+		public void SetArray<T>(IList<T> values) => UpdateInternalObject(values);
+		public void Set<T>(T value) => UpdateInternalObject(value);
 
 		/// <summary>
 		/// Sets comment only if it's empty.

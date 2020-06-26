@@ -180,7 +180,8 @@ namespace MKAh.Ini
 			{
 				if (rv is null) rv = new Setting() { Name = setting, Parent = this };
 
-				rv.Set(Converter<T>.Convert(fallback));
+				rv.Set<T>(fallback);
+				//rv.Set(Converter<T>.Convert(fallback));
 
 				Add(rv);
 			}
