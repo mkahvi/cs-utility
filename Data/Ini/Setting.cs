@@ -45,9 +45,7 @@ namespace MKAh.Ini
 
 		public Section? Parent { get; set; } = null;
 
-		Type ValueType = typeof(string);
 		object ValueObject = null;
-
 
 		protected override void Altered(Interface.Value value) => Parent?.ChildAltered(this);
 
@@ -71,7 +69,7 @@ namespace MKAh.Ini
 				ResetEscapedCache();
 				Reset();
 				_value = value;
-				UpdateInternalObject(value);
+				ValueObject = value;
 				Altered(this);
 			}
 		}
@@ -81,7 +79,6 @@ namespace MKAh.Ini
 		void UpdateInternalObject<T>(T value)
 		{
 			ValueObject = value;
-			ValueType = value.GetType();
 		}
 
 		// alias for Value
@@ -104,36 +101,12 @@ namespace MKAh.Ini
 			}
 		}
 
-		public bool UpdateBool(bool value)
-		{
-			if (ValueObject is bool fval && fval != value)
-			{
-				Set(value);
-				UpdateInternalObject(value);
-				return true;
-			}
-
-			return false;
-		}
-
-		public bool? TryBool => bool.TryParse(Value, out bool result) ? (bool?)result : null;
+		public bool? TryBool => bool.TryParse(Value, out var result) ? result : (bool?)null; // bool.TryParse(Value, out bool result) ? (bool?)result : null;
 
 		public int Int
 		{
 			set => Set(value);
 			get => int.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
-		}
-
-		public bool UpdateInt(int value)
-		{
-			if (ValueObject is int fval && fval != value)
-			{
-				Set(value);
-				UpdateInternalObject(value);
-				return true;
-			}
-
-			return false;
 		}
 
 		// is null valid formatprovider?
@@ -145,18 +118,6 @@ namespace MKAh.Ini
 			get => long.Parse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
 		}
 
-		public bool UpdateLong(long value)
-		{
-			if (ValueObject is long fval && fval != value)
-			{
-				Set(value);
-				UpdateInternalObject(value);
-				return true;
-			}
-
-			return false;
-		}
-
 		public long? TryLong => long.TryParse(Value, System.Globalization.NumberStyles.Integer | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result) ? (long?)result : null;
 
 		public float Float
@@ -165,36 +126,12 @@ namespace MKAh.Ini
 			get => float.Parse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
 		}
 
-		public bool UpdateFloat(float value)
-		{
-			if (ValueObject is float fval && fval != value)
-			{
-				Set(value);
-				UpdateInternalObject(value);
-				return true;
-			}
-
-			return false;
-		}
-
 		public float? TryFloat => float.TryParse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result) ? (float?)result : null;
 
 		public double Double
 		{
 			set => Set(value);
 			get => double.Parse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
-		}
-
-		public bool UpdateDouble(double value)
-		{
-			if (ValueObject is double fval && fval != value)
-			{
-				Set(value);
-				UpdateInternalObject(value);
-				return true;
-			}
-
-			return false;
 		}
 
 		public double? TryDouble => double.TryParse(Value, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result) ? (double?)result : null;
