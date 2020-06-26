@@ -425,8 +425,6 @@ namespace IniFile
 
 			var f = config.Get("Test").Get("vflo");
 			Assert.AreEqual(5.5f, f.Float, float.Epsilon);
-
-			//var o = f.InternalObject;
 		}
 	}
 }
