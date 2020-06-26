@@ -45,8 +45,6 @@ namespace MKAh.Ini
 
 		public Section? Parent { get; set; } = null;
 
-		object ValueObject = null;
-
 		protected override void Altered(Interface.Value value) => Parent?.ChildAltered(this);
 
 		public override string ToString()
@@ -69,27 +67,17 @@ namespace MKAh.Ini
 				ResetEscapedCache();
 				Reset();
 				_value = value;
-				ValueObject = value;
 				Altered(this);
 			}
 		}
 
 		public bool IsEmpty => string.IsNullOrEmpty(Value);
 
-		void UpdateInternalObject<T>(T value)
-		{
-			ValueObject = value;
-		}
-
 		// alias for Value
 		public string String
 		{
 			get => Value;
-			set
-			{
-				Value = value;
-				UpdateInternalObject(value);
-			}
+			set => Value = value;
 		}
 
 		public bool Bool
