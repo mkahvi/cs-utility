@@ -32,19 +32,42 @@ namespace MKAh.Logic
 	public static class Bit
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static long Set(long dec, int index) => Or(dec, (1 << index));
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Set(int dec, int index) => Or(dec, (1 << index));
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsSet(long value, int index) => And(value, (1 << index)) != 0;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsSet(int value, int index) => And(value, (1 << index)) != 0;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static long Unset(long value, int index) => And(value, ~(1 << index));
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Unset(int value, int index) => And(value, ~(1 << index));
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static long Or(long value1, long value2) => value1 | value2;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Or(int value1, int value2) => value1 | value2;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static long And(long value1, long value2) => value1 & value2;
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int And(int value1, int value2) => value1 & value2;
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static long Count(long i)
+		{
+			i = i - ((i >> 1) & 0x5555555555555555);
+			i = (i & 0x3333333333333333) + ((i >> 2) & 0x3333333333333333);
+			return (((i + (i >> 4)) & 0xF0F0F0F0F0F0F0F) * 0x101010101010101) >> 56;
+		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Count(int i)
@@ -52,6 +75,25 @@ namespace MKAh.Logic
 			i -= ((i >> 1) & 0x55555555);
 			i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
 			return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
+		}
+
+		public static long Fill(long value, long allowedbits, long maxbits)
+		{
+			//var bits = Count(value);
+
+			int filled = 0;
+
+			for (int i = 0; i < 32 && filled <= maxbits; i++)
+			{
+				if (IsSet(allowedbits, i) && !IsSet(value, i))
+				{
+					value = Set(value, i);
+					//bits++;
+					filled++;
+				}
+			}
+
+			return value;
 		}
 
 		// This looks really slow
@@ -81,6 +123,22 @@ namespace MKAh.Logic
 			return value;
 		}
 
+		public static long Unfill(long value, long allowedBits, int removemax, int maxoffset = sizeof(int) * 8)
+		{
+			Debug.Assert(maxoffset <= sizeof(int) * 8, "Overflow");
+
+			for (int i = 0; i < maxoffset && removemax > 0; i++)
+			{
+				if (!IsSet(allowedBits, i) && IsSet(value, i))
+				{
+					value = Unset(value, i);
+					removemax--;
+				}
+			}
+
+			return value;
+		}
+
 		public static int Unfill(int value, int allowedBits, int removemax, int maxoffset = sizeof(int) * 8)
 		{
 			Debug.Assert(maxoffset <= sizeof(int) * 8, "Overflow");
@@ -95,6 +153,21 @@ namespace MKAh.Logic
 			}
 
 			return value;
+		}
+
+		public static long Move(long source, long allowedBits)
+		{
+			long movable = source & ~allowedBits; // bits to move
+			long movecount = Count(movable); // bits still needing to move
+			long available = allowedBits & ~source; // available bit positions
+
+			source = And(source, allowedBits); // already in correct positions
+
+			//System.Diagnostics.Debug.WriteLine("Bit.Move - source: " + Convert.ToString(source, 2) + " - allowed: " + Convert.ToString(allowedBits, 2) + " - moving: " + movecount.ToString());
+
+			source = Fill(source, available, movecount);
+
+			return source;
 		}
 
 		public static int Move(int source, int allowedBits)
