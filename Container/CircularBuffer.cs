@@ -48,14 +48,14 @@ namespace MKAh.Container
 
 		public CircularBuffer(int size)
 		{
-			if (size < 2) throw new ArgumentException(nameof(size));
+			if (size < 2) throw new ArgumentException("Buffer size too small", nameof(size));
 
 			Ring = new T[size];
 		}
 
 		public CircularBuffer(CircularBuffer<T> old, int size)
 		{
-			if (size < 2) throw new ArgumentException(nameof(size));
+			if (size < 2) throw new ArgumentException("Buffer size too small", nameof(size));
 
 			Ring = new T[size];
 
@@ -100,7 +100,7 @@ namespace MKAh.Container
 		{
 			uint lindex = Index + Convert.ToUInt32(Size + offset);
 
-			if (length < 1 || length > Size) throw new ArgumentException(nameof(length));
+			if (length < 1 || length > Size) throw new ArgumentException("Length too small or too long", nameof(length));
 
 			var rv = new T[length];
 
